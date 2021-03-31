@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Personal Information</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    form{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        
+        width: 50%;
+        margin: auto;
+        line-height: 2rem;
+
+    }
+    input[type="text"], input[type="email"], input[type="date"]{
+        background-color: #fff;
+        height: 2rem;
+        border-collapse: collapse;
+        border-left: 0;
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 1px solid;
+        outline: none;
+        
+    }
+    
+    #submit-reset{
+        margin: auto;
+    }
+
+    ul,li { list-style-type: none;
+        list-style-position: inside;
+        margin:0;
+        padding:0;
+    }
+    label[for="name"], label[for="dob"] ,label[for="class"], 
+    label[for="uni"], label[for="hobbies"], label[for="email"], 
+    label[for="address"], label[for="phone"], label[for="skills"]{
+        font-weight: bold;
+    }
+
+    #hobbies-skills{
+        
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    li input{
+        margin-left: 1rem;
+        margin-top: 0.6rem;
+        float: right;
+        vertical-align: middle;
+        
+    }
+
+    li input#others, li input#other_skills{
+        height: 0.8rem;
+        word-wrap: break-word;
+    }
+    #name-profile{
+        display: flex;
+        justify-content: space-between;
+        
+    }
+    #name-profile #flex-column-name{
+        width: 50%;
+        max-width: inherit;
+    }
+    #name-profile .flex-column{
+        display: flex;
+        flex-direction: column;
+    }
+
+
+</style>
+</head>
+<body>
+    <form action="UserInfo.php" method="POST" enctype="multipart/form-data">
+       
+        <div id="name-profile">
+            <div class="flex-column" id="flex-column-name">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your full name">
+            </div>
+            <div class="flex-column">
+                <label for="profile">Upload profile</label>
+                <input type="file" name="profile" id="profile">
+            </div>
+        </div>
+        <label for="dob">Date of birth</label>
+        <input type="date" name="dob" id="dob">
+        <label for="class">Class</label>
+        <input type="text" id="class" name="class" placeholder="Enter your class">
+        <label for="uni">University</label>
+        <input type="text" id="uni" name="uni" placeholder="Enter your university">
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address">
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" placeholder="Enter your address">
+        <label for="phone">Phone number</label>
+        <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+        
+        <div id="hobbies-skills">
+        <div class="hobbies">
+        <label for="hobbies">Hobbies</label>
+        <ul id="hobbies">
+            <li class="hobby-item">
+                <label for="sport">Sport</label>
+                <input type="checkbox" name="hobbies[]" id="sport" value="sport">
+            </li>
+            <li class="hobby-item">
+                <label for="book">Reading books</label>
+                <input type="checkbox" name="hobbies[]" id="book" value="book">
+            </li>
+            <li class="hobby-item">
+                <label for="music">Music</label>
+                <input type="checkbox" name="hobbies[]" id="music" value="music">
+            </li>
+            <li class="hobby-item">
+                <label for="tech">Technology</label>
+                <input type="checkbox" name="hobbies[]" id="tech" value="tech">
+            </li>
+            <li class="hobby-item">
+                <label for="art">Art</label>
+                <input type="checkbox" name="hobbies[]" id="art" value="art">
+            </li>
+            <li class="hobby-item">
+                <label for="stream">Livestreaming</label>
+                <input type="checkbox" name="hobbies[]" id="stream" value="stream">
+            </li>
+            <li class="hobby-item">
+                <label for="game">Gaming</label>
+                <input type="checkbox" name="hobbies[]" id="game" value="game">
+            </li>
+            <li class="hobby-item">
+                <label for="others">Others</label>
+                <input type="text" name="others" id="others">
+            </li>
+        </ul>
+        </div>
+        
+        <div class="skills">
+        <label for="skills">Skills</label>
+        <ul id="skills">
+            <li class="skill-item">
+                <label for="math">Mathematics</label>
+                <input type="checkbox" name="skills[]" id="math" value="math">
+            </li>
+            <li class="skill-item">
+                <label for="programming">Programming</label>
+                <input type="checkbox" name="skills[]" id="programming" value="programming">
+            </li>
+            <li class="skill-item">
+                <label for="ai">AI</label>
+                <input type="checkbox" name="skills[]" id="ai" value="AI">
+            </li>
+            <li class="skill-item">
+                <label for="algo">Algorithm</label>
+                <input type="checkbox" name="skills[]" id="algo" value="algorithm">
+            </li>
+            <li class="skill-item">
+                <label for="design">Pattern design</label>
+                <input type="checkbox" name="skills[]" id="design" value="design">
+            </li>
+            <li class="skill-item">
+                <label for="oop">OOP</label>
+                <input type="checkbox" name="skills[]" id="oop" value="oop">
+            </li>
+            <li class="skill-item">
+                <label for="present">Presentation</label>
+                <input type="checkbox" name="skills[]" id="present" value="present">
+            </li>
+            <li class="skill-item">
+                <label for="team">Teamwork</label>
+                <input type="checkbox" name="skills[]" id="team" value="team">
+            </li>
+            <li class="skill-item">
+                <label for="other_skills">Others</label>
+                <input type="text" name="other_skills" id="other_skills">
+            </li>
+        
+        </ul>
+        </div>
+        </div>
+        <div id="submit-reset">
+            <button type="submit">Submit</button>
+            <button type="reset">Clear</button>
+        </div>
+        
+        
+        
+      
+    </form>
+    <script>
+        function sortList(id) {
+            var list, i, switching, b, shouldSwitch;
+            list = document.getElementById(id);
+            switching = true;
+            /* Make a loop that will continue until
+            no switching has been done: */
+            while (switching) {
+              // Start by saying: no switching is done:
+              switching = false;
+              b = list.getElementsByTagName("li");
+              // Loop through all list items:
+              for (i = 0; i < (b.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Check if the next item should
+                switch place with the current item: */
+                if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+                  /* If next item is alphabetically lower than current item,
+                  mark as a switch and break the loop: */
+                  shouldSwitch = true;
+                  break;
+                }
+              }
+              if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark the switch as done: */
+                b[i].parentNode.insertBefore(b[i + 1], b[i]);
+                switching = true;
+              }
+            }
+        }
+       
+    </script>
+</body>
+
+</html>
