@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>A simple form</title>
+        <link rel="stylesheet" href="conditional.css">
+    </head>
+    <body>
+        <form action="ConditionalTest.php" method="get">
+            
+            <table class="center">
+                <tr>
+                    <td>First name: </td>
+                    <td><input type="text" size="10" maxlength = "15" name="firstName" required></td>
+                </tr>
+                <tr>
+                    <td>Middle name: </td>
+                    <td><input type="text" size="10" maxlength = "15" name="middleName" required></td>
+                </tr>
+                <tr>
+                    <td>Last name: </td>
+                    <td><input type="text" size="10" maxlength = "15" name="lastName" required></td>
+                </tr>
+                <tr>
+                    <td>Enter mid-term score: </td>
+                    <td><input type="text" size="4" maxlength = "7" name="grade1" required></td>
+                </tr>
+                <tr>
+                    <td>Enter Final-exam score: </td>
+                    <td><input type="text" size="4" maxlength = "7" name="grade2" required></td>
+                </tr>
+                <tr>
+                    <td align="right"><input type="submit" value="Submit"></td>
+                    <td align="left"><input type="reset" value="Reset"></td>
+                </tr>
+            </table>
+        
+        </form>
+    </body>
+</html>
