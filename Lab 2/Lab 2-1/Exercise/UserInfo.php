@@ -60,10 +60,11 @@
     if (isset($_POST["skills"])){
         $skills = $_POST["skills"];
     }
-    if (isset($_POST["others"])){
+    if (isset($_POST["others"]) && strlen($_POST["others"]) > 0){
         array_push($hobbies, $_POST["others"]);
     }
-    if (isset($_POST["other_skills"])){
+    if (isset($_POST["other_skills"]) && strlen($_POST["other_skills"]) > 0){
+
         array_push($skills, $_POST["other_skills"]);
     }
     
