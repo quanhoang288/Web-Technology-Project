@@ -4,6 +4,7 @@
     <style>
         #general{
             display: flex;
+            margin-top: 2rem;
             margin-bottom: 2rem;
         }
         #general #general-info{
@@ -45,6 +46,7 @@
     $phone = $_POST["phone"];
     $profile = $_FILES["profile"];
     $filepath = "./" . $_FILES["profile"]["name"];
+    
     move_uploaded_file($_FILES["profile"]["tmp_name"], $filepath);
     // if (move_uploaded_file($_FILES["profile"]["tmp_name"], $filepath)){
     //     {
@@ -58,37 +60,13 @@
     if (isset($_POST["skills"])){
         $skills = $_POST["skills"];
     }
+    if (isset($_POST["others"])){
+        array_push($hobbies, $_POST["others"]);
+    }
+    if (isset($_POST["other_skills"])){
+        array_push($skills, $_POST["other_skills"]);
+    }
     
-    
-    // echo "Hello, $name <br>";
-    // echo "You are studying at $class, $uni <br>";
-    // echo "Email address: $email <br>";
-    // echo "Address: $address <br>";
-    // echo "Phone numbers: $phone <br>";
-    
-    // if (!empty($hobbies)){
-    //     echo "Hobbies: <br>";
-    //     // echo "<ol>";
-    //     foreach($hobbies as $key=>$value){
-    //         echo $key + 1 . '. ' . $value;
-    //         echo "<br>";
-    //         // echo strlen($value);
-                
-    //         // if ($value != ''){
-                
-    //         // }
-            
-    //     }
-    //     // echo "</ol> <br>";
-    // }
-    // if (!empty($skills)){
-    //     echo "Skills: <br>";
-    //     echo "<ol>";
-    //     foreach($skills as $value){
-    //         echo "<li> $value <li>";
-    //     }
-    //     echo "</ol> <br>";
-    // }
 
     
 ?>
@@ -133,6 +111,7 @@
                         echo $key + 1 . '. ' . $value;
                         echo "<br>";
                     }
+                    
                     echo "</td> </tr>";
                 }
             ?>

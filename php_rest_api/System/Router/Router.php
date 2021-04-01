@@ -118,6 +118,7 @@ class Router {
     private function getMatchRoutersByPattern($pattern) {
         $this->matchRouter = [];
         foreach ($pattern as $value) {
+            // echo $value->getPattern() . "<br>";
             if ($this->dispatch(cleanUrl($this->url), $value->getPattern()))
                 array_push($this->matchRouter, $value);
         }
@@ -129,9 +130,10 @@ class Router {
     public function dispatch($uri, $pattern) {
         $parsUrl = explode('?', $uri);
         $url = $parsUrl[0];
-
+        // echo $url . "<br>";
+        // echo $parsUrl[1] . "<br>";
         preg_match_all('@:([\w]+)@', $pattern, $params, PREG_PATTERN_ORDER);
-
+        
         $patternAsRegex = preg_replace_callback('@:([\w]+)@', [$this, 'convertPatternToRegex'], $pattern);
 
         if (substr($pattern, -1) === '/' ) {
