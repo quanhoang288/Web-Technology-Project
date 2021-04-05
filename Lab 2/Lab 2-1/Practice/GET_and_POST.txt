@@ -1,0 +1,15 @@
+Khi thay đổi phương thức POST thành phương thức GET thì 
+sau khi user submit, trên thanh url hiển thị thông tin về dữ liệu còn phương thức POST thì không hiển thị
+
+url với POST:	http://localhost:8110/Web_Lab2_1/Form4Radio.php
+url với GET:	http://localhost:8110/Web_Lab2_1/Form4Radio.php?email=abc%40gmail.co&contact=Yes
+
+
+Do: 	
+	- Phương thức GET là phương thức gửi dữ liệu thông qua đường dẫn URL nằm trên thanh địa chỉ của Browser.
+	Server sẽ nhận đường dẫn đó và phân tích trả về kết quả.
+	- Phương thức POST  sẽ gửi dữ liệu qua một cái form HTML và các giá trị sẽ được định nghĩa trong các input và được nhận dang thông qua tên của các input đó.
+
+Nhận xét: - Phương thức POST bảo mật hơn GET vì dữ liệu được gửi ngầm bằng mắt thường không thể nhìn thấy được.
+	  - Phương thức GET luôn luôn nhanh hơn POST vì dữ liệu gửi đi được Browser giữ lại trong cache.
+	Khi thực thi với POST thì Server luôn thực thi lệnh rồi trả về cho Client, còn với GET thì Browser sẽ kiểm tra trong cache có chưa, nếu có thì trả về ngay chứ không cần gửi lên Server.
