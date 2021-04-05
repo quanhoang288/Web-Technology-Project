@@ -19,7 +19,7 @@ class JWT {
         $token = "$headers_encoded.$payload_encoded.$signature_encoded";
         return $token;
     }
-    public static function decode($token, $key)
+    public static function decode($token)
     {
         return json_decode(base64url_decode(str_replace('_', '/', str_replace('-','+',explode('.', $token)[1]))));
     }

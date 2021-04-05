@@ -158,7 +158,9 @@ class Response {
      * @param $content
      */
     public function setContent($content) {
+        
         $this->content = json_encode($content);
+       
     }
 
     /**
@@ -167,6 +169,7 @@ class Response {
      * @return mixed
      */
     public function getContent() {
+        
         return $this->content;
     }
 
@@ -194,6 +197,7 @@ class Response {
 
     public function sendStatus($code) {
         if (!$this->isInvalid($code)) {
+            
             $this->setHeader(sprintf('HTTP/1.1 ' . $code . ' %s' , $this->getStatusCodeText($code)));
         }
     }
@@ -202,8 +206,10 @@ class Response {
      *  Render Output
      */
     public function render() {
+        
         if ($this->content) {
             $output = $this->content;
+            
 
             // Headers
             if (!headers_sent()) {

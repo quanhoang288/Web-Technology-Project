@@ -7,19 +7,42 @@ class ControllersLogin extends Controller {
     public function validate_user()
     {
         
+        header('Content-type: application/json');
         $model = $this->model('login');
-        $username = $_POST['username'];
-        $user = ($model->find_username($username))[0];
-        if(password_verify($_POST['password'], $user['password']))
+        $data = json_decode(file_get_contents('php://input'), true);
+        $username = $data['username'];
+        $password = $data['password'];
+        $user = ($model->find_username($username));
+
+        $response ='';
+        if(sizeof($user) == 0)
         {
-            $token = JWT::encode($user, SECRET_KEY);
-            echo($token);
             
+            $response = 'invalid_username';
+            $this->response->sendStatus(401);
+
+            $this->response->setContent([ 'response'=> $response]);
+
         }
-        else
-        {
-            echo("invalid password");
+        else{
+            $user = $user[0];
+            
+            if(password_verify($password, $user['password']))
+            {
+                $token = JWT::encode($user, SECRET_KEY);
+                
+                $response = ['user'=>$user];
+                $this->response->sendStatus(200);
+                $this->response->setContent(['token' => $token, 'response'=> $response]);    
+            }
+            else
+            {
+                $response = 'invalid_password';
+                $this->response->sendStatus(401);
+                $this->response->setContent([ 'response'=> $response]);
+            }
         }
+        
         
     
     }
