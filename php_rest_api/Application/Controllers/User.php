@@ -3,16 +3,27 @@
 use MVC\Controller;
 use JWT\JWT;
 require SYSTEM . 'JWT.php';
-class ControllersLogin extends Controller {
+class ControllersUser extends Controller {
+    private $model ;
+    public function __construct()
+    {
+        Controller::__construct();
+        $this->model = $this->model('user');
+
+    }
+    public function register()
+    {
+        $this->model->register($_POST);
+    }
     public function validate_user()
     {
         
         header('Content-type: application/json');
-        $model = $this->model('login');
+        
         $data = json_decode(file_get_contents('php://input'), true);
         $username = $data['username'];
         $password = $data['password'];
-        $user = ($model->find_username($username));
+        $user = ($this->model->find_username($username));
 
         $response ='';
         if(sizeof($user) == 0)
