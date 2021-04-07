@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Personal Information</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    form{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        
+        width: 50%;
+        margin: auto;
+        line-height: 2rem;
+
+    }
+    input[type="text"], input[type="email"], input[type="date"], input[type="tel"]{
+        background-color: #fff;
+        height: 2rem;
+        border-collapse: collapse;
+        border-left: 0;
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 1px solid;
+        outline: none;
+        
+    }
+    
+    #submit-reset{
+        margin: auto;
+    }
+
+    ul,li { list-style-type: none;
+        list-style-position: inside;
+        margin:0;
+        padding:0;
+    }
+    label[for="name"], label[for="dob"] ,label[for="class"], 
+    label[for="uni"], label[for="hobbies"], label[for="email"], 
+    label[for="address"], label[for="phone"], label[for="skills"]{
+        font-weight: bold;
+    }
+
+    #hobbies-skills{
+        
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    li input{
+        margin-left: 1rem;
+        margin-top: 0.6rem;
+        float: right;
+        vertical-align: middle;
+        
+    }
+
+    li input#others, li input#other_skills{
+        height: 0.8rem;
+        word-wrap: break-word;
+    }
+    #name-profile{
+        display: flex;
+        justify-content: space-between;
+        
+    }
+    #name-profile #flex-column-name{
+        width: 100%;
+        max-width: inherit;
+    }
+    #name-profile .flex-column{
+        display: flex;
+        flex-direction: column;
+    }
+
+
+</style>
+</head>
+<body>
+    <form>
+       
+        <div id="name-profile">
+            <div class="flex-column" id="flex-column-name">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+
+        </div>
+        <label for="dob">Date of birth</label>
+        <input type="date" name="dob" id="dob" required>
+        <label for="class">Class</label>
+        <input type="text" id="class" name="class" placeholder="Enter your class" required>
+        <label for="uni">University</label>
+        <input type="text" id="uni" name="uni" placeholder="Enter your university" required>
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" placeholder="Enter your address" required>
+        <label for="phone">Phone number (Format: 0xxxxxxxxx)</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" maxlength="10" pattern="^0[0-9]{2,2}[0-9]{4,4}[0-9]{3,3}$" required>
+        
+       
+        <div id="submit-reset">
+            <button type="submit">Submit</button>
+            <button type="reset">Clear</button>
+        </div>
+        
+        
+        
+      
+    </form>
+    <script>
+        function onHandleSubmit(event){
+            //console.log(event.target);
+            //name = document.getElementById('name').value;
+            //dob = document.getElementById('dob').value;
+            let form = event.target;
+            let formData = {};
+            let inputs = form.querySelectorAll('input');
+            let dob = form.dob.value;
+            
+            for (let i = 0; i < inputs.length; i++){
+                formData[inputs[i].name] = inputs[i].value;
+            }
+
+            let jsonData = JSON.stringify(formData);
+            console.log(jsonData);
+            alert(jsonData);
+            
+            
+                       
+        }
+        document.getElementsByTagName('form')[0].addEventListener('submit', onHandleSubmit);
+       
+    </script>
+</body>
+
+</html>

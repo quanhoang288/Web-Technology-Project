@@ -32,7 +32,7 @@ class ControllersUser extends Controller {
             $response = 'invalid_username';
             $this->response->sendStatus(401);
 
-            $this->response->setContent([ 'response'=> $response]);
+            $this->response->setContent(['response'=> $response]);
 
         }
         else{

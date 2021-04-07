@@ -190,6 +190,7 @@ class Router {
         $this->getMatchRoutersByPattern($this->matchRouter);
 
         if (!$this->matchRouter || empty($this->matchRouter)) {
+            // echo "no match router found!";
 			$this->sendNotFound();        
 		} else {
             // call to callback method

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Personal Information</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    form{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        
+        width: 100%;
+        margin: auto;
+        line-height: 2rem;
+
+    }
+    input[type="text"], input[type="email"], input[type="date"]{
+        background-color: #fff;
+        height: 2rem;
+        border-collapse: collapse;
+        border-left: 0;
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 1px solid;
+        outline: none;
+        
+    }
+    
+    #submit-reset{
+        margin: auto;
+    }
+
+    
+    label[for="name"], label[for="post-date"] ,label[for="class"], 
+    label[for="uni"], label[for="email"], 
+    label[for="author"], label[for="phone"], label[for="content"]{
+        font-weight: bold;
+    }
+
+    #title-upload{
+        display: flex;
+    }
+    
+    
+
+    
+    
+
+
+</style>
+</head>
+<body>
+    <form>
+       
+        <!-- <div id="title-upload">
+            <div id="title">
+                </div>
+            <div id="upload">
+                <label for="img">Upload blog image</label>
+                <input type="file"  id="img" name="img" accept="image/*">        
+            </div>
+            </div> -->
+        <label for="name">Title</label>
+        <input type="text" required id="name" name="name" placeholder="Enter blog title">    
+        
+        <label for="author">Author</label>
+        <input type="text" id="author" name="author" placeholder="Enter blog author">
+        <label for="post-date">Post date</label>
+        <input type="date" name="post-date" id="post-date">
+        
+        
+        <label for="content">Content (No longer than 4kB)</label>
+        <textarea name="content" id="content" cols="30" rows="20" required maxlength="2000"></textarea>
+
+        
+        
+        <div id="submit-reset">
+            <button type="submit">Submit</button>
+            <button type="reset">Clear</button>
+
+        </div>
+        
+        
+        
+      
+    </form>
+    <script>
+        let today = new Date();
+        let expire = new Date(today.getTime() + 24*3600*1000); //plus 1 day
+        
+        function onHandleSubmit(event){
+            //console.log(event.target);
+            //name = document.getElementById('name').value;
+            //dob = document.getElementById('dob').value;
+            let form = event.target;
+            let formData = {};
+            let inputs = form.querySelectorAll('input');
+            let content = form.querySelector('textarea');
+            for (let i = 0; i < inputs.length; i++){
+                formData[inputs[i].name] = inputs[i].value;
+            }
+            //console.log(content);
+            formData[content.name] = content.value;
+            let jsonData = JSON.stringify(formData);
+            console.log(jsonData);
+            setCookie('data', jsonData);
+
+                       
+        }
+        function setCookie(name, value){
+            //deleteCookie(name);
+            document.cookie = name + "=" + escape(value) + "; path=/; expires=" + expire.toGMTString();
+            console.log(unescape(document.cookie));
+            console.log('success');
+        }
+        function deleteCookie(name){
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
+        form = document.getElementsByTagName('form')[0];
+        form.addEventListener("submit", onHandleSubmit);
+        //deleteCookie('data');
+        
+    </script>
+</body>
+
+</html>

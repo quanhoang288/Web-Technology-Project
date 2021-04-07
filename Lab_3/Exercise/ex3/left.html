@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Blog</title>
+        <!-- <link rel="stylesheet" href="style.css"> -->
+        <style>
+            #info{
+                display: flex;
+                
+            }
+            #date, #author{
+                font-weight: bold;
+            }
+            #date{
+                margin-left: 2rem;
+           
+            }
+            #content{
+          
+                overflow-y: auto;
+                max-width: 100%;
+       
+                
+            }
+            #content p{
+                word-break: break-all;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <script type="text/javascript">
+
+
+            
+            function getCookie(name){
+                if (document.cookie != ' '){
+                    c_start = document.cookie.indexOf(name + '=');
+                    if (c_start != -1) {
+                        c_start = c_start + name.length + 1;
+                        c_end = document.cookie.indexOf(";", c_start);
+                        
+                        if (c_end == -1) {
+                            c_end = document.cookie.length;
+                        }
+                        return JSON.parse(unescape(document.cookie.substring(c_start, c_end)));
+                    }
+                }
+                //data = JSON.parse(document.cookie);
+                //return data;
+            }
+            function render(data){
+                let title = data.name;
+                let author = data.author;
+                let postDate = data["post-date"];
+                let content = data.content;
+                let root = document.querySelector('body');
+                
+                let header = createNode("h1", title, root);
+                let infoDiv = createNode("div", "", root, "id", "info");
+                let authorTag = createNode("p", "Author: " + author, infoDiv, "id", "author");
+                let dateTag = createNode("p", "Published: " + postDate, infoDiv, "id", "date");
+                let contentDiv = createNode("div", "", root, "id", "content");
+                let contentTag = createNode("p", content, contentDiv);
+                
+
+            }
+            function createNode(nodeName, nodeText, parentNode, attrName=null, attrValue=null){
+                let element = document.createElement(nodeName);
+                let textNode = document.createTextNode(nodeText);           
+                element.appendChild(textNode);
+                if (attrName != null && attrValue != null){
+                    let att = document.createAttribute(attrName);
+                    att.value = attrValue;
+                    element.setAttributeNode(att);
+                }
+                //console.log(parentNode);
+                parentNode.appendChild(element);
+                return element;
+            }
+            let data = getCookie('data');
+            console.log(data);
+            console.log(unescape(document.cookie));
+            render(data);
+            //for (const key in data){
+            //    document.write(`${key}: ${data[key]} <br>`);
+            //}
+            //document.write(getCookie('data'));
+        </script>
+
+    </body>
+</html>
