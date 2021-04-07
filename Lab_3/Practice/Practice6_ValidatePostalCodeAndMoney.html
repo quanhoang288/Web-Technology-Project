@@ -8,7 +8,7 @@
 
   <script type="text/javascript">
     function ValidatePostalCode(){
-      var postalCodeCheck = new RegExp("([A-Z][0-9]) {3,3}");
+      var postalCodeCheck = new RegExp("([A-Z][0-9]){3,3}");
       if (postalCodeCheck.test(document.getElementById("postalCodeField").value) ){
         alert("Valid Post COde");
         return true;

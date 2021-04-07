@@ -113,23 +113,14 @@
     </form>
     <script>
         function onHandleSubmit(event){
-            //console.log(event.target);
-            //name = document.getElementById('name').value;
-            //dob = document.getElementById('dob').value;
             let form = event.target;
-            let formData = {};
             let inputs = form.querySelectorAll('input');
-            let dob = form.dob.value;
+            var output = '';
             
             for (let i = 0; i < inputs.length; i++){
-                formData[inputs[i].name] = inputs[i].value;
+                output += inputs[i].name + ' : ' + inputs[i].value + '\n';
             }
-
-            let jsonData = JSON.stringify(formData);
-            console.log(jsonData);
-            alert(jsonData);
-            
-            
+            alert(output);
                        
         }
         document.getElementsByTagName('form')[0].addEventListener('submit', onHandleSubmit);
