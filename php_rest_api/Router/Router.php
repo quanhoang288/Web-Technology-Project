@@ -20,7 +20,3 @@ $router->post('/login','user@validate_user');
 $router->post('/register','user@register');
 
 
-
-$commit on master
-
-about to rebase
