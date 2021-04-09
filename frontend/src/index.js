@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import  {composeWithDevTools} from 'redux-devtools-extension'
 
-
+import './App.css'
 const rootReducer = combineReducers({
     
     authReducer: auth,
