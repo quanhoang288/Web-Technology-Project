@@ -9,16 +9,26 @@ class ControllersUser extends Controller {
     {
         Controller::__construct();
         $this->model = $this->model('user');
-
     }
     public function register()
     {
-        $this->model->register($_POST);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $response ='Succesfully Registerd ';
+        try{
+            
+            $this->model->register($data);
+            $this->response->setContent(['message'=>$response,'code'=>201]);
+            $this->response->sendStatus(201);
+        }
+        catch(PDOException $e)
+        {
+            $response = $e ->getMessage();
+            $this->response->setContent(['message'=>$response,'code'=>400]);
+            $this->response->sendStatus(200);
+        }
     }
     public function validate_user()
-    {
-        
-        header('Content-type: application/json');
+    {        
         
         $data = json_decode(file_get_contents('php://input'), true);
         $username = $data['username'];
@@ -28,12 +38,9 @@ class ControllersUser extends Controller {
         $response ='';
         if(sizeof($user) == 0)
         {
-            
             $response = 'invalid_username';
             $this->response->sendStatus(401);
-
             $this->response->setContent(['response'=> $response]);
-
         }
         else{
             $user = $user[0];
@@ -42,9 +49,9 @@ class ControllersUser extends Controller {
             {
                 $token = JWT::encode($user, SECRET_KEY);
                 
-                $response = ['user'=>$user];
+                $response = ['user'=>$user,'token' => $token];
                 $this->response->sendStatus(200);
-                $this->response->setContent(['token' => $token, 'response'=> $response]);    
+                $this->response->setContent(['response'=> $response]);    
             }
             else
             {
@@ -53,9 +60,5 @@ class ControllersUser extends Controller {
                 $this->response->setContent([ 'response'=> $response]);
             }
         }
-        
-        
-    
     }
-
 }

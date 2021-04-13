@@ -33,6 +33,19 @@ class Model {
             DATABASE['Name'],
             DATABASE['Port']    
         );
+        
+        
+        $this->_table = str_replace('models','',strtolower(get_class($this)));
     }
+
+    public function all(){
+        $stmt = $this->db->prepare('select * from '.$this->_table);
+        $stmt->execute();
+        return json_encode($stmt->fetchAll(\PDO::FETCH_NAMED));
+
+    }
+   
+
+
 }
 

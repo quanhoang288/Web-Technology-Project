@@ -2,31 +2,48 @@ import React, { Component } from 'react';
 import './Registration.css'
 import axios from 'axios'
 import { HOST_URL } from '../../config'
+import { Redirect } from 'react-router';
 
 class Registration extends Component {
     state = {
-        username: '',
-        password: '',
-        email: '',
-        workplace: '',
-        phone: '',
+        user_info:
+        {
+            username: '',
+            password: '',
+            firstname: '',
+            lastname: '',
+            role: 's',
+            school: '',
+            phone: '',
+        },
+        success: false
+
 
     }
     fieldOnChangeHandler = (field, e) => {
-
-        this.setState({ [`${field}`]: e.target.value })
+        const user = { ...this.state.user_info }
+        user[`${field}`] = e.target.value
+        this.setState({ 'user_info': user })
 
     }
+
     onSubmit = (e) => {
         e.preventDefault()
+        const { username, password, firstname, lastname, role, school, phone } = this.state.user_info
         var data = JSON.stringify({
-            "username": this.state.username,
-            "password": this.state.password
+            "username": username,
+            "password": password,
+            'firstname': firstname,
+            'lastname': lastname,
+            'school': school,
+            'phone': phone,
+            'role': role
         });
+
 
         var config = {
             method: 'post',
-            url: `${HOST_URL}/login`,
+            url: `${HOST_URL}/register`,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -35,14 +52,25 @@ class Registration extends Component {
 
         axios(config)
             .then(res => {
-                console.log(res)
+                alert(res.data.message)
+
+                if (res.data.code === 400) {
+
+                }
+                else {
+
+                    this.setState({ 'success': true })
+                }
             })
             .catch(err => {
-                console.log(err)
+                alert(err)
             })
 
     }
     render() {
+
+
+
         const genCustomInput = (key, description, type, field, required) => {
             return (
 
@@ -61,13 +89,16 @@ class Registration extends Component {
                 description: 'Username', type: 'text', field: 'username', required: true
             },
             {
-                description: 'Email', type: 'email', field: 'email', required: true
-            },
-            {
                 description: 'Password', type: 'text', field: 'password', required: true
             },
             {
-                description: 'Workplace', type: 'text', field: 'workplace', required: true
+                description: 'Firstname', type: 'text', field: 'firstname', required: true
+            },
+            {
+                description: 'Lastname', type: 'text', field: 'lastname', required: true
+            },
+            {
+                description: 'Workplace', type: 'text', field: 'school', required: true
             },
             {
                 description: 'Phone number', type: 'tel', field: 'phone', required: true
@@ -75,35 +106,51 @@ class Registration extends Component {
         ]
 
 
+
+
         return (
-            <div className="container">
-                <div className="wrapper-register">
-                    <div className="title">
-                        Sign up!</div>
-                    <form action="#">
+            <React.Fragment>
+                {!this.state.success ?
+                    <div className="container">
+                        <div className="wrapper-register">
+                            <div className="title">
+                                Sign up!</div>
+                            <form onSubmit={this.onSubmit}>
 
-                        {field.map((elm, idx) => {
-                            if (elm.type === 'tel') {
-                                return (
-                                    <div className='field' key={idx}>
+                                {field.map((elm, idx) => {
+                                    if (elm.type === 'tel') {
+                                        return (
+                                            <div className='field' key={idx}>
 
-                                        <input type={elm.type} required={elm.required}  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" onChange={(e) => { this.fieldOnChangeHandler(elm.field, e) }} ></input>
-                                        <label>{elm.description}</label>
-                                    </div>
-                                )
-                            }
-                            return (
-                                genCustomInput(idx, elm.description, elm.type, elm.field, elm.required)
-                            )
+                                                <input type={elm.type} required={elm.required} onChange={(e) => { this.fieldOnChangeHandler(elm.field, e) }} ></input>
+                                                <label>{elm.description}</label>
+                                            </div>
+                                        )
+                                    }
+                                    return (
+                                        genCustomInput(idx, elm.description, elm.type, elm.field, elm.required)
+                                    )
 
-                        })}
-                        <div className="field">
-                            <input type="submit" value="Register" />
+                                })}
+                                <select onChange={(e) => this.fieldOnChangeHandler('role', e)}>
+                                    <option value="s" >Student</option>
+                                    <option value="t" >Teacher</option>
+
+                                </select>
+                                <div className="field">
+                                    <input type="submit" value="Register" />
+                                </div>
+
+                            </form>
                         </div>
+                    </div>
+                    :
+                    <Redirect to='/login'></Redirect>
+                }
 
-                    </form>
-                </div>
-            </div>
+
+            </React.Fragment>
+
 
         );
     }
