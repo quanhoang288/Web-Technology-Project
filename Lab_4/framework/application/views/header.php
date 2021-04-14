@@ -70,6 +70,13 @@ margin:0;
 padding:10px;
 }
 
+h1 a{
+	text-decoration: none;
+	color: #000000;
+}
+h1 a:hover{
+	color:blue;
+}
 h2 {
 color:#000000;
 font-family: Cambria, serif;
@@ -82,6 +89,13 @@ line-height: 1.7em;
 padding:0;
 margin:0;
 padding:10px;
+}
+h2 a{
+	text-decoration: none;
+	color: #000000;
+}
+h2 a:hover{
+	color: blue;
 }
 
 .category {
@@ -107,8 +121,15 @@ text-decoration:none;
 .category a:hover{ 
 background-color:#FFFF33
 }
+
+form .input{
+	margin-bottom: 2rem;
+	
+}
+
+
 	</style>
 </head>
 
 <body>
-<div class="navigation"><h1>My E-Commerce Website</h1>
+<div class="navigation"><h1> <?php echo $html->link('My E-commerce Website', '') ?></h1>

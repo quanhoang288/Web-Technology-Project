@@ -44,6 +44,9 @@ class SQLQuery {
         }
     }
 
+	function getDbHandle(){
+		return $this->_dbHandle;
+	}
     /** Select Query **/
 
 	function where($field, $value) {
@@ -79,7 +82,7 @@ class SQLQuery {
 		$this->_order = $order;
 	}
 
-	function search() {
+	function search($singleResult = 0) {
 
 		global $inflect;
 
@@ -169,6 +172,7 @@ class SQLQuery {
 								for ($j = 0;$j < $numOfFieldsChild; ++$j) {
 									$tempResultsChild[$tableChild[$j]][$fieldChild[$j]] = $rowChild[$j];
 								}
+								
 								array_push($resultsChild,$tempResultsChild);
 							}
 						}
@@ -255,16 +259,18 @@ class SQLQuery {
 	function custom($query) {
 
 		global $inflect;
-
+		// echo $query . ' </br>';
 		$this->_result = mysqli_query($this->_dbHandle, $query);
 
 		$result = array();
 		$table = array();
 		$field = array();
 		$tempResults = array();
-
+		
 		if(substr_count(strtoupper($query),"SELECT")>0) {
+			
 			if ($this->_result->num_rows > 0) {
+				
 				$numOfFields = $this->_result->field_count;
 				for ($i = 0; $i < $numOfFields; ++$i) {
 					array_push($table,$this->_result->fetch_field_direct($i)->table);
@@ -280,6 +286,7 @@ class SQLQuery {
 			}
 			$this->_result->free_result();
 		}	
+
 		$this->clear();
 		return($result);
 	}
@@ -334,6 +341,7 @@ class SQLQuery {
 			$updates = '';
 			foreach ($this->_describe as $field) {
 				if ($this->$field) {
+					
 					$updates .= '`'.$field.'` = \''.mysqli_real_escape_string($this->_dbHandle, $this->$field).'\',';
 				}
 			}
@@ -342,10 +350,13 @@ class SQLQuery {
 
 			$query = 'UPDATE '.$this->_table.' SET '.$updates.' WHERE `id`=\''.mysqli_real_escape_string($this->_dbHandle, $this->id).'\'';			
 		} else {
+		
 			$fields = '';
 			$values = '';
 			foreach ($this->_describe as $field) {
+				
 				if ($this->$field) {
+					
 					$fields .= '`'.$field.'`,';
 					$values .= '\''.mysqli_real_escape_string($this->_dbHandle, $this->$field).'\',';
 				}
@@ -354,11 +365,13 @@ class SQLQuery {
 			$fields = substr($fields,0,-1);
 
 			$query = 'INSERT INTO '.$this->_table.' ('.$fields.') VALUES ('.$values.')';
+		
 		}
 		$this->_result = mysqli_query($this->_dbHandle, $query);
 		$this->clear();
-		if ($this->_result == 0) {
+		if (!$this->_result) {
             /** Error Generation **/
+			echo "failed";
 			return -1;
         }
 	}

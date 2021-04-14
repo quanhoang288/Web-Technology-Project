@@ -1,6 +1,8 @@
 <div><h2><strong><?php echo $category['Category']['name']?></strong>
 </div>
-
+<?php if(empty($category['Product']) && !$category['Category']['parent_id'])  : ?>
+<div> <h2><?php echo $html->link('Add a new sub-category', 'categories/addview'.'/'.$category['Category']['id'] . '/'.$category['Category']['name']) ?></h2></div>
+<?php endif ?>
 <?php if (!empty($subcategories)): ?>
 <div><h2>Please select a sub-category</h2>
 <?php foreach ($subcategories as $subcategory):?>
@@ -12,7 +14,9 @@
 <?php endforeach?>
 </div>
 <?php endif?>
-
+<?php if($category['Category']['parent_id']): ?>
+    <div> <h2><?php echo $html->link('Add a new product', 'products/addview/' . $category['Category']['id'] . '/' . $category['Category']['name']) ?></h2></div>
+<?php endif ?>
 <?php if (!empty($category['Product'])): ?>
 <div><h2>Please select a product</h2>
 <?php foreach ($category['Product'] as $product):?>
@@ -23,4 +27,10 @@
 </div>
 <?php endforeach?>
 </div>
+<?php elseif (empty($subcategory)): ?>
+<p>No products found</p>
+
+
+
 <?php endif?>
+

@@ -1,3 +1,4 @@
+
 <div><h2><strong><?php echo $product['Product']['name']?></strong>
 </div>
 
@@ -14,3 +15,5 @@
 <?php endforeach?>
 </div>
 <?php endif?>
+<div> <h2><?php echo $html->link('Edit product', 'products/editview') ?></h2></div>
+<div> <h2><?php echo $html->link('Delete this product', 'products/deleteview') ?></h2></div>

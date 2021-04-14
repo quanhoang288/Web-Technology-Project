@@ -77,26 +77,34 @@ function callHook() {
 	$queryString = array();
 
 	if ($url == '') {
+		// echo "empty";
 		$controller = $default['controller'];
 		$action = $default['action'];
 	} else {
-		
+		// echo $url;
 		$url = routeURL($url);
-		
+		// echo '</br>';
+		// echo $url;
 		$urlArray = array();
 		$urlArray = explode("/",$url);
 		// foreach($urlArray as $key=>$value){
 		// 	echo $key . ' ' . $value . "\r\n";
 		// }
 		$controller = $urlArray[0];
+		// echo "Controller: " . $controller;
+		// echo "</br>";
 		array_shift($urlArray);
 		if (isset($urlArray[0])) {
 			$action = $urlArray[0];
+			// echo "Action: " . $action . ' </br>';
 			array_shift($urlArray);
 		} else {
 			$action = 'index'; // Default Action
 		}
 		$queryString = $urlArray;
+		// foreach($queryString as $value){
+		// 	echo "Query string: " . $value . ' </br>';
+		// }
 	}
 	
 	$controllerName = ucfirst($controller).'Controller';
