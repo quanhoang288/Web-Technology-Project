@@ -1,0 +1,60 @@
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  table td, table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  table tr:hover {background-color: #ddd;}
+  
+  table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+  }
+
+
+  .hiddenCB label {
+    padding: 4px 6px;
+    line-height: 190%;
+    outline-style: none;
+    transition: all .6s;
+  }
+  
+  .hiddenCB div {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .hiddenCB input[type="checkbox"],
+  .hiddenCB input[type="radio"] {
+    display: none;
+    
+  }
+  
+  .hiddenCB label {
+    
+    cursor: pointer;
+  }
+  
+  .hiddenCB input[type="checkbox"]+label:hover{
+    background: rgba(0, 128, 128, .8);
+  }
+  
+  .hiddenCB input[type="checkbox"]:checked+label {
+    background: rgba(0, 128, 128, .4);
+  }
+  
+  .hiddenCB input[type="checkbox"]:checked+label:hover{
+    background: rgba(0, 128, 128, 0, .7);
+  }

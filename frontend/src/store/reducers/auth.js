@@ -15,7 +15,7 @@ const initState = {
 
 
 // action creator
-export default (state = initState, action) => {
+const dispatcher =  (state = initState, action) => {
     switch (action.type) {
         case USER_LOADING:
             return {
@@ -73,3 +73,5 @@ export default (state = initState, action) => {
             return state
     }
 }
+
+export default dispatcher

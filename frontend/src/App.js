@@ -10,6 +10,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import Dashboard from './components/Dashboard/Dashboard';
 class App extends Component {
     render() {
       return(
@@ -18,6 +19,7 @@ class App extends Component {
         <Switch>
           <Route path = '/login' exact component={Login}></Route>          
           <Route path = '/register' exact component={Register}></Route>
+          <Route path = '/dashboard' component={Dashboard}></Route>
         </Switch>
       </Router>
       );
