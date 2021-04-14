@@ -48,18 +48,28 @@ function unregisterGlobals() {
  
 function callHook() {
     global $url;
-    // echo "Url: " . $url . "-----------------";
+    global $default;
+    // echo $url;
     $urlArray = array();
     $urlArray = explode("/",$url);
     // foreach($urlArray as $key => $value){
     //     echo $key . ' ' . $value;
     // }
+    if ($url == ''){
+        
+        $controller = $default['controller'];
+        $action = $default['action'];
+        $queryString = array();
+    }
+    else{
+        $controller = $urlArray[0];
+        array_shift($urlArray);
+        $action = $urlArray[0];
+        array_shift($urlArray);
+        $queryString = $urlArray;
+    }
 
-    $controller = $urlArray[0];
-    array_shift($urlArray);
-    $action = $urlArray[0];
-    array_shift($urlArray);
-    $queryString = $urlArray;
+
     
     // echo 'Controller: ' . $controller;
     // echo 'Action: ' . $action;

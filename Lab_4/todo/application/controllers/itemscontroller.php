@@ -16,6 +16,7 @@ class ItemsController extends Controller {
     }
  
     function add() {
+
         $todo = $_POST['todo'];
         $this->set('title','Success - My Todo List App');
         $this->set('todo',$this->Item->query('insert into items (item_name) values (\''.mysqli_real_escape_string($this->Item->getDbHandle(), $todo).'\')'));
