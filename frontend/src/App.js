@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 import Dashboard from './components/Dashboard/Dashboard';
 import { connect } from 'react-redux'
+import { NavBar } from './components/NavBar/NavBar';
 class App extends Component {
   render() {
     return (
@@ -25,13 +26,14 @@ class App extends Component {
           <Route
 
             path="/"
+            exact
             render={({ match: { url } }) => {
               
               return (
                 <>
                   {
                     this.props.user !== null ? 
-                    <Redirect path={`${url}/${this.props.user.role}`} />
+                    <Redirect to={`${this.props.user.role}`} />
                     :null
                   }
                   
@@ -44,11 +46,13 @@ class App extends Component {
           <Route
 
             path="/admin"
+            
             render={({ match: { url } }) => {
               const permission = 'admin'
               return (
                 <>
-                  <PrivateRoute permission={permission} path={`${url}/dashboard`} component={Dashboard} />
+                  <PrivateRoute exact permission={permission} path={`${url}`} component={null} />
+                  <PrivateRoute exact permission={permission} path={`${url}/dashboard`} component={Dashboard} />
                 </>
               )
             }}
