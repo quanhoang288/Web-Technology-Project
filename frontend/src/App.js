@@ -8,9 +8,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  
+  Redirect,
+
 } from "react-router-dom";
 import Dashboard from './components/Dashboard/Dashboard';
+import { connect } from 'react-redux'
 class App extends Component {
   render() {
     return (
@@ -19,7 +21,25 @@ class App extends Component {
         <Switch>
           <Route path='/login' exact component={Login}></Route>
           <Route path='/register' exact component={Register}></Route>
-          
+
+          <Route
+
+            path="/"
+            render={({ match: { url } }) => {
+              
+              return (
+                <>
+                  {
+                    this.props.user !== null ? 
+                    <Redirect path={`${url}/${this.props.user.role}`} />
+                    :null
+                  }
+                  
+                </>
+              )
+            }}
+          />
+
           {/* admin routes */}
           <Route
 
@@ -46,4 +66,21 @@ class App extends Component {
   }
 }
 
-export default App;
+
+
+
+
+
+
+
+
+const mapState = (state) => {
+  return (
+    {
+      user: state.authReducer.user
+    }
+  )
+}
+
+export default connect(mapState)(App)
+
