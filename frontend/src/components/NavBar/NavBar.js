@@ -13,7 +13,7 @@ export class NavBar extends Component {
             <header class='header'>
                 <div className='logo'>Logo</div>
                 <nav>
-                    <ul className='nav__links'>
+                    {/* <ul className='nav__links'>
                         <li>
                             <Link className='links' to='/login'>Log in</Link>
                         </li>
@@ -25,10 +25,23 @@ export class NavBar extends Component {
                         </li>
 
 
-                    </ul>
+                    </ul> */}
 
                 </nav>
-                <button className='cta'>Contact</button>
+                {
+                    !this.props.user ?
+                        <button>
+                            <Link className='links' to='/login'>Log in</Link>
+                        </button>
+                        :
+                        <button onClick={this.props.signout}>
+                            <Link className='links' to='/'>Log out</Link>
+                        </button>
+
+                }
+                
+
+
             </header>
 
 

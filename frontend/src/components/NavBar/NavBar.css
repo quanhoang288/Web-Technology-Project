@@ -8,36 +8,16 @@
     
 }
 .logo{
-    order: 3;
-    margin-left: auto;
-}
-nav{
-    order: 1;
-}
-ul{
-    list-style: none;
-}
-.nav__links li{
-    display: inline-block;
-    padding: 0px 20px ;
-}
-.nav__links li:nth-child(1){
-    display: inline-block;
-    padding: 0px 20px 0px 0px ;
-}
-.nav__links li .links{
-    transition: all 0.5s ease-out 0s;
     
+    margin-right: auto;
 }
-.cta{
-    order: 2;
+.links{
+    color: black;
 }
-.nav__links li .links:hover{
-    color: #0088a9;
-}
+
 .header button{
     padding: 9px 25px;
-    background-color: rgba(51, 51, 51, 0.6);
+    
     border: none;
     border-radius: 50px;
     cursor: pointer;

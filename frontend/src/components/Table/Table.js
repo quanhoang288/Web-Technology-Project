@@ -149,15 +149,7 @@ export class Table extends Component {
 
 
                 
-                <header>header</header>
-                <section>
-                    <div>a</div>
-                    <div>b</div>
-                    <div className='pro'>c</div>
-                </section>
-                <section>lowr-section</section>
-                <footer>footer</footer>
-
+               
             </React.Fragment>
 
         )
