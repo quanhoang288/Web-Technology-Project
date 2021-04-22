@@ -21,9 +21,6 @@ export class Table extends Component {
         const columns = this.props.data[0] && Object.keys(this.props.data[0])
         const query_field = columns ? columns : []
         this.setState({query_field:query_field})
-        
-
-
     }
 
     rowClick = (row_data) => {
@@ -65,23 +62,24 @@ export class Table extends Component {
             <React.Fragment>
                 
 
-                <div>
-                    <input onChange={this.queryHandler}></input>
+                <div  className='searchfield'>
+                    <input required onChange={this.queryHandler}></input>
+                    <label >Search</label>
                 </div>
 
 
-                <div className="hiddenCB">
-                    <h3>Search field</h3>
+                <div className='hiddenCB'>
+                    
 
-                    <div>
+                    <div className = 'checkboxes'>
 
                         {
                             this.props.data[0] ?
                                 columns.map((elm, idx) => {
                                     return (
-                                        
-                                            <label key={idx}>
-                                                <input key={idx} type="checkbox" value="ok" checked={this.state.query_field.includes(elm)}
+                                        <div>
+                                            
+                                                <input id={idx} key={idx} type="checkbox"  checked={this.state.query_field.includes(elm)}
                                                     onChange={(e) => {
                                                         const checked = this.state.query_field.includes(elm)
                                                         const query_field = { ...this.state }.query_field
@@ -96,10 +94,11 @@ export class Table extends Component {
 
 
                                                 />
+                                                <label htmlFor={idx}>
                                                 {elm}
                                             </label>
 
-                                        
+                                        </div>
 
                                     )
 
@@ -147,6 +146,18 @@ export class Table extends Component {
 
                     </tbody>
                 </table>
+
+
+                
+                <header>header</header>
+                <section>
+                    <div>a</div>
+                    <div>b</div>
+                    <div className='pro'>c</div>
+                </section>
+                <section>lowr-section</section>
+                <footer>footer</footer>
+
             </React.Fragment>
 
         )

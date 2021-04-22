@@ -8,23 +8,42 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  
 } from "react-router-dom";
 import Dashboard from './components/Dashboard/Dashboard';
 class App extends Component {
-    render() {
-      return(
-        <Router>
-        <Layout/>
+  render() {
+    return (
+      <Router>
+        <Layout />
         <Switch>
-          <Route path = '/login' exact component={Login}></Route>          
-          <Route path = '/register' exact component={Register}></Route>
-          <Route path = '/dashboard' component={Dashboard}></Route>
+          <Route path='/login' exact component={Login}></Route>
+          <Route path='/register' exact component={Register}></Route>
+          
+          {/* admin routes */}
+          <Route
+
+            path="/admin"
+            render={({ match: { url } }) => {
+              const permission = 'admin'
+              return (
+                <>
+                  <PrivateRoute permission={permission} path={`${url}/dashboard`} component={Dashboard} />
+                </>
+              )
+            }}
+          />
+
+
+          {/* teacher routes */}
+
+
+          {/* student routes */}
         </Switch>
       </Router>
-      );
-      
-    }
+    );
+
+  }
 }
 
 export default App;

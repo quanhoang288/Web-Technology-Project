@@ -1,92 +1,51 @@
-.NavbarItems {
-    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+.header{
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    
     align-items: center;
-    height: 80px;
-    font-size: 1.2rem;
-
-    
+    padding: 30px 10%;
+    background-color: lightgray;
     
 }
-.fa-react{
-    margin-left: 0.5rem;
-    font-size: 1.6rem;
+.logo{
+    order: 3;
+    margin-left: auto;
 }
-.navbar-logo{
-    color: #fff;
-    font-size: 1.6rem;
-    margin-left: 20px;
-    cursor: pointer;
-    
-    
+nav{
+    order: 1;
 }
-.nav-menu{
-    display: grid;
-    grid-template-columns: repeat(5, auto);
-    grid-gap: 10px;
+ul{
     list-style: none;
-    justify-content:end ;
-    margin-right: 2px;
-    width: 70vw;
 }
-.nav-links{
-    color: white;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
+.nav__links li{
+    display: inline-block;
+    padding: 0px 20px ;
 }
-.nav-links:hover{
-    background: purple;
-    border-radius: 4px;
-    transition: all 0.2s ease-out;
+.nav__links li:nth-child(1){
+    display: inline-block;
+    padding: 0px 20px 0px 0px ;
 }
-.nav-links-mobile{
-    display: none;
+.nav__links li .links{
+    transition: all 0.5s ease-out 0s;
+    
 }
-.menu-icon{
-    display: none;
+.cta{
+    order: 2;
 }
-@media  screen and (max-width: 600px) {
-    .NavbarItems{
-        position: relative;
-    }
-    .nav-menu{
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        
-        opacity: 1;
-        transition: all 0.5s ease;
-    }
-    .nav-menu.active{
-        background: #6668f4;
-        left: 0;
-        transition: all 0.5s ease;
-        z-index: 1;
-    }
-    .nav-links{
-        text-align: center;
-        padding: 2rem;
-        width: 100%;
-        display: table;
-    }
-    .nav-links:hover{
-        background: black;
-        border-radius: 0px;
-    }
-    .navbar-logo{
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(25%, 50%);
-    }
-    .menu-icon{
-        display: block;
-        position: absolute;
-        top:0;
-        right: 0;
-        transform: translate(-100%,60%);
-        cursor: pointer;
-    }
+.nav__links li .links:hover{
+    color: #0088a9;
+}
+.header button{
+    padding: 9px 25px;
+    background-color: rgba(51, 51, 51, 0.6);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: auto;
+    
 
-  }
+}
+.header button:hover{
+    background-color: rgba(51, 51, 51, 0.5);
+}
