@@ -32,6 +32,8 @@ $response->setHeader('Access-Control-Allow-Origin: *');
 $response->setHeader("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 $response->setHeader('Content-Type: application/json; charset=UTF-8');
 
+
+$cache = new Cache();
 $router = new Router($request->getUrl(), $request->getMethod());
 
 // import router file

@@ -1,19 +1,11 @@
 <?php
 
-/**
- *
- * This file is part of mvc-rest-api for PHP.
- *
- */
+
 namespace Database;
 
-/**
- * Class DatabaseAdapter for handel database query
- *
- * @author Mohammad Rahmani <rto1680@gmail.com>
- *
- * @package Database
- */
+use PDO;
+use PDOException;
+
 class DatabaseAdapter {
     
     /**
@@ -21,7 +13,7 @@ class DatabaseAdapter {
      *
      * @var
      */
-    private $dbConnection;
+    protected $dbConnection;
 
     /**
      * Database constructor. set connection driver [pdo, mysqli, mysql,...]
@@ -33,14 +25,21 @@ class DatabaseAdapter {
      * @param $database
      */
     public function __construct($driver, $hostname, $username, $password, $database, $port) {
-        $class = '\Database\DB\\' . $driver;
-
-        if (class_exists($class)) {
-            $this->dbConnection = new $class($hostname, $username, $password, $database, $port);
-        } else {
-            exit('Error: Could not load database driver ' . $driver . '!');
+        try {
+            $this->dbConnection = new PDO('mysql:host='.$hostname.'; dbname='.$database, $username, $password);
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage() . " <br/>";
+            die();
         }
+        // $class = '\Database\DB\\' . $driver;
+
+        // if (class_exists($class)) {
+        //     $this->dbConnection = new $class($hostname, $username, $password, $database, $port);
+        // } else {
+        //     exit('Error: Could not load database driver ' . $driver . '!');
+        // }
     }
+
 
     /**
      * @param $sql
@@ -59,13 +58,16 @@ class DatabaseAdapter {
      * @return mixed
      */
     public function escape($value) {
-        return $this->dbConnection->escape($value);
+        $search = array("\\", "\0", "\n", "\r", "\x1a", "'", '"');
+        $replace = array("\\\\", "\\0", "\\n", "\\r", "\Z", "\'", '\"');
+        return str_replace($search, $replace, $value);
+        // return $this->dbConnection->escape($value);
     }
 
     /**
      * @return mixed
      */
     public function getLastId() {
-        return $this->dbConnection->getLastId();
+        return $this->dbConnection->lastInsertId();
     }
 }

@@ -1,8 +1,20 @@
 <?php
 use MVC\Model;
 class ModelsUser extends Model{
-    public function find_username($username)
-    {
+    protected $username;
+    protected $password;
+    protected $firstname;
+    protected $phone;
+    protected $school;
+    protected $active;
+    protected $role;
+
+
+
+    var $hasManyAndBelongsToMany = array("course"=>"course_user"); 
+    var $hasMany = array("course"=>"teacher_id");
+    
+    public function find_username($username){
         $stmt = $this->db->prepare('
             SELECT * from user where username = ?
         ');
@@ -10,6 +22,7 @@ class ModelsUser extends Model{
         
         return $stmt->fetchAll(PDO::FETCH_NAMED);
     }
+
     public function register($data)
     {
         

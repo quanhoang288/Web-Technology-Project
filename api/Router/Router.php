@@ -14,8 +14,10 @@ $router->get('/', function() {
     echo 'Welcome ';
     
 });
-
-
+$router->get('/course/delete', 'course@test_delete');
+$router->get('/course/insert', 'course@test_save');
+$router->get('/course', 'course@test_get');
+$router->get('/user', 'user@test');
 $router->post('/login','user@validate_user');
 $router->post('/register','user@register');
 

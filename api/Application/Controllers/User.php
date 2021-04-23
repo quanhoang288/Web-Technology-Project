@@ -10,6 +10,13 @@ class ControllersUser extends Controller {
         Controller::__construct();
         $this->model = $this->model('user');
     }
+
+    public function test(){
+        // $this->model->id = 2;
+        $this->model->showHMABTM();
+        $this->model->showHasMany();
+        $this->response->setContent(['response' =>$this->model->search()]);
+    }
     public function register()
     {
         $data = json_decode(file_get_contents('php://input'), true);

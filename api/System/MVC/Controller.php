@@ -43,18 +43,27 @@ class Controller {
      */
     public function model($model) {
         $file = MODELS . ucfirst($model) . '.php';
-
+  
 		// check exists file
         if (file_exists($file)) {
+            
             require_once $file;
-
+            
             $model = 'Models' . str_replace('/', '', ucwords($model, '/'));
+            
 			// check class exists
-            if (class_exists($model))
+            if (class_exists($model)){
+             
                 return new $model;
-            else 
+            }
+                
+            else{
+         
                 throw new Exception(sprintf('{ %s } this model class not found', $model));
+            }
+                
         } else {
+            echo "error";
             throw new Exception(sprintf('{ %s } this model file not found', $file));
         }
     }
