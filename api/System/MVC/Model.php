@@ -18,11 +18,12 @@ class Model {
     protected $_hO;
     protected $_hM;
     protected $_hMABTM;
+	
 
     /**
      *  Construct
      */
-    public function __construct() {
+    public function __construct($childClass=null) {
         $this->_db = new \Database\DatabaseAdapter(
             DATABASE['Driver'],
             DATABASE['Host'],
@@ -31,10 +32,14 @@ class Model {
             DATABASE['Name'],
             DATABASE['Port']    
         );
-        
 
+		if (!$childClass){
+			$this->_table = str_replace('models','',strtolower(get_class($this))); 
+		}
+		else{
+			$this->_table = str_replace('models','',strtolower($childClass)); 
+		}
         
-        $this->_table = str_replace('models','',strtolower(get_class($this)));        
 		$this->_describe();
 		
     }
@@ -80,11 +85,11 @@ class Model {
 			}
 		}
         
-		if ($this->id) {
+		if (isset($this->id)) {
 			$conditions .= '`'.$this->_table.'`.`id` = \''.$this->_db->escape($this->id).'\' AND ';
 		}
 
-		if ($this->_extraConditions) {
+		if (isset($this->_extraConditions)) {
 			$conditions .= $this->_extraConditions;
 		}
 
@@ -98,6 +103,7 @@ class Model {
 		
 		$this->_query = 'SELECT * FROM '.$from.' WHERE '.$conditions;
 		echo '<!--'.$this->_query.'-->' . PHP_EOL;
+
 		$this->_result = $this->_db->query($this->_query);
 		$result = array();
 		$table = array();
@@ -250,12 +256,13 @@ class Model {
     }
     protected function _describe() {
 		global $cache;
-
+		// echo $this->_table . PHP_EOL;
 		$this->_describe = $cache->get('describe'.$this->_table);
 
 		if (!$this->_describe) {
 			$this->_describe = array();
 			$query = 'DESCRIBE '.$this->_table;
+			// echo $query . PHP_EOL;
 			$this->_result = $this->_db->query($query);
 			while ($row = $this->_result->fetch(\PDO::FETCH_NUM)) {
 				 array_push($this->_describe,$row[0]);

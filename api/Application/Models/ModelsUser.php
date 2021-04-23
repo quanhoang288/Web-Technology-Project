@@ -10,9 +10,14 @@ class ModelsUser extends Model{
     protected $role;
 
 
+    public function __construct(){
+        // echo "User class: " . get_class() . PHP_EOL;
+        Model::__construct(get_class());
+        // echo "Model user table : " . $this->_table . PHP_EOL;
+        // $this->hasManyAndBelongsToMany = array("course"=>"course_user"); 
+        // $this->hasMany = array("course"=>"teacher_id");
+    }
 
-    var $hasManyAndBelongsToMany = array("course"=>"course_user"); 
-    var $hasMany = array("course"=>"teacher_id");
     
     public function find_username($username){
         $stmt = $this->db->prepare('

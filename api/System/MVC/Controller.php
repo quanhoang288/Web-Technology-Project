@@ -43,17 +43,16 @@ class Controller {
      */
     public function model($model) {
         $file = MODELS . ucfirst($model) . '.php';
-  
+        // echo "Inside controller: ".$file . PHP_EOL;
 		// check exists file
         if (file_exists($file)) {
-            
             require_once $file;
             
             $model = 'Models' . str_replace('/', '', ucwords($model, '/'));
-            
+        
 			// check class exists
             if (class_exists($model)){
-             
+                // echo "Inside controller - Model: $model" . PHP_EOL;
                 return new $model;
             }
                 
@@ -63,7 +62,7 @@ class Controller {
             }
                 
         } else {
-            echo "error";
+            // echo "error";
             throw new Exception(sprintf('{ %s } this model file not found', $file));
         }
     }

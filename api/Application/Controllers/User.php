@@ -4,18 +4,20 @@ use MVC\Controller;
 use JWT\JWT;
 require SYSTEM . 'JWT.php';
 class ControllersUser extends Controller {
-    private $model ;
+    private $_model ;
     public function __construct()
     {
         Controller::__construct();
-        $this->model = $this->model('user');
+        
+        $this->_model = $this->model('user');
+     
     }
 
     public function test(){
-        // $this->model->id = 2;
-        $this->model->showHMABTM();
-        $this->model->showHasMany();
-        $this->response->setContent(['response' =>$this->model->search()]);
+        // $this->_model->id = 2;
+        $this->_model->showHMABTM();
+        // $this->_model->showHasMany();
+        $this->response->setContent(['response' =>$this->_model->search()]);
     }
     public function register()
     {
@@ -23,7 +25,7 @@ class ControllersUser extends Controller {
         $response ='Succesfully Registerd ';
         try{
             
-            $this->model->register($data);
+            $this->_model->register($data);
             $this->response->setContent(['message'=>$response,'code'=>201]);
             $this->response->sendStatus(201);
         }
@@ -40,7 +42,7 @@ class ControllersUser extends Controller {
         $data = json_decode(file_get_contents('php://input'), true);
         $username = $data['username'];
         $password = $data['password'];
-        $user = ($this->model->find_username($username));
+        $user = ($this->_model->find_username($username));
 
         $response ='';
         if(sizeof($user) == 0)
