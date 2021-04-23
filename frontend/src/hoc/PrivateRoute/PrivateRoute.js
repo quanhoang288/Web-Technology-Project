@@ -3,7 +3,7 @@ import { Redirect, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 const PrivateRoute = ({ component: Component,token,user, permission, ...rest }) => {
-    console.log(permission)
+    
     return (
         <Route {...rest} render={props => {
             if (token) {

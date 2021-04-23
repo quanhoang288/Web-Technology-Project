@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import PrivateRoute from './hoc/PrivateRoute/PrivateRoute'
 import Layout from './hoc/Layout/Layout'
 import Login from './components/Login/Login'
@@ -13,7 +12,8 @@ import {
 } from "react-router-dom";
 import Dashboard from './components/Dashboard/Dashboard';
 import { connect } from 'react-redux'
-import { NavBar } from './components/NavBar/NavBar';
+import NavBar from './components/NavBar/NavBar'
+
 class App extends Component {
   render() {
     return (
@@ -28,15 +28,14 @@ class App extends Component {
             path="/"
             exact
             render={({ match: { url } }) => {
-              
               return (
                 <>
                   {
-                    this.props.user !== null ? 
-                    <Redirect to={`${this.props.user.role}`} />
-                    :null
+                    this.props.user !== null ?
+                      <Redirect to={`${this.props.user.role}`} />
+                      : null
                   }
-                  
+
                 </>
               )
             }}
@@ -46,23 +45,56 @@ class App extends Component {
           <Route
 
             path="/admin"
-            
+
             render={({ match: { url } }) => {
               const permission = 'admin'
               return (
                 <>
-                  <PrivateRoute exact permission={permission} path={`${url}`} component={null} />
+                  {/* default route */}
+                  
+
                   <PrivateRoute exact permission={permission} path={`${url}/dashboard`} component={Dashboard} />
+                  
                 </>
               )
             }}
           />
 
-
           {/* teacher routes */}
+          <Route
 
+            path="/teacher"
 
+            render={({ match: { url } }) => {
+              const permission = 'teacher'
+              return (
+                <>
+                  
+
+                  <PrivateRoute exact permission={permission} path={`${url}/dashboard`} component={Dashboard} />
+                  
+                </>
+              )
+            }}
+          />
           {/* student routes */}
+          <Route
+
+            path="/"
+            exact
+            render={() => {
+              return (
+                <>
+                  {
+                    this.props.user !== null ?
+                      <Redirect to={`${this.props.user.role}`} />
+                      : null
+                  }
+
+                </>
+              )
+            }}
+          />
         </Switch>
       </Router>
     );
