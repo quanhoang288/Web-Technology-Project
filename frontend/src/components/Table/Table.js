@@ -59,7 +59,7 @@ export class Table extends Component {
         return (
 
 
-            <React.Fragment>
+            <div>
                 
 
                 <div  className='searchfield'>
@@ -146,11 +146,8 @@ export class Table extends Component {
 
                     </tbody>
                 </table>
-
-
-                
                
-            </React.Fragment>
+            </div>
 
         )
     }

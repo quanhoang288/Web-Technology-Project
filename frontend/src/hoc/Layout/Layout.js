@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import NavBar from '../../components/NavBar/NavBar'
-
-
+import Sidebar from '../../components/Sidebar/Sidebar'
+import './Layout.css'
 class Layout extends Component {
     render() {
         return (
-            <React.Fragment>
+            <div>
                 <NavBar></NavBar>
-                <main className='Content'>
+                <Sidebar permission={this.props.permission}></Sidebar>
+                
                     {this.props.children}
-                </main>
-            </React.Fragment>
+                
+
+            </div>
         )
     }
 }

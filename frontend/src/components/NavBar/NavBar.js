@@ -44,29 +44,6 @@ export class NavBar extends Component {
 
             </header>
 
-
-
-            // <nav className="NavbarItems">
-            //     <div className='navbar-logo'>react<i className='fab fa-react'></i></div>
-
-
-
-            //     <ul className='nav-menu'>
-            //         {
-
-            //             !this.props.user ?
-            //                 <Link to='/login' className='nav-links'>Sign in</Link>
-            //                 :
-            //                 <Dropdown className='nav-links' username = {this.props.user.username}>
-            //                     <Link to='/login' onClick={this.props.signout}>Log out</Link>
-            //                 </Dropdown>
-
-
-
-            //         }
-
-            //     </ul>
-            // </nav>
         )
     }
 }
