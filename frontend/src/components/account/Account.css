@@ -1,0 +1,31 @@
+.account {
+  height: 15%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.account img{
+  height: 100%;
+  min-height: 30px;
+  width: 600%;
+  min-height: 50px;
+}
+
+.account .name-role{
+  margin-left: 5px;
+}
+
+.account .name-account{
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+  font-size: large;
+}
+
+.account .role-account{
+  color: rgb(255, 255, 255);
+  position: absolute;
+  bottom: 0;
+}

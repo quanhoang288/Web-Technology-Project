@@ -1,0 +1,37 @@
+.newsItem{
+  border-bottom: 1px solid rgb(204, 204, 204);
+  
+  /* border: 5px dashed red; */
+  
+  
+  background: rgb(246, 246, 246);
+}
+
+.newsItem a{
+  color: rgb(17, 17, 17);
+  text-decoration: none;
+}
+
+.newsItem a:hover{
+  text-decoration:underline;
+}
+
+.newsItem h2{
+  font-size: 25px;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+.newsItem i {
+  color: rgb(180, 180, 180);
+  font-size: 15px;
+  font-style: italic;
+  margin-right: 1rem;
+}
+
+.newsItem label{
+  display: block;
+}
