@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-
 import PrivateRoute from './hoc/PrivateRoute/PrivateRoute'
 import Layout from './hoc/Layout/Layout'
 import Login from './components/Login/Login'
 import Register from './components/Registration/Registration'
+import Sidebar from './components/Sidebar/Sidebar'
+import News from'./components/news/News'
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,6 +20,8 @@ class App extends Component {
         <Switch>
           <Route path = '/login' exact component={Login}></Route>          
           <Route path = '/register' exact component={Register}></Route>
+          <Route path = '/sidebar' exact component={Sidebar}></Route>
+          <Route path = '/news' exact component={News}></Route>
         </Switch>
       </Router>
       );
