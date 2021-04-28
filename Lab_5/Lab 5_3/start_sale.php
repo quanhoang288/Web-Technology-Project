@@ -27,6 +27,9 @@
           <form ACTION = "sale.php"  method = "POST">
             <p style="color: blue; font-size: 20px;">SELECT PRODUCT WE JUST SOLD<p>';
           
+          // while($row = $result->fetch_row()){
+          //     echo "<input type='radio' name='contact' value='Yes'>";
+          // }
 
           echo '
             <br>

@@ -3,12 +3,7 @@
   <title>Display data from Products</title>
 </head>
 <body>
-  <label style="color: blue; font-size: 20px;">Products DATA<label>
-  <br>
-  <label style="color: black; font-size: medium;">The Query is SELECT * FROM Products<label>
-  <br>
-  <br>
-
+  <p style="color: blue; font-size: 20px;">UPDATE Results for Table Products<p>
   <?php
     $server = 'localhost';
     $user = 'root';
@@ -16,12 +11,23 @@
 
     $mydb = 'mydatabase';
     $table_name = 'Products';
+    $Product_desc = $_POST["Product_desc"];
 
     $connect = mysqli_connect($server, $user, $pass, $mydb);
       if (!$connect) {
         die ("Cannot connect to $server using $user");
       }
       else {
+
+        $SQL_update = "UPDATE $table_name SET Numb = Numb - 1
+                        WHERE (Product_desc = ".'"'.$Product_desc.'"'.")";
+
+        if (mysqli_query($connect, $SQL_update)) {
+          print "The Query is " . $SQL_update;
+        } else {
+          print "Error: " . $SQL_update . "<br>" . mysqli_error($connect);
+        }
+
         $SQL_Display = "SELECT * FROM $table_name";
         $result = mysqli_query($connect, $SQL_Display);
 
