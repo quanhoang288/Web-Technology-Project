@@ -12,22 +12,7 @@ export class NavBar extends Component {
         return (
             <header class='header'>
                 <div className='logo'>Logo</div>
-                <nav>
-                    {/* <ul className='nav__links'>
-                        <li>
-                            <Link className='links' to='/login'>Log in</Link>
-                        </li>
-                        <li>
-                            <Link className='links' to='/register'>Sign up</Link>
-                        </li>
-                        <li>
-                            <Link className='links' to='/register'>Sign up</Link>
-                        </li>
-
-
-                    </ul> */}
-
-                </nav>
+                
                 {
                     !this.props.user ?
                         <button>
