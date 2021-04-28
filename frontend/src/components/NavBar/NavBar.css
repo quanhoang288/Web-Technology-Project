@@ -1,92 +1,31 @@
-.NavbarItems {
-    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+.header{
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+    
     align-items: center;
-    height: 80px;
-    font-size: 1.2rem;
+    padding: 30px 10%;
+    background-color: lightgray;
+    
+}
+.logo{
+    
+    margin-right: auto;
+}
+.links{
+    color: black;
+}
 
+.header button{
+    padding: 9px 25px;
     
-    
-}
-.fa-react{
-    margin-left: 0.5rem;
-    font-size: 1.6rem;
-}
-.navbar-logo{
-    color: #fff;
-    font-size: 1.6rem;
-    margin-left: 20px;
+    border: none;
+    border-radius: 50px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: auto;
     
-    
-}
-.nav-menu{
-    display: grid;
-    grid-template-columns: repeat(5, auto);
-    grid-gap: 10px;
-    list-style: none;
-    justify-content:end ;
-    margin-right: 2px;
-    width: 70vw;
-}
-.nav-links{
-    color: white;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-}
-.nav-links:hover{
-    background: purple;
-    border-radius: 4px;
-    transition: all 0.2s ease-out;
-}
-.nav-links-mobile{
-    display: none;
-}
-.menu-icon{
-    display: none;
-}
-@media  screen and (max-width: 600px) {
-    .NavbarItems{
-        position: relative;
-    }
-    .nav-menu{
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        
-        opacity: 1;
-        transition: all 0.5s ease;
-    }
-    .nav-menu.active{
-        background: #6668f4;
-        left: 0;
-        transition: all 0.5s ease;
-        z-index: 1;
-    }
-    .nav-links{
-        text-align: center;
-        padding: 2rem;
-        width: 100%;
-        display: table;
-    }
-    .nav-links:hover{
-        background: black;
-        border-radius: 0px;
-    }
-    .navbar-logo{
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(25%, 50%);
-    }
-    .menu-icon{
-        display: block;
-        position: absolute;
-        top:0;
-        right: 0;
-        transform: translate(-100%,60%);
-        cursor: pointer;
-    }
 
-  }
+}
+.header button:hover{
+    background-color: rgba(51, 51, 51, 0.5);
+}

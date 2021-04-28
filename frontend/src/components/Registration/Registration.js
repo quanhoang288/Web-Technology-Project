@@ -12,7 +12,7 @@ class Registration extends Component {
             password: '',
             firstname: '',
             lastname: '',
-            role: 's',
+            role: 'student',
             school: '',
             phone: '',
         },
@@ -133,8 +133,8 @@ class Registration extends Component {
 
                                 })}
                                 <select onChange={(e) => this.fieldOnChangeHandler('role', e)}>
-                                    <option value="s" >Student</option>
-                                    <option value="t" >Teacher</option>
+                                    <option value="student" >Student</option>
+                                    <option value="teacher" >Teacher</option>
 
                                 </select>
                                 <div className="field">

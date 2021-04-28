@@ -1,0 +1,9 @@
+.courses{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+.course-lists{
+    text-align: center;
+    margin: 30px 10px;
+}
