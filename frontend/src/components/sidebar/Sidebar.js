@@ -17,7 +17,13 @@ export class Sidebar extends Component {
                 break
             case 'teacher':
                 items = [
+<<<<<<< HEAD
 
+=======
+                    <li><Link to="/teacher/info"><i className="fas fa-qrcode"></i>General Info</Link></li>,
+                    <li><Link to="/teacher/courses"><i className="fas fa-qrcode"></i>Courses</Link></li>,
+                    <li><Link to="/teacher/assignment"><i className="fas fa-qrcode"></i>Assignment</Link></li>,
+>>>>>>> af966eb... 'update-frontend'
                 ]
                 break
             case 'student':
