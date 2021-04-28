@@ -1,33 +1,27 @@
-import React, { Fragment } from 'react'
-import { Redirect , Route} from 'react-router-dom'
+import React from 'react'
+import { Redirect, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-const PrivateRoute = ({component: Component,token,permission, ...rest}) => {
-
-    // check permission before processing
+const PrivateRoute = ({ component: Component,token,user, permission, ...rest }) => {
     
-
-    //look for permission status in redux store ( current user )
-
-
-
-    //
     return (
+        <Route {...rest} render={props => {
+            if (token) {
+                if (user.role === permission) {
+                    return (<Component {...props} />)
+                }
+                return <h1>Permission deined</h1>
+            }
+            return <Redirect to="/login" />
 
-        
-        <Route {...rest} render={props => (
-            token ? 
-                <Component {...props} />
-            : <Redirect to="/login" />
-        )} />
+
+        }} />
     );
-    
-
-    
 }
 const mapState = (state) => {
     return {
-        token: state.authReducer.token
+        token: state.authReducer.token,
+        user: state.authReducer.user
     }
 }
 

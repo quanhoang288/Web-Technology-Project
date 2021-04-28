@@ -7,19 +7,23 @@ class ModelsUser extends Model{
             SELECT * from user where username = ?
         ');
         $stmt->execute(array($username));
-        return $stmt->fetchAll();
+        
+        return $stmt->fetchAll(PDO::FETCH_NAMED);
     }
     public function register($data)
     {
+        
         $stmt = $this->db->prepare('
             insert into user
-            values (null,?,?,?,?,?,?,?,?)
+            values (null,?,?,?,?,?,?,1,?)
         ');
 
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $stmt->execute(array_values($data));
         
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_NAMED);
     }
+    
+
 }

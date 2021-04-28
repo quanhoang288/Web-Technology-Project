@@ -1,39 +1,25 @@
 import React, { Component } from 'react';
 import NavBar from '../../components/NavBar/NavBar'
-
-import { connect } from 'react-redux'
+import Sidebar from '../../components/Sidebar/Sidebar'
+import Footer from '../../components/Footer/Footer'
+import './Layout.css'
 class Layout extends Component {
-    
-
-    
-
-    render () {
-        
+    render() {
         return (
-            <React.Fragment>
-                
+            <div>
                 <NavBar></NavBar>
-                {/* {
-                    this.props.user ?
-                    <p>{this.props.user['role']}</p>
-                    :
-                    <p>Need logged in</p>
-                } */}
-                <main className='Content'>
-                    {this.props.children}
-                </main>
-                </React.Fragment>
+                <Sidebar permission={this.props.permission}></Sidebar>
+                
+                {this.props.children}
+                <Footer></Footer>
+                
+
+            </div>
         )
     }
 }
 
-const mapState = (state) => {
-    return (
-        {
-            user : state.authReducer.user
-        }
-    )
-}
 
-export default connect(mapState, null)(Layout)
-// export default Layout;
+
+export default Layout
+

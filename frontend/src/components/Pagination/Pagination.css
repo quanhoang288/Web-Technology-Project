@@ -1,0 +1,50 @@
+
+
+.pagination ul {
+  position: relative;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 50px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.pagination ul li {
+  list-style: none;
+  line-height: 50px;
+  margin: 0 5px;
+}
+
+.pagination ul li.pageNumber {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+
+.pagination ul li a {
+  display: block;
+  text-decoration: none;
+  color: #383838;
+  font-weight: 600;
+  border-radius: 50%;
+}
+
+.pagination ul li.pageNumber:hover a,
+.pagination ul li.pageNumber.active a {
+  background: #383838;
+  color: #fff;
+}
+
+.pagination ul li:first-child {
+  margin-right: 30px;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.pagination ul li:last-child {
+  margin-left: 30px;
+  font-weight: 700;
+  font-size: 20px;
+}
