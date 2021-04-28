@@ -329,7 +329,7 @@ class SQLQuery {
     /** Delete an Object **/
 
 	function delete() {
-		echo "deleting";
+		// echo "deleting";
 		global $inflect;
 		// if (isset($this->id)) {
 		// 	$query = 'DELETE FROM '.$this->_table.' WHERE `id`=\''.mysqli_real_escape_string($this->_dbHandle, $this->id).'\'';		
@@ -401,7 +401,7 @@ class SQLQuery {
                 }
             }
 			$query = 'DELETE FROM '.$this->_table.' WHERE `id`='.$this->id;	
-            echo $query . ' </br>';
+            // echo $query . ' </br>';
 			$this->_result = mysqli_query($this->_dbHandle, $query);
 			$this->clear();
 			
@@ -411,7 +411,7 @@ class SQLQuery {
 		    }
             return true;
 		} else {
-			echo "no id given!" . '</br>';
+			// echo "no id given!" . '</br>';
 			/** Error Generation **/
 			return false;
 		}
