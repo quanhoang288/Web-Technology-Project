@@ -73,7 +73,7 @@ function routeURL($url) {
 function callHook() {
 	global $url;
 	global $default;
-
+	
 	$queryString = array();
 
 	if ($url == '') {
@@ -102,10 +102,13 @@ function callHook() {
 			$action = 'index'; // Default Action
 		}
 		$queryString = $urlArray;
+
 		// foreach($queryString as $value){
 		// 	echo "Query string: " . $value . ' </br>';
 		// }
 	}
+	// echo $controller . ' - ' . $action;
+	
 	
 	$controllerName = ucfirst($controller).'Controller';
 

@@ -83,7 +83,7 @@ class SQLQuery {
 	}
 
 	function search($singleResult = 0) {
-
+		
 		global $inflect;
 
 		$from = '`'.$this->_table.'` as `'.$this->_model.'` ';
@@ -121,7 +121,8 @@ class SQLQuery {
 		}
 		
 		$this->_query = 'SELECT * FROM '.$from.' WHERE '.$conditions;
-		#echo '<!--'.$this->_query.'-->';
+		
+		// echo $this->_query . ' </br> ';
 		$this->_result = mysqli_query($this->_dbHandle, $this->_query);
 		$result = array();
 		$table = array();
@@ -136,6 +137,13 @@ class SQLQuery {
 			while ($row = $this->_result->fetch_row()) {
 				for ($i = 0;$i < $numOfFields; ++$i) {
 					$tempResults[$table[$i]][$field[$i]] = $row[$i];
+					// if (!isset($tempResults[$table[$i]][$field[$i]])){
+						
+					// }
+					// else{
+					// 	$tempResults[$alias .'_'.$table[$i]][$field[$i]] = $row[$i];
+					// }
+					
 				}
 
 				if ($this->_hM == 1 && isset($this->hasMany)) {
@@ -153,7 +161,7 @@ class SQLQuery {
 						$conditionsChild .= '`'.$aliasChild.'`.`'.strtolower($this->_model).'_id` = \''.$tempResults[$this->_model]['id'].'\'';
 	
 						$queryChild =  'SELECT * FROM '.$fromChild.' WHERE '.$conditionsChild;	
-						#echo '<!--'.$queryChild.'-->';
+						// echo '<!--'.$queryChild.'-->' . PHP_EOL;
 						$resultChild = mysqli_query($this->_dbHandle, $queryChild);
 				
 						$tableChild = array();
@@ -206,7 +214,7 @@ class SQLQuery {
 						$fromChild = substr($fromChild,0,-1);
 
 						$queryChild =  'SELECT * FROM '.$fromChild.' WHERE '.$conditionsChild;	
-						#echo '<!--'.$queryChild.'-->';
+						// echo '<!--'.$queryChild.'-->' . PHP_EOL;
 						$resultChild = mysqli_query($this->_dbHandle, $queryChild);
 				
 						$tableChild = array();
@@ -259,9 +267,12 @@ class SQLQuery {
 	function custom($query) {
 
 		global $inflect;
-		// echo $query . ' </br>';
+		// echo $query . PHP_EOL;
 		$this->_result = mysqli_query($this->_dbHandle, $query);
-
+		if (!$this->_result){
+			// echo "could not insert into db" . PHP_EOL;
+		}
+		// echo "//////////////";
 		$result = array();
 		$table = array();
 		$field = array();
@@ -318,17 +329,91 @@ class SQLQuery {
     /** Delete an Object **/
 
 	function delete() {
+		echo "deleting";
+		global $inflect;
+		// if (isset($this->id)) {
+		// 	$query = 'DELETE FROM '.$this->_table.' WHERE `id`=\''.mysqli_real_escape_string($this->_dbHandle, $this->id).'\'';		
+		// 	echo ' </br> ' . $query . ' </br>';
+		// 	$this->_result = mysqli_query($this->_dbHandle, $query);
+		// 	$this->clear();
+		// 	if (!$this->_result) {
+		// 	    /** Error Generation **/
+		// 		return false;
+		//    }
+		//    return true;
+		// } else {
+		// 	echo "no id provided!";
+		// 	return false;
+		// }
 		if ($this->id) {
-			$query = 'DELETE FROM '.$this->_table.' WHERE `id`=\''.mysqli_real_escape_string($this->_dbHandle, $this->id).'\'';		
+            if (isset($this->hasMany)){
+                
+                foreach($this->hasMany as $aliasChild => $modelChild){
+                    $queryChild = '';
+                    $conditionsChild = '';
+                    $fromChild = '';
+             
+					
+                    $tableChild = strtolower($inflect->pluralize($modelChild));
+					$pluralAliasChild = strtolower($inflect->pluralize($aliasChild));
+					$singularAliasChild = strtolower($aliasChild);
+
+					$fromChild .= '`'.$tableChild.'`' ;
+					
+					$conditionsChild .= '`'.strtolower($this->_model).'_id` = \''.$this->id.'\'';
+					$queryChild = 'DELETE FROM ' . $fromChild . ' WHERE ' . $conditionsChild;
+					echo $queryChild . '</br>';
+                    
+                    $this->_result = mysqli_query($this->_dbHandle, $queryChild);
+                    if (!$this->_result){
+						echo "error delete child row!" . ' </br>';
+                        return false;
+                    }
+                }
+            }
+            if (isset($this->hasManyAndBelongsToMany)){
+                foreach ($this->hasManyAndBelongsToMany as $aliasChild=>$tableChild) {
+                    $queryChild = '';
+					$conditionsChild = '';
+					$fromChild = '';
+
+					$tableChild = strtolower($inflect->pluralize($tableChild));
+					$pluralAliasChild = strtolower($inflect->pluralize($aliasChild));
+					// $singularAliasChild = strtolower($aliasChild);
+
+					$sortTables = array($this->_table,$pluralAliasChild);
+					sort($sortTables);
+					$joinTable = implode('_',$sortTables);
+
+					$fromChild .= '`'.$joinTable.'`';
+
+					$conditionsChild .= '`'.$joinTable.'`.`'.strtolower($this->_model).'_id` = \''.$this->id.'\'';
+				
+				
+                    $queryChild =  'DELETE  FROM '.$fromChild.' WHERE '.$conditionsChild;	
+
+                    
+					
+                    $this->_result = mysqli_query($this->_dbHandle, $queryChild);
+                    if (!$this->_result){
+                        return false;
+                    }
+                }
+            }
+			$query = 'DELETE FROM '.$this->_table.' WHERE `id`='.$this->id;	
+            echo $query . ' </br>';
 			$this->_result = mysqli_query($this->_dbHandle, $query);
 			$this->clear();
-			if ($this->_result == 0) {
-			    /** Error Generation **/
-				return -1;
-		   }
+			
+			if (!$this->_result) {
+				
+				return false;
+		    }
+            return true;
 		} else {
+			echo "no id given!" . '</br>';
 			/** Error Generation **/
-			return -1;
+			return false;
 		}
 		
 	}
@@ -371,7 +456,7 @@ class SQLQuery {
 		$this->clear();
 		if (!$this->_result) {
             /** Error Generation **/
-			echo "failed";
+			// echo "failed";
 			return -1;
         }
 	}
