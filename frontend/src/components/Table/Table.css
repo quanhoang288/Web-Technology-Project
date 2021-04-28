@@ -5,12 +5,8 @@
 table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-<<<<<<< HEAD
-    width: 90%;
-    margin: 0 auto;
-=======
+    
     width: 100%;  
->>>>>>> af966eb... 'update-frontend'
   }
   
   table td, table th {
