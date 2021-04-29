@@ -59,7 +59,7 @@ export class Table extends Component {
         return (
 
 
-            <div>
+            <div className='custom-table'>
                 
 
                 <div  className='searchfield'>

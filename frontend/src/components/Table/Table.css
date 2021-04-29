@@ -1,7 +1,12 @@
+.custom-table{
+  padding: 20px;
+  
+}
 table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
   }
   
   table td, table th {
