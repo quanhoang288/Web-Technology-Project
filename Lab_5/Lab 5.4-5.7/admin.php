@@ -52,6 +52,8 @@
 	<h1>
 		Category Adminstration
 	</h1>
+	<a href="index.php">Back to home</a>
+	<br>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<table style="width:100%">
 

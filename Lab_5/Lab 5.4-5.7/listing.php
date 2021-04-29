@@ -86,6 +86,7 @@
 
             $connect->close();
         ?>
+        <a href="index.php">Back to home</a>
         <div id='content'>
         <table id="category">
             <th>Click on a category to find business listings</th>

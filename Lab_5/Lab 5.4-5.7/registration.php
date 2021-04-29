@@ -58,6 +58,7 @@
 	<h1>
 		Business Registration
 	</h1>
+	<a href="index.php">Back to home</a>
 
 	<?php 
 		$query = "SELECT Title FROM categories";
