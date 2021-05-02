@@ -3,7 +3,7 @@ import PrivateRoute from './hoc/PrivateRoute/PrivateRoute'
 import Layout from './hoc/Layout/Layout'
 import Login from './components/Login/Login'
 import Register from './components/Registration/Registration'
-
+import HomePage from './containers/Homepage/HomePage'
 import {
   BrowserRouter as Router,
   Switch,
@@ -15,6 +15,7 @@ import {
 import AdminDashboard from './containers/Admin/AdminDashboard/AdminDashboard'
 import StudentManagement from './containers/Admin/StudentManagement/StudentManagement'
 import TeacherManagement from './containers/Admin/TeacherManagement/TeacherManagement'
+import CourseManagement from './containers/Admin/CourseManagement/CourseManagement'
 import StudentInfo from './containers/Student/StudentInfo/StudentInfo'
 import StudentCourse from './containers/Student/StudentCourse/StudentCourse'
 import Assignment from './containers/Student/Assignment/Assignment'
@@ -28,21 +29,21 @@ class App extends Component {
         <Layout permission={this.props.user !== null ? this.props.user.role : 'default'}>
 
           <Switch>
+            
             <Route path='/login' exact component={Login}></Route>
             <Route path='/register' exact component={Register}></Route>
-            {/* <Route path='/dashboard' exact component={Register}></Route> */}
-            
             <Route
 
               path="/"
               exact
               render={({ match: { url } }) => {
+                
                 return (
                   <>
                     {
                       this.props.user !== null ?
                         <Redirect to={`${this.props.user.role}`} />
-                        : null
+                        : <HomePage></HomePage>
                     }
 
                   </>
@@ -65,6 +66,7 @@ class App extends Component {
                     <PrivateRoute exact permission={permission} path={`${url}/dashboard`} component={AdminDashboard} />
                     <PrivateRoute exact permission={permission} path={`${url}/manage/students`} component={StudentManagement} />
                     <PrivateRoute exact permission={permission} path={`${url}/manage/teachers`} component={TeacherManagement} />
+                    <PrivateRoute exact permission={permission} path={`${url}/manage/courses`} component={CourseManagement} />
 
                   </>
                 )

@@ -1,49 +1,53 @@
 import React, { Component } from 'react'
-import Carousel from '../../../components/Carousel/Carousel'
-import Card from '../../../components/Card/Card'
-import Pagination from '../../../components/Pagination/Pagination'
-import News from '../../../components/News/News'
 import './AdminDashboard.css'
+import Notiboard from '../../../components/Notiboard/Notiboard'
+import StatCard from '../../../components/Card/StatCard'
+import MOCKDATA from '../../../components/Notiboard/mock.json'
+
 export class Dashboard extends Component {
-    state = {
-        currentPage: 1,
-        postsPerPage: 5,
-    }
-    paginate = pageNumber => this.setState({currentPage:pageNumber})
-
     render() {
-        const posts = [
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'abc'},
-            {"id":1, 'title':'bom bom'},
-            {"id":1, 'title':'second to last'},
-            {"id":1, 'title':'last'},
+        const stats = [
+            {title:"Revenue",content:"$1234"},
+            {title:"Visitor",content:"123"},
+            {title:"Student",content:"69"},
+            {title:"Course",content:"96"},
         ]
-        const indexOfLastPost = this.state.currentPage * this.state.postsPerPage;
-        const indexOfFirstPost = indexOfLastPost - this.state.postsPerPage;
-        const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-        
+            
         return (
-            <React.Fragment>
-                  {/* <News posts={currentPosts} loading={false} />
-                 <Pagination
-        postsPerPage={this.state.postsPerPage}
-        totalPosts={posts.length}
-        paginate={this.paginate}
-        currentPage={this.state.currentPage}
-      /> */}
-      <div>Statistics</div>
+            <div className='dashboard'>
+                <div className="title">
+                    Dashboard
+                </div>
+                <div className="statistics">
+                   {
+                       stats.map((item, idx) => {
+                           return(
+                               <StatCard
+                                    title = {item.title}
+                                    content = {item.content}
+                               />
+                           )
+                       })
+                   }
+                </div>
                 
-            </React.Fragment>
+                <div className="notiboard">
+                <Notiboard data = {MOCKDATA} rowPerPage={2}>
+                    </Notiboard>
+                    <div className="create-plan">
+          <h1>Update plan</h1>
+          <hr></hr>
+          <textarea></textarea>
+          <button>Submit</button>
+        </div>
+                </div>
+                    
 
-
+                    
+                    
+                
+                
+            </div>
         )
     }
 }

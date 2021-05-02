@@ -1,17 +1,19 @@
 .footer {
     border: 1px solid lightgray;
-    height: 350px;
-    position: relative;
+    height: 50px;
+    position: fixed;
+    bottom: 0px;
     background-color: #fff;
+    width:100%;
     border-radius:3px;
-    top: 4em;
+    
     
   }
   .footer-content{
-    height:300px;
+    height:80%;
     display:flex;
     padding: 40px 60px;
-    width:100%;
+    
     border-bottom: 1px solid #84849D;
   }
   .footer-section {

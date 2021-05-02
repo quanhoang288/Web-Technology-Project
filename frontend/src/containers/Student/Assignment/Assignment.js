@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import MiniCard from '../../../components/Card/MiniCard'
+// import MiniCard from '../../../components/Card/MiniCard'
 import './Assignment.css'
 export class Assignment extends Component {
     render() {
         return (
             <div className='assignment'>
-                <div className='ongoing'>
+                {/* <div className='ongoing'>
                     <p>Ongoing</p>
                     <MiniCard></MiniCard>
                     <MiniCard></MiniCard>
@@ -14,7 +14,7 @@ export class Assignment extends Component {
                     <p>Due</p>
                         <MiniCard></MiniCard>
                         <MiniCard></MiniCard>
-                </div>
+                </div> */}
             </div>
         )
     }

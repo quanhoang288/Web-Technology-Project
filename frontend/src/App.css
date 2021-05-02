@@ -12,4 +12,10 @@ li, a, button{
     
     font-weight: 400;
     text-decoration: none;
+    color: black;
+    
+}
+
+body{
+    background-color: 	#F8F8F8;
 }
