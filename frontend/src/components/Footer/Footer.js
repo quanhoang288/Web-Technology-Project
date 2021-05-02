@@ -4,7 +4,7 @@ export class Footer extends Component {
     render() {
         return (
             <div class="footer">
-                <div class="footer-content">
+                {/* <div class="footer-content">
                     <div class="footer-section">
                         <h3>Gallery</h3>
                         <ul>
@@ -36,7 +36,7 @@ export class Footer extends Component {
                         <input type="email" placeholder="Enter your email address" />
                         <button>Subscribe</button>
                     </div>
-                </div>
+                </div> */}
                 <div class="footer-bottom">
                     Privacy policy-Terms and conditions
   </div>

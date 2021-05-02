@@ -12,7 +12,7 @@ export class Sidebar extends Component {
                     <li><Link to="/admin/manage/students"><i className="fas fa-qrcode"></i>Students</Link></li>,
                     <li><Link to="/admin/manage/teachers"><i className="fas fa-qrcode"></i>Teachers</Link></li>,
                     <li><Link to="/admin/manage/courses"><i className="fas fa-qrcode"></i>Courses</Link></li>,
-                    
+
                 ]
                 break
             case 'teacher':
@@ -27,13 +27,12 @@ export class Sidebar extends Component {
                     <li><Link to="/student/info"><i className="fas fa-qrcode"></i>General Info</Link></li>,
                     <li><Link to="/student/payment"><i className="fas fa-qrcode"></i>Payment</Link></li>,
                     <li><Link to="/student/courses"><i className="fas fa-qrcode"></i>Course</Link></li>,
-                    
+
                     <li><Link to="/student/schedule"><i className="fas fa-qrcode"></i>Schedule</Link></li>,
 
                 ]
                 break
         }
-
         return (
             <div class="sidebar-wrapper">
                 <div className={this.props.permission === 'default' ? 'sidebar-disable' : 'sidebar-enable'}>
@@ -43,14 +42,14 @@ export class Sidebar extends Component {
                         <i class="fas fa-times" id="cancel"></i>
                     </label>
                     <div className='sidebar'>
-                    <header> . </header>
-                    <ul>
-                        {items}
-                    </ul>
+                        <header> . </header>
+                        <ul>
+                            {items}
+                        </ul>
                     </div>
-                    
+
                 </div>
-            </div>            
+            </div>
         )
     }
 }

@@ -1,5 +1,9 @@
 
-
+.pagination{
+  width: 50%;
+  padding-top: 20px;
+  margin: auto;
+}
 .pagination ul {
   position: relative;
   background: #fff;
