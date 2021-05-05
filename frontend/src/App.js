@@ -9,7 +9,6 @@ import {
   Switch,
   Route,
   Redirect,
-
 } from "react-router-dom";
 
 import AdminDashboard from './containers/Admin/AdminDashboard/AdminDashboard'
@@ -119,13 +118,6 @@ class App extends Component {
 
   }
 }
-
-
-
-
-
-
-
 
 
 const mapState = (state) => {
