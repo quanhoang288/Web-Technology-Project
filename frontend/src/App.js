@@ -30,7 +30,7 @@ class App extends Component {
         <Layout permission={this.props.user !== null ? this.props.user.role : 'default'}>
 
           <Switch>
-            
+
             <Route path='/login' exact component={Login}></Route>
             <Route path='/register' exact component={Register}></Route>
             <Route
@@ -38,7 +38,7 @@ class App extends Component {
               path="/"
               exact
               render={({ match: { url } }) => {
-                
+
                 return (
                   <>
                     {
@@ -61,13 +61,17 @@ class App extends Component {
                 const permission = 'admin'
                 return (
                   <>
-                    {/* default route */}
+                    
+                    <Switch>
+                    
+                      <PrivateRoute exact permission={permission} path={`${url}/manage/students`} component={StudentManagement} />
+                      <PrivateRoute exact permission={permission} path={`${url}/manage/teachers`} component={TeacherManagement} />
+                      <PrivateRoute exact permission={permission} path={`${url}/manage/courses`} component={CourseManagement} />
+                      <PrivateRoute exact permission={permission} path={ `${url}/dashboard`} component={AdminDashboard} />
+                      <Redirect to={ `${url}/dashboard`}></Redirect>
 
+                    </Switch>
 
-                    <PrivateRoute exact permission={permission} path={`${url}/dashboard`} component={AdminDashboard} />
-                    <PrivateRoute exact permission={permission} path={`${url}/manage/students`} component={StudentManagement} />
-                    <PrivateRoute exact permission={permission} path={`${url}/manage/teachers`} component={TeacherManagement} />
-                    <PrivateRoute exact permission={permission} path={`${url}/manage/courses`} component={CourseManagement} />
 
                   </>
                 )
@@ -75,7 +79,7 @@ class App extends Component {
             />
 
             {/* teacher routes */}
-            <Route  
+            <Route
 
               path="/teacher"
 
@@ -85,14 +89,14 @@ class App extends Component {
                   <>
 
 
-                    <PrivateRoute exact permission={permission} path={`${url}/dashboard`} component={AdminDashboard} />
+                    <PrivateRoute permission={permission} path={`${url}/dashboard`} component={AdminDashboard} />
 
                   </>
                 )
               }}
             />
             {/* student routes */}
-            <Route  
+            <Route
 
               path="/student"
 
@@ -102,7 +106,7 @@ class App extends Component {
                   <>
 
 
-                    <PrivateRoute exact permission={permission} path={`${url}/info`} component={StudentInfo} />
+                    <PrivateRoute permission={permission} path={`${url}/info`} component={StudentInfo} />
                     <PrivateRoute exact permission={permission} path={`${url}/courses`} component={StudentCourse} />
                     <PrivateRoute exact permission={permission} path={`${url}/assignment`} component={Assignment} />
 
