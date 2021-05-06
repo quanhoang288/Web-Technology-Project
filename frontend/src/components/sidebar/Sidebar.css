@@ -5,7 +5,8 @@
   display: block;
 }
 .sidebar {
-    position: fixed;
+    position: absolute;
+    top: 0;
     left: -250px;
     width: 250px;
     height: 100%;
@@ -62,7 +63,7 @@
   .sidebar-wrapper label #cancel{
     z-index: 11111;
     left: -195px;
-    top: 80px;
+    top: 20px;
     font-size: 30px;
     color: #0a5275;
     padding: 4px 9px;
