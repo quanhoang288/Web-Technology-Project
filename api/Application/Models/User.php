@@ -1,6 +1,6 @@
 <?php
 use MVC\Model;
-class ModelsUser extends Model{
+class UserModel extends Model{
     public function find_username($username)
     {
         $stmt = $this->db->prepare('

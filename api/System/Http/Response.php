@@ -1,19 +1,9 @@
 <?php
 
-/**
- *
- * This file is part of mvc-rest-api for PHP.
- *
- */
+
 namespace Http;
 
-/**
- * Class Response an Http response
- *
- * @author Mohammad Rahmani <rto1680@gmail.com>
- *
- * @package Http
- */
+
 class Response {
 
     /**

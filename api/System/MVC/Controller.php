@@ -25,13 +25,34 @@ class Controller {
      * Response Class.
      */
     public $response;
+    
+    protected $_model;
 
 	/**
 	*  Construct
 	*/
     public function __construct() {
+        $model = str_replace('Controller', '', get_class($this));
+        $this->_model = $this->model($model);
+        
+
         $this->request = $GLOBALS['request'];
         $this->response = $GLOBALS['response'];
+    }
+    protected function get_all(){
+        $this->_model->search();
+    }
+
+    protected function get(){
+        
+    }
+
+    protected function create(){
+
+    }
+
+    protected function delete(){
+
     }
 
     /**
@@ -48,8 +69,9 @@ class Controller {
         if (file_exists($file)) {
             require_once $file;
 
-            $model = 'Models' . str_replace('/', '', ucwords($model, '/'));
-			// check class exists
+            // $model = 'Models' . str_replace('/', '', ucwords($model, '/'));
+			$model = ucfirst($model) . 'Model';
+            // check class exists
             if (class_exists($model))
                 return new $model;
             else 

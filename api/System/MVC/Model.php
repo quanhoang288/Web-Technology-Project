@@ -35,7 +35,7 @@ class Model {
         );
         
         
-        $this->_table = str_replace('models','',strtolower(get_class($this)));
+        $this->_table = str_replace('model','',strtolower(get_class($this)));
     }
 
     public function all(){
