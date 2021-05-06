@@ -32,6 +32,7 @@ export class StudentManagement extends Component {
                     data={MOCK_DATA}
                     rowPerPage={6}
                     editHander={this.editHander}
+                    enableSearchAndPagination={true}
                 ></DataTables>
 
 

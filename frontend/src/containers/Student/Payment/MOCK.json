@@ -1,0 +1,7 @@
+[
+    {"Course_ID": "ENG12", "Course_Name": "English 12", "Course_Fee": 500000, "Paid": 500000}, 
+    {"Course_ID": "MATH12", "Course_Name": "Math 12", "Course_Fee": 500000, "Paid": 300000}, 
+    {"Course_ID": "PHY12", "Course_Name": "Physic 12", "Course_Fee": 500000, "Paid": 400000}, 
+    {"Course_ID": "CHE12", "Course_Name": "Chemistry 12", "Course_Fee": 500000, "Paid": 500000} 
+
+]

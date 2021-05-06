@@ -1,0 +1,6 @@
+[
+    {"Day": "Monday", "Time": "8:30", "Classroom": "TC-301", "Course_ID": "ENG12", "Course_Name": "English 12", "Teacher": "NXT"},
+    {"Day": "Monday", "Time": "14:30", "Classroom": "TC-303", "Course_ID": "MATH2", "Course_Name": "Math 12", "Teacher": "VHT"},
+    {"Day": "Tuesday", "Time": "14:30", "Classroom": "TC-401", "Course_ID": "PHY12", "Course_Name": "Physic 12", "Teacher": "Quan AP"},
+    {"Day": "Wednesday", "Time": "14:30", "Classroom": "TC-504", "Course_ID": "CHE12", "Course_Name": "Chemistry 12", "Teacher": "NDT"}
+]

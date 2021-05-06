@@ -1,1 +1,1 @@
-export const HOST_URL = 'http://localhost/webproject/api'
+export const HOST_URL = 'http://localhost:2000/Web-Technology-Project/api'

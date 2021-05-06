@@ -12,7 +12,7 @@ import {
 
 } from "react-router-dom";
 
-import AdminDashboard from './containers/Admin/AdminDashboard/AdminDashboard'
+import AdminDashboard, { Dashboard } from './containers/Admin/AdminDashboard/AdminDashboard'
 import StudentManagement from './containers/Admin/StudentManagement/StudentManagement'
 import TeacherManagement from './containers/Admin/TeacherManagement/TeacherManagement'
 import CourseManagement from './containers/Admin/CourseManagement/CourseManagement'
@@ -20,8 +20,11 @@ import StudentInfo from './containers/Student/StudentInfo/StudentInfo'
 import StudentCourse from './containers/Student/StudentCourse/StudentCourse'
 import Assignment from './containers/Student/Assignment/Assignment'
 import { connect } from 'react-redux'
-
-
+import Schedule from './containers/Student/Schedule/Schedule';
+import StudentPayment from './containers/Student/Payment/StudentPayment';
+import CourseDetail from './containers/CourseDetail/CourseDetail';
+import UserInfo from './containers/UserInfo/UserInfo';
+import Notiboard from './components/Notiboard/Notiboard';
 class App extends Component {
   render() {
     return (
@@ -32,6 +35,7 @@ class App extends Component {
             
             <Route path='/login' exact component={Login}></Route>
             <Route path='/register' exact component={Register}></Route>
+            
             <Route
 
               path="/"
@@ -84,8 +88,9 @@ class App extends Component {
                   <>
 
 
-                    <PrivateRoute exact permission={permission} path={`${url}/dashboard`} component={AdminDashboard} />
-
+                    <PrivateRoute exact permission={permission} path={`${url}/notification`} component={Notiboard} />
+                    <PrivateRoute exact permission={permission} path={`${url}/info`} component={UserInfo} />
+                    <PrivateRoute exact permission={permission} path={`${url}/courses`} component={StudentCourse} />
                   </>
                 )
               }}
@@ -99,8 +104,10 @@ class App extends Component {
                 const permission = 'student'
                 return (
                   <>
-
-
+                    <PrivateRoute exact permission={permission} path={`${url}/notification`} component={Notiboard} />
+                    <PrivateRoute exact permission={permission} path={`${url}/courses/:id`} component={CourseDetail} />
+                    <PrivateRoute exact permission={permission} path={`${url}/payment`} component={StudentPayment} />
+                    <PrivateRoute exact permission={permission} path={`${url}/schedule`} component={Schedule} />
                     <PrivateRoute exact permission={permission} path={`${url}/info`} component={StudentInfo} />
                     <PrivateRoute exact permission={permission} path={`${url}/courses`} component={StudentCourse} />
                     <PrivateRoute exact permission={permission} path={`${url}/assignment`} component={Assignment} />

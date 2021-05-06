@@ -17,6 +17,7 @@ export class Sidebar extends Component {
                 break
             case 'teacher':
                 items = [
+                    <li><Link to="/teacher/notification"><i className="fas fa-qrcode"></i>Notification</Link></li>,
                     <li><Link to="/teacher/info"><i className="fas fa-qrcode"></i>General Info</Link></li>,
                     <li><Link to="/teacher/courses"><i className="fas fa-qrcode"></i>Courses</Link></li>,
                     <li><Link to="/teacher/assignment"><i className="fas fa-qrcode"></i>Assignment</Link></li>,
@@ -24,6 +25,7 @@ export class Sidebar extends Component {
                 break
             case 'student':
                 items = [
+                    <li><Link to="/student/notification"><i className="fas fa-qrcode"></i>Notification</Link></li>,
                     <li><Link to="/student/info"><i className="fas fa-qrcode"></i>General Info</Link></li>,
                     <li><Link to="/student/payment"><i className="fas fa-qrcode"></i>Payment</Link></li>,
                     <li><Link to="/student/courses"><i className="fas fa-qrcode"></i>Course</Link></li>,

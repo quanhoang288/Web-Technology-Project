@@ -15,8 +15,10 @@ export class Table extends Component {
     paginate = pageNumber => this.setState({ currentPage: pageNumber })
     componentDidMount() {
         //init query field 
+        
         const columns = this.props.data[0] && Object.keys(this.props.data[0])
         const query_field = columns ? columns : []
+        
         this.setState({ query_field: query_field })
     }
 
@@ -52,18 +54,29 @@ export class Table extends Component {
     }
     render() {
         const columns = this.props.data[0] && Object.keys(this.props.data[0])
+
         const indexOfLastPost = this.state.currentPage * this.props.rowPerPage;
         const indexOfFirstPost = indexOfLastPost - this.props.rowPerPage;
+
+
         const data = this.filterData(this.props.data)
-        const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
+        const enableSearchAndPagination = this.props.enableSearchAndPagination;
+        const currentRows = enableSearchAndPagination ? data.slice(indexOfFirstPost, indexOfLastPost) : data;
+        // console.log(data);
         
+
         return (
             <div className='custom-table'>
+                {
+                    enableSearchAndPagination &&  
+                <>
                 <div className='searchfield'>
                     <input required onChange={this.queryHandler}></input>
                     <label >Search</label>
                 </div>
+                
                 <div className='hiddenCB'>
+                
                     <div className='checkboxes'>
                         {
                             data[0] ?
@@ -91,7 +104,10 @@ export class Table extends Component {
                                 }) : null
                         }
                     </div>
+                    
                 </div>
+                </>
+                }
                 <table>
                     <thead>
                         <tr>
@@ -107,11 +123,15 @@ export class Table extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentRows[0] ?
+                        {
+                        // enableSearchAndPagination?
+                        currentRows[0] ?
                             currentRows.map((row, idx) => {
                                 let row_values = Object.values(row)
                                 return (
-                                    <tr key={idx} onClick={() => { this.rowClick(row) }}>
+                                    <tr key={idx} onClick={() => { 
+                                        if(enableSearchAndPagination)this.rowClick(row)
+                                        }}>
                                         {
                                             row_values.map((row_val, td_idx) => {
                                                 return (
@@ -123,15 +143,18 @@ export class Table extends Component {
                                 )
                             })
                             : null
+
                         }
                     </tbody>
                 </table>
+                {enableSearchAndPagination &&
                 <Pagination 
                     postsPerPage={this.props.rowPerPage}
                     totalPosts={this.props.data.length}
                     paginate={this.paginate}
                     currentPage = {this.state.currentPage}
                     />
+                }
             </div>
         )
     }
