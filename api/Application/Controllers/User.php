@@ -3,13 +3,13 @@
 use MVC\Controller;
 use JWT\JWT;
 require SYSTEM . 'JWT.php';
-class ControllersUser extends Controller {
+class UserController extends Controller {
     private $_model ;
     public function __construct()
     {
         Controller::__construct();
         
-        $this->_model = $this->model('user');
+      
      
     }
 
