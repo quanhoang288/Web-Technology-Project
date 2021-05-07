@@ -7,6 +7,8 @@
  */
 namespace MVC;
 use \Exception as Exception;
+use PDOException;
+
 /**
  * Class Controller, a port of MVC
  *
@@ -25,13 +27,81 @@ class Controller {
      * Response Class.
      */
     public $response;
-
+    private $_model;
 	/**
 	*  Construct
 	*/
     public function __construct() {
         $this->request = $GLOBALS['request'];
         $this->response = $GLOBALS['response'];
+        $model = str_replace('Controller', '', get_class($this));
+        $this->_model = $this->model($model);
+    }
+    public function get_all($params=null){
+        try{
+            $data = $this->_model->search();
+            if (count($data))
+                $this->send(200, ['response'=>'OK', 'data'=>$data]);
+            else 
+                $this->send(204, ['response'=> 'No content']);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+    }
+
+    public function get($id){
+        
+        try{
+            $this->_model->id = $id;
+            $data = $this->_model->search();
+            if (count($data))
+                $this->send(200, ['response'=>'OK', 'data'=>$data]);
+            else 
+                $this->send(204, ['response'=> 'No content']);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+        
+    }
+
+    public function create(){
+        
+        $data = json_decode(file_get_contents('php://input'), true);
+        try{
+            $this->_model->setAtrributes($data);
+            $this->_model->save();
+            $this->send(200, ['response'=>'OK']);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+
+    }
+    public function update($id){
+        $data = json_decode(file_get_contents('php://input'), true);
+        try{
+            $this->_model->setAtrributes($data);
+            $this->_model->id = $id;
+            $this->_model->save();
+            $this->send(200, ['response'=>'OK']);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+
+    }
+
+    public function delete($id){
+        try{  
+            $this->_model->id = $id;
+            $this->_model->delete();
+            $this->send(200, ['response'=>'OK']);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
     }
 
     /**
@@ -41,15 +111,17 @@ class Controller {
      * 
      * @return object
      */
-    public function model($model) {
+    private function model($model) {
+        // echo $model . PHP_EOL;
         $file = MODELS . ucfirst($model) . '.php';
         // echo "Inside controller: ".$file . PHP_EOL;
 		// check exists file
         if (file_exists($file)) {
             require_once $file;
             
-            $model = 'Models' . str_replace('/', '', ucwords($model, '/'));
-        
+       
+            $model = ucfirst($model) . 'Model';
+
 			// check class exists
             if (class_exists($model)){
                 // echo "Inside controller - Model: $model" . PHP_EOL;

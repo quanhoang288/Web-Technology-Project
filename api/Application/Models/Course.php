@@ -1,6 +1,6 @@
 <?php
 use MVC\Model;
-class ModelsCourse extends Model{
+class CourseModel extends Model{
 
     // var $hasOne = array("user"=>"teacher_id");
     public function __construct()

@@ -19,6 +19,45 @@ class ControllersUser extends Controller {
         // $this->_model->showHasMany();
         $this->response->setContent(['response' =>$this->_model->search()]);
     }
+    public function get_all($params=null){
+        if (!$params)
+            parent::get_all();
+        else{
+            try{
+                foreach($params as $key=>$value){
+                    $this->_model->where($key, $value);
+                    
+                }
+                $data = $this->_model->search();
+                if (count($data))
+                    $this->send(200, ['response'=>'OK', 'data'=>$data]);
+                else 
+                    $this->send(204, ['response'=> 'No content']);
+            }
+            catch(PDOException $e){
+                $this->send(400, ['response'=> $e->getMessage()]);
+            }
+
+        }
+    }
+    
+    public function create(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        $response ='Succesfully Registerd ';
+        try{
+            $this->_model->setAtrributes($data);
+            $this->_model->save();
+            $this->send(201, ['response'=>$response]);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+    }
+
+    
+    
     public function register()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -36,7 +75,7 @@ class ControllersUser extends Controller {
             $this->response->sendStatus(200);
         }
     }
-    public function validate_user()
+    public function validate()
     {        
         
         $data = json_decode(file_get_contents('php://input'), true);

@@ -34,10 +34,10 @@ class Model {
         );
 
 		if (!$childClass){
-			$this->_table = str_replace('models','',strtolower(get_class($this))); 
+			$this->_table = str_replace('model','',strtolower(get_class($this))); 
 		}
 		else{
-			$this->_table = str_replace('models','',strtolower($childClass)); 
+			$this->_table = str_replace('model','',strtolower($childClass)); 
 		}
         
 		$this->_describe();
