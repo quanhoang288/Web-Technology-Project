@@ -1,7 +1,11 @@
 <?php
 use MVC\Model;
 class UserModel extends Model{
-    
+    public function __construct()
+    {
+        Model::__construct();
+        
+    }
     public function find_username($username)
     {
         $stmt = $this->_db->prepare('

@@ -7,7 +7,7 @@ class TeacherModel extends UserModel{
     
     public function __construct(){
         
-        UserModel::__construct();
+        UserModel::__construct(get_class($this));
 
         $this->hasMany = array("course"=>"teacher_id"); 
 
