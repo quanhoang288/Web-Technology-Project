@@ -3,7 +3,6 @@
 // autoload class
 function autoload($class) {
     // set file class
-    // echo $class . PHP_EOL;
     $systemFile = SYSTEM . str_replace('\\', '/', $class) . '.php';
     $controllerFile = CONTROLLERS . str_replace('\\', '/', $class) . 'php';
     $modelFile = MODELS . str_replace('\\', '/', $class) . 'php';

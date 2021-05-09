@@ -35,9 +35,12 @@ class Model {
 
 		if (!$childClass){
 			$this->_table = str_replace('model','',strtolower(get_class($this))); 
+			
 		}
 		else{
+
 			$this->_table = str_replace('model','',strtolower($childClass)); 
+			 
 		}
         
 		$this->_describe();
@@ -78,10 +81,10 @@ class Model {
 		$fromChild = '';
         if ($this->_hO == 1 && isset($this->hasOne)) {
 			
-			foreach ($this->hasOne as $model=>$foreignKey) {
+			foreach ($this->hasOne as $alias=>$model) {
 				// $table = strtolower($model);
-				$from .= ' LEFT JOIN `'.$model.'`';
-				$from .= ' ON `'.$this->_table.'`.`'.$foreignKey .'` = `'.$model.'`.id  ';
+				$from .= ' LEFT JOIN `'.$model.'` AS ' . '`'.$alias.'`';
+				$from .= ' ON `'.$this->_table.'`.`'.$alias .'_id' .'` = `'.$alias.'`.id  ';
 			}
 		}
         
@@ -126,7 +129,7 @@ class Model {
 				}
 
 				if ($this->_hM == 1 && isset($this->hasMany)) {
-					foreach ($this->hasMany as $childTable => $foreignKey) {
+					foreach ($this->hasMany as $aliasChild => $childTable) {
 						$queryChild = '';
 						$conditionsChild = '';
 						$fromChild = '';
@@ -135,41 +138,42 @@ class Model {
 						// $pluralAliasChild = strtolower($aliasChild);
 						// $singularAliasChild = strtolower($aliasChild);
 
-						$fromChild .= '`'.$childTable.'`';
+						$fromChild .= '`'.$childTable.'` AS' . '`' . $aliasChild . '`';
 						
-						$conditionsChild .= '`'.$foreignKey.'` = \''.$tempResults[$this->_table]['id'].'\'';
+						$conditionsChild .= $this->_table.'_id = ' . $tempResults[$this->_table]['id'];
 	
 						$queryChild =  'SELECT * FROM '.$fromChild.' WHERE '.$conditionsChild;	
 						echo '<!--'.$queryChild.'-->' . PHP_EOL;
 						$resultChild = $this->_db->query($queryChild);
 				
-						$tableChild = array();
-						$fieldChild = array();
+						$tableChildArr = array();
+						$fieldChildArr = array();
 						$tempResultsChild = array();
 						$resultsChild = array();
                         $countSQL = 'SELECT COUNT(*) FROM '.$fromChild.' WHERE '.$conditionsChild;
+						// echo $countSQL . PHP_EOL;
                         $res = $this->_db->query($countSQL);
                         $num_rows = $res->fetchColumn();
 						if ($num_rows > 0) {
 							// echo "has many!" . PHP_EOL;
 							$numOfFieldsChild = $resultChild->columnCount();
 							for ($j = 0; $j < $numOfFieldsChild; ++$j) {
-								array_push($tableChild, $resultChild->getColumnMeta($j)['table']);
-								array_push($fieldChild, $resultChild->getColumnMeta($j)['name']);
+								array_push($tableChildArr, $resultChild->getColumnMeta($j)['table']);
+								array_push($fieldChildArr, $resultChild->getColumnMeta($j)['name']);
 							}
 
 							while ($rowChild = $resultChild->fetch(\PDO::FETCH_NUM)) {
 								for ($j = 0;$j < $numOfFieldsChild; ++$j) {
 									// echo $rowChild[$j] . PHP_EOL;
 									// $tempResultsChild[$tableChild[$j]][$fieldChild[$j]] = $rowChild[$j];
-									$tempResultsChild[$fieldChild[$j]] = $rowChild[$j];
+									$tempResultsChild[$fieldChildArr[$j]] = $rowChild[$j];
 								}
 								
 								array_push($resultsChild,$tempResultsChild);
 							}
 						}
 						
-						$tempResults[$childTable] = $resultsChild;
+						$tempResults[$aliasChild] = $resultsChild;
 						
 						// $resultChild->free_result();
 					}
@@ -177,27 +181,32 @@ class Model {
 
 
 				if ($this->_hMABTM == 1 && isset($this->hasManyAndBelongsToMany)) {
-					foreach ($this->hasManyAndBelongsToMany as $childTable=>$joinTable) {
+					foreach ($this->hasManyAndBelongsToMany as $aliasChild=>$childTable) {
 						$queryChild = '';
 						$conditionsChild = '';
 						$fromChild = '';
-
+						// $select = '`' . $aliasChild . '`' . '.*';
+						$select = '*';
 						// $tableChild = strtolower($tableChild);
 						// $pluralAliasChild = strtolower($inflect->pluralize($aliasChild));
 						// $singularAliasChild = strtolower($aliasChild);
 
-						// $sortTables = array($this->_table,$tableChild);
-						// sort($sortTables);
-						// $joinTable = implode('_',$sortTables);
-
-						$fromChild .= '`'.$childTable.'`, ';
+						$sortTables = array($this->_table, $aliasChild);
+						sort($sortTables);
+						$joinTable = implode('_',$sortTables);
+						
+						$fromChild .= '`'.$childTable.'`AS `' . $aliasChild .'`, ';
 						$fromChild .= '`'.$joinTable.'`,';
 						
-						$conditionsChild .= '`'.$joinTable.'`.`'.$childTable.'_id` = `'.$childTable.'`.`id` AND ';
+
+						 
+						$conditionsChild .= '`'.$joinTable.'`.`'.$aliasChild.'_id` = `'.$aliasChild.'`.`id` AND ';
+						if (isset($this->childID))
+							$conditionsChild .= '`'.$joinTable.'`.`'.$aliasChild.'_id` = '. $this->childID . ' AND ';
 						$conditionsChild .= '`'.$joinTable.'`.`'.strtolower($this->_table).'_id` = \''.$tempResults[$this->_table]['id'].'\'';
 						$fromChild = substr($fromChild,0,-1);
 
-						$queryChild =  'SELECT * FROM '.$fromChild.' WHERE '.$conditionsChild;	
+						$queryChild =  'SELECT ' . $select . ' FROM '.$fromChild.' WHERE '.$conditionsChild;	
 						
 						echo '<!--'.$queryChild.'-->' . PHP_EOL;
 						$resultChild = $this->_db->query($queryChild);
@@ -219,15 +228,28 @@ class Model {
 							}
 
 							while ($rowChild = $resultChild->fetch(\PDO::FETCH_NUM)) {
+								$joinResult = array();
+								$childFK = $aliasChild . '_id';
+								$tableFK = $this->_table . '_id';
+								// echo $childFK . ' - ' . $tableFK . PHP_EOL;
 								for ($j = 0;$j < $numOfFieldsChild; ++$j) {
-									$tempResultsChild[$tableChildArr[$j]][$fieldChildArr[$j]] = $rowChild[$j];
+									if ($tableChildArr[$j] == $aliasChild){
+										$tempResultsChild[$fieldChildArr[$j]] = $rowChild[$j];
+									}
+									else if ($fieldChildArr[$j] != $childFK && $fieldChildArr[$j] != $tableFK){
+										$joinResult[$fieldChildArr[$j]] = $rowChild[$j];
+									}
+				
+									// $tempResultsChild[$tableChildArr[$j]][$fieldChildArr[$j]] = $rowChild[$j];
 									// $tempResultsChild[$fieldChildArr[$j]] = $rowChild[$j];
 								}
+								if (count($joinResult))
+									$tempResultsChild[$joinTable] = $joinResult;
 								array_push($resultsChild,$tempResultsChild);
 							}
 						}
 						
-						$tempResults[$childTable] = $resultsChild;
+						$tempResults[$aliasChild] = $resultsChild;
 						
 					}
 					// var_dump($tempResults);
@@ -276,6 +298,11 @@ class Model {
 		}
 	}
 
+	public function custom($query, $params=null){
+		$stmt = $this->_db->prepare($query);
+		return $stmt->execute($params);
+
+	}
 
     public function save(){
         $query = '';
@@ -325,15 +352,15 @@ class Model {
         if ($this->id) {
             if (isset($this->hasMany)){
                 
-                foreach($this->hasMany as $tableChild => $foreignKey){
+                foreach($this->hasMany as $aliasChild => $childTable){
                     $queryChild = '';
                     $conditionsChild = '';
                     $fromChild = '';
              
 					
-                    $conditionsChild .= '`'.$foreignKey.'` = '.$this->id;
+                    $conditionsChild .= $this->_table.'_id = '.$this->id;
 
-                    $queryChild = 'DELETE FROM ' . $tableChild . ' WHERE ' . $conditionsChild ;
+                    $queryChild = 'DELETE FROM ' . $childTable . ' WHERE ' . $conditionsChild ;
 					echo $queryChild . PHP_EOL;
                     $stmt = $this->_db->prepare($queryChild);
                     $this->_result = $stmt->execute();
@@ -344,7 +371,7 @@ class Model {
                 }
             }
             if (isset($this->hasManyAndBelongsToMany)){
-                foreach ($this->hasManyAndBelongsToMany as $tableChild=>$joinTable) {
+                foreach ($this->hasManyAndBelongsToMany as $aliasChild=>$childTable) {
                     $queryChild = '';
                     $conditionsChild = '';
                     $fromChild = '';
@@ -352,12 +379,12 @@ class Model {
                     // $tableChild = strtolower($tableChild);
 
 
-                    // $sortTables = array($this->_table,$tableChild);
-                    // sort($sortTables);
-                    // $joinTable = implode('_',$sortTables);
+                    $sortTables = array($this->_table,$childTable);
+                    sort($sortTables);
+                    $joinTable = implode('_',$sortTables);
                     
                     $fromChild .= '`'.$joinTable.'`';
-                    $conditionsChild .= '`'.strtolower($this->_table).'_id` = '.$this->id;
+                    $conditionsChild .= strtolower($this->_table).'_id = '.$this->id;
                     $queryChild =  'DELETE  FROM '.$fromChild.' WHERE '.$conditionsChild;	
 
                     $stmt = $this->_db->prepare($queryChild);
@@ -385,6 +412,10 @@ class Model {
 		}
     }
     public function clear() {
+		if (isset($this->id)) 
+			$this->id = null;
+		if (isset($this->childID)) 
+			$this->childID = null;	
 		foreach($this->_describe as $field) {
 			$this->$field = null;
 		}
