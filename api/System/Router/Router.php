@@ -139,22 +139,28 @@ class Router {
         // var_dump($parsUrl);
         
         preg_match_all('@:([\w]+)@', $pattern, $params, PREG_PATTERN_ORDER);
+        // preg_match_all('/:([\w]+)/', $pattern, $params, PREG_PATTERN_ORDER);
+
 
         // var_dump($params);
         // echo $pattern . PHP_EOL;
         
         $patternAsRegex = preg_replace_callback('@:([\w]+)@', [$this, 'convertPatternToRegex'], $pattern);
+        // $patternAsRegex = preg_replace_callback(':([\w]+)', [$this, 'convertPatternToRegex'], $pattern);
         
         if (substr($pattern, -1) === '/' ) {
             // echo "123" . PHP_EOL;
 	        $patternAsRegex = $patternAsRegex . '?';
 	    }
         $patternAsRegex = '@^' . $patternAsRegex . '$@';
-        
- 
+        // echo $url . PHP_EOL;
+        // echo $patternAsRegex . PHP_EOL;
+        // echo '-------------' . PHP_EOL;
         // check match request url
         if (preg_match($patternAsRegex, $url, $paramsValue)) {
-
+            
+            
+            
             array_shift($paramsValue);
             foreach ($params[0] as $key => $value) {
                 $val = substr($value, 1);
@@ -178,9 +184,7 @@ class Router {
                 }
             }
             
-            // $params = explode('&', $queryString);
-            // var_dump($params);
-            // var_dump($this->params);
+
             
             return true;
         }
@@ -215,7 +219,7 @@ class Router {
      */
     public function run() {
         // echo "1234";
-        echo $this->url . PHP_EOL;
+        // var_dump($this->router);
         if (!is_array($this->router) || empty($this->router)) 
             throw new \Exception('NON-Object Route Set');
 
@@ -223,7 +227,7 @@ class Router {
         $this->getMatchRoutersByPattern($this->matchRouter);
         
         if (!$this->matchRouter || empty($this->matchRouter)) {
-            
+            echo "not found" . PHP_EOL;
 			$this->sendNotFound();        
 		} else {
             // echo $this->matchRouter[0]->getCallback() . PHP_EOL;
@@ -242,7 +246,7 @@ class Router {
         
         $parts = explode('@', $controller);
         $file = CONTROLLERS . ucfirst($parts[0]) . '.php';
-        echo $controller . PHP_EOL;
+        // echo $controller . PHP_EOL;
         if (file_exists($file)) {
             require_once($file);
 
@@ -270,7 +274,7 @@ class Router {
             }
             
             // call to controller
-            echo $method . PHP_EOL;
+            // echo $method . PHP_EOL;
             if (is_callable([$controller, $method]))
                 return call_user_func([$controller, $method], $params);
             else     

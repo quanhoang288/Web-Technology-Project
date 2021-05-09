@@ -34,7 +34,13 @@
 #delete student enrollment
 
 
-
+// echo "herereeererer" . PHP_EOL;
+#routers for course 
+$router->get('/courses', 'course@get_all');
+$router->get('/courses/:id', 'course@get');
+$router->post('/courses', 'course@create');
+$router->put('/courses/:id', 'course@update');
+$router->delete('/courses/:id', 'course@delete');
 
 #routers for user
 #used for retrieval of student and teacher lists, student lists of a course 
@@ -45,9 +51,6 @@ $router->post('/users', 'user@create');
 $router->put('/users/:id', 'user@update');
 $router->delete('/users/:id', 'user@delete');
 
-$router->post('/upload', 'home@uploadImage');
-
-$router->post('/home', 'home@post');
 
 
 
@@ -71,6 +74,9 @@ $router->get('/course_notifications/:id', 'course_notification@get');
 $router->post('/course_notifications', 'course_notification@create');
 $router->put('/course_notifications/:id', 'course_notification@update');
 $router->delete('/course_notifications/:id', 'course_notification@delete');
+
+#router for exam 
+$router->get('/exams', 'exam@get_all');
 
 #router for course's test results
 $router->get('/results?course_id=?exam_id=?student_id=?', 'result@get');
