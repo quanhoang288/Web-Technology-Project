@@ -2,23 +2,31 @@
   padding: 20px;
   
 }
-table {
+.custom-table table {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     
     width: 100%;  
+    border: none;
   }
   
-  table td, table th {
+  .custom-table table td,.custom-table table th {
     border: 1px solid #ddd;
     padding: 8px;
+    
+    
+    
   }
   
-  table tr:nth-child(even){background-color: #f2f2f2;}
+  table tr{
+    height: 50px;
+  }
   
-  table tr:hover {background-color: #ddd;}
+  .custom-table table tr:nth-child(even){background-color: #f2f2f2;}
   
-  table th {
+  .custom-table table tr:hover {background-color: #ddd;}
+  
+  .custom-table table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
@@ -26,7 +34,7 @@ table {
     color: white;
   }
 
-  .searchfield{
+  .custom-table .searchfield{
     height: 50px;
     width: 95%;
     margin: 30px auto;
@@ -34,7 +42,7 @@ table {
     
     
   }
-  .searchfield input{
+  .custom-table .searchfield input{
     height: 100%;
     width: 100%;
     outline: none;
@@ -44,12 +52,12 @@ table {
     border-radius: 25px;
     transition: all 0.3s ease;
   }
-  .searchfield input:focus,
-  .searchfield input:valid
+  .custom-table .searchfield input:focus,
+  .custom-table .searchfield input:valid
   {
     border-color: #4158d0;
   }
-  .searchfield label{
+  .custom-table .searchfield label{
     position: absolute;
     top: 50%;
     left: 20px;
@@ -62,8 +70,8 @@ table {
     
     
   }
-  .searchfield input:focus ~label,
-  .searchfield input:valid ~ label
+  .custom-table .searchfield input:focus ~label,
+  .custom-table .searchfield input:valid ~ label
   {
     top: 0%;
     font-size: 16px;
@@ -77,7 +85,7 @@ table {
 
 
   
-  .hiddenCB .checkboxes{
+  .custom-table .hiddenCB .checkboxes{
     display: flex;
     margin: 30px auto;
     padding: 0;
@@ -88,13 +96,13 @@ table {
 
   }
   
-  .hiddenCB input[type="checkbox"],
-  .hiddenCB input[type="radio"] {
+  .custom-table .hiddenCB input[type="checkbox"],
+  .custom-table .hiddenCB input[type="radio"] {
     display: none;
     
   }
   
-  .hiddenCB label {
+  .custom-table .hiddenCB label {
     margin: 10px;
     cursor: pointer;
     padding: 4px 6px;
@@ -105,14 +113,14 @@ table {
     transform: translateY(-150%);
   }
   
-  .hiddenCB input[type="checkbox"]+label:hover{
+  .custom-table .hiddenCB input[type="checkbox"]+label:hover{
     background: rgba(0, 128, 128, .8);
   }
   
-  .hiddenCB input[type="checkbox"]:checked+label {
+  .custom-table .hiddenCB input[type="checkbox"]:checked+label {
     background: rgba(0, 128, 128, .4);
   }
   
-  .hiddenCB input[type="checkbox"]:checked+label:hover{
+  .custom-table .hiddenCB input[type="checkbox"]:checked+label:hover{
     background: rgba(0, 128, 128, 0, .7);
   }

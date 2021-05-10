@@ -17,6 +17,7 @@ import AdminDashboard from './containers/Admin/AdminDashboard/AdminDashboard'
 import StudentManagement from './containers/Admin/StudentManagement/StudentManagement'
 import TeacherManagement from './containers/Admin/TeacherManagement/TeacherManagement'
 import CourseManagement from './containers/Admin/CourseManagement/CourseManagement'
+import CourseDetail from './components/CourseDetail/CourseDetail'
 import StudentInfo from './containers/Student/StudentInfo/StudentInfo'
 import StudentCourse from './containers/Student/StudentCourse/StudentCourse'
 import Assignment from './containers/Student/Assignment/Assignment'
@@ -67,7 +68,9 @@ class App extends Component {
                       <PrivateRoute exact permission={permission} path={`${url}/manage/students`} component={StudentManagement} />
                       <PrivateRoute exact permission={permission} path={`${url}/manage/teachers`} component={TeacherManagement} />
                       <PrivateRoute exact permission={permission} path={`${url}/manage/courses`} component={CourseManagement} />
+                      <PrivateRoute exact permission={permission} path={ `${url}/manage/courses/:id`} component={CourseDetail} />
                       <PrivateRoute exact permission={permission} path={ `${url}/dashboard`} component={AdminDashboard} />
+                      
                       <Redirect to={ `${url}/dashboard`}></Redirect>
 
                     </Switch>

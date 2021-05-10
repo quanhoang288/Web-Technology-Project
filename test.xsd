@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:element name="resume">
+  <xs:complexType>
+    
+      <xs:element name="school">
+       <xs:complexType>
+        
+         
+        <xs:attribute name="type" type="xsd:string" fixed='college' use="required"/>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="degree" type="xs:string"/>
+            <xs:element name="year" type="xs:string"/>
+            <xs:element name="location">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="city" type="xs:string">
+                        <xs:element name="state" type="xs:string">
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            
+        </xs:sequence>
+      
+     </xs:complexType>
+    </xs:element>
+    
+  </xs:complexType>
+</xs:element>

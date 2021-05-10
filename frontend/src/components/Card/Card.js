@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import './Card.css'
 import img from '../../asset/eclass.png'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Card = ({ title, overview, price, id }) => {
+    const path = useLocation().pathname
     return (
-        <Link to='#'>
+        <Link to={`${path}/${id}`}>
             <div class="card">
                 <div className="card-header">
                     <img src={img} className='bigger_img' />

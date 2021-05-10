@@ -36,7 +36,7 @@ export class CourseManagement extends Component {
                             children={
                                 [
                                     <div>
-                                        <Card></Card>
+                                        <Card id='1'></Card>
                                     </div>,
                                     <div>
                                         <Card></Card>

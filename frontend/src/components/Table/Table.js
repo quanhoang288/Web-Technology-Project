@@ -57,6 +57,21 @@ export class Table extends Component {
         const data = this.filterData(this.props.data)
         const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
         
+        const padding_row = []
+        for(let i=0 ; i < this.props.rowPerPage - currentRows.length; i++)
+        {
+            padding_row.push(
+                <tr>
+                    {columns.map((col, idx) => {
+                        return(
+                            <td key={idx}></td>
+                        )
+                    })}
+                </tr>
+            )
+        }
+        
+        
         return (
             <div className='custom-table'>
                 <div className='searchfield'>
@@ -123,6 +138,9 @@ export class Table extends Component {
                                 )
                             })
                             : null
+                        }
+                        {
+                            padding_row
                         }
                     </tbody>
                 </table>
