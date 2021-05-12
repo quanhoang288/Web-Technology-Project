@@ -34,7 +34,7 @@ export class Notiboard extends Component {
                     <p>{item.title}</p>
                   </Link>
                 </div>
-                <i class="fas fa-edit"></i>
+                <i class="fas fa-edit" ></i>
               </div>)
 
             })

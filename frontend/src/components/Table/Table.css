@@ -18,8 +18,9 @@
     
   }
   
-  table tr{
-    height: 50px;
+  .custom-table table{
+    height: 450px;
+    
   }
   
   .custom-table table tr:nth-child(even){background-color: #f2f2f2;}

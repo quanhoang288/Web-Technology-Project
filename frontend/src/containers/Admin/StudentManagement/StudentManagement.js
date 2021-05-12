@@ -31,7 +31,7 @@ export class StudentManagement extends Component {
                 <DataTables
                     data={MOCK_DATA}
                     rowPerPage={5}
-                    editHander={this.editHander}
+                    rowClick={this.editHander}
                 ></DataTables>
 
 

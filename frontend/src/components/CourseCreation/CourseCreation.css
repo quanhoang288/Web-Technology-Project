@@ -1,0 +1,38 @@
+.course-create{
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+}
+
+.course-create-form{
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.course-create-form > div{
+    margin: 30px;
+}
+.course-create-form textarea{
+    width: 90%;
+    height: 25vh;
+}
+.course-create-form .schedule{
+    display: flex;
+    
+    align-items: center;
+
+}
+.course-create-form .schedule >div{
+    margin: 20px 30px;
+}
+.img-uploader{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+}
+.img-uploader>div{
+    margin: auto;
+}

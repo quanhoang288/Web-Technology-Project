@@ -20,12 +20,6 @@ export class Table extends Component {
         this.setState({ query_field: query_field })
     }
 
-    rowClick = (row_data) => {
-        
-        this.props.editHander(row_data)
-    }
-
-
 
     queryHandler = (e) => {
 
@@ -126,7 +120,7 @@ export class Table extends Component {
                             currentRows.map((row, idx) => {
                                 let row_values = Object.values(row)
                                 return (
-                                    <tr key={idx} onClick={() => { this.rowClick(row) }}>
+                                    <tr key={idx} onClick={() => { this.props.rowClick ? this.props.rowClick(row) :console.log("Row click not implemented") }}>
                                         {
                                             row_values.map((row_val, td_idx) => {
                                                 return (

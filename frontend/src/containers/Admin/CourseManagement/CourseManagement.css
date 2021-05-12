@@ -4,12 +4,14 @@
     border: 1px solid #dcdacb;
     border-radius: 10px ;
 }
+
 .open-course .card{
     margin: 20px;
 }
 .courses-section{
-    margin-bottom: 100px;
+    padding: 20px;
 }
+
 .fas.fa-plus-circle{
     color: orange;
     size: 100px 100px;

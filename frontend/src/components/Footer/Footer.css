@@ -1,63 +1,18 @@
 .footer {
-    border: 1px solid lightgray;
-    height: 50px;
+    
+    
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
+    margin-top: auto;
     background-color: #fff;
     width:100%;
     border-radius:3px;
     
-    
-  }
-  .footer-content{
-    height:80%;
-    display:flex;
-    padding: 40px 60px;
-    
-    border-bottom: 1px solid #84849D;
-  }
-  .footer-section {
-    width:23%;
-  }
-  .footer-content .form {
-    width: 33%;
-  }
-  .footer-content .form p {
-    font-size: 14px;
-    
-  }
-  .footer-section input{
-    border:1px solid #84849D;
-    padding: 10px 25px;
-    border-radius: 5px;
-    margin-bottom:15px;
-  }
-  .footer-section button {
-    padding: 12px 78px;
-    color:white;
-    font-size:15px;
-    background-color:#5D7CC5;
-    border:none;
-    border-radius: 5px;
-    
-  }
-  .footer-section li {
-    list-style:none;
-    padding-bottom: 7px;
-  }
-  .footer-section li a {
-    text-decoration:none;
-    color:#000948;
-  }
-  .footer-section h3 {
-    color: #010837;
   }
   
+  
   .footer-bottom {
-    position:absolute;
-    bottom:0;
-    left:0;
-    height:50px;
+    
     line-height:50px;
     width:100%;
     text-align:center;

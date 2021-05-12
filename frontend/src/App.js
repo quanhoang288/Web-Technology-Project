@@ -17,6 +17,7 @@ import AdminDashboard from './containers/Admin/AdminDashboard/AdminDashboard'
 import StudentManagement from './containers/Admin/StudentManagement/StudentManagement'
 import TeacherManagement from './containers/Admin/TeacherManagement/TeacherManagement'
 import CourseManagement from './containers/Admin/CourseManagement/CourseManagement'
+import CourseCreation from './components/CourseCreation/CourseCreation'
 import CourseDetail from './components/CourseDetail/CourseDetail'
 import StudentInfo from './containers/Student/StudentInfo/StudentInfo'
 import StudentCourse from './containers/Student/StudentCourse/StudentCourse'
@@ -24,6 +25,9 @@ import Assignment from './containers/Student/Assignment/Assignment'
 import { connect } from 'react-redux'
 
 
+import Test from './components/Test/Test'
+
+import './App.css'
 class App extends Component {
   render() {
     return (
@@ -31,7 +35,7 @@ class App extends Component {
         <Layout permission={this.props.user !== null ? this.props.user.role : 'default'}>
 
           <Switch>
-
+            <Route path='/test' exact component={Test}></Route>
             <Route path='/login' exact component={Login}></Route>
             <Route path='/register' exact component={Register}></Route>
             <Route
@@ -68,7 +72,9 @@ class App extends Component {
                       <PrivateRoute exact permission={permission} path={`${url}/manage/students`} component={StudentManagement} />
                       <PrivateRoute exact permission={permission} path={`${url}/manage/teachers`} component={TeacherManagement} />
                       <PrivateRoute exact permission={permission} path={`${url}/manage/courses`} component={CourseManagement} />
+                      <PrivateRoute exact permission={permission} path={ `${url}/manage/courses/new-course`} component={CourseCreation} />
                       <PrivateRoute exact permission={permission} path={ `${url}/manage/courses/:id`} component={CourseDetail} />
+                      
                       <PrivateRoute exact permission={permission} path={ `${url}/dashboard`} component={AdminDashboard} />
                       
                       <Redirect to={ `${url}/dashboard`}></Redirect>
