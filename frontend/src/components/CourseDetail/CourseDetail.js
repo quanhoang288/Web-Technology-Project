@@ -46,38 +46,7 @@ export default function CourseDetail() {
             onChange={(teacher) => setTeacher(teacher)}
           />
         </div>
-        <div className="sched">
-            <div className="date-picker">
-                <label>DatePicker</label>
-                <Dropdown 
-                    options={
-                        [{
-                            id:1,weekday:"Sunday",
-                            id:2,weekday:"Monday",
-                            id:3,weekday:"Tuesday",
-                        }]
-                    }
-                    prompt="select weekday"
-                    value="Weekday"
-                    field='weekday'
-                ></Dropdown>
-            </div>
-            <div className="time-picker">
-            <label>Timepicker</label>
-            <Dropdown
-                    options={
-                        [{
-                            id:1,weekday:"Sunday",
-                            id:2,weekday:"Monday",
-                            id:3,weekday:"Tuesday",
-                        }]
-                    }
-                    prompt="select weekday"
-                    value="Weekday"
-                    field='weekday'
-                ></Dropdown>
-            </div>
-        </div>
+        
         <Button> Update </Button>
       </div>
       <div className="student-table">

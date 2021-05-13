@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import './Card.css'
+
 import img from '../../asset/eclass.png'
 import { Link, useLocation } from 'react-router-dom'
-
+import './Card.css'
 const Card = ({ title, overview, price, id }) => {
     const path = useLocation().pathname
     return (

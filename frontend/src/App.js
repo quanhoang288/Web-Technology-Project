@@ -112,14 +112,16 @@ class App extends Component {
               render={({ match: { url } }) => {
                 const permission = 'student'
                 return (
-                  <>
+                  <Switch>
 
-
-                    <PrivateRoute permission={permission} path={`${url}/info`} component={StudentInfo} />
-                    <PrivateRoute exact permission={permission} path={`${url}/courses`} component={StudentCourse} />
+                    
+                    <PrivateRoute exact permission={permission} path={`${url}/info`} component={StudentInfo} />
+                    <PrivateRoute exact permission={permission} path={`${url}/enrolled`} component={StudentCourse} />
                     <PrivateRoute exact permission={permission} path={`${url}/assignment`} component={Assignment} />
-
-                  </>
+                    <PrivateRoute exact permission={permission} path={`${url}`} component={HomePage} />
+                    <Redirect to={'/student'}></Redirect>
+                    
+                  </Switch>
                 )
               }}
             />

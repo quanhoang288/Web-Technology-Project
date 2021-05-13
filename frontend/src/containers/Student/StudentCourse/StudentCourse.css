@@ -1,9 +1,26 @@
+.enrol{
+    display: flex;
+    
+    justify-content: space-around;
+    
+}
+.enrol a{
+    margin-left: auto;
+}
+.enrol h1{
+    font-size: 2em;
+    padding: 20px;
+}
+
 .courses{
     display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
 }
-.course-lists{
-    text-align: center;
-    margin: 30px 10px;
+.courses > div{
+    width: 20%;
+    
+    padding: 20px;
 }

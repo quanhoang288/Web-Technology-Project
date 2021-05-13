@@ -45,7 +45,7 @@ export default function Dropdown({
                     onChange ={e => {
                         setQ(e.target.value)
                         onChange(null)
-                        console.log(e.target.value)
+                        
                     }}
                     onClick={()=>setOpen(prev =>!prev)}
                     
