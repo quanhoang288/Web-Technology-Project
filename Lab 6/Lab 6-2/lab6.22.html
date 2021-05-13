@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CSS Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./mystyle6.22.css">
+</head>
+
+<body>
+    <header>
+        <h2>Information</h2>
+    </header>
+
+    <section>
+        <nav>
+            <ul>
+                <li id='London' onclick="handleClick1()">London</li>
+                <li id='Paris' onclick="handleClick2()">Paris</li>
+                <li id='Tokyo' onclick="handleClick3()">Tokyo</li>
+                <li id='HaNoi' onclick="handleClick4()">Ha Noi</li>
+            </ul>
+        </nav>
+
+        <article>
+            <div id='paragraph'>
+                <h1>London</h1>
+                <p>London is the capital city of England. It is the most populous city in the United Kingdom, with a
+                    metropolitan area of over 13 million inhabitants.</p>
+                <p>Standing on the River Thames, London has been a major settlement for two millennia, its history going
+                    back to its founding by the Romans, who named it Londinium.</p>
+            </div>
+        </article>
+    </section>
+
+    <footer>
+        <p>CopyRight By TrollBongDa</p>
+    </footer>
+    <script>
+        function handleClick1() {
+            document.getElementById('paragraph').innerHTML = '<h1>London</h1> <p>London is the capital city of England. It is the most populous city in the United Kingdom, with a\
+                metropolitan area of over 13 million inhabitants.</p>\
+            <p>Standing on the River Thames, London has been a major settlement for two millennia, its history going\
+                back to its founding by the Romans, who named it Londinium.</p>'
+        }
+        function handleClick2() {
+            document.getElementById('paragraph').innerHTML = '<h1>Paris</h1><p>Paris is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).Since the 17th century, Paris has been one of Europe\'s major centres of finance, diplomacy, commerce, fashion, gastronomy, science and arts.</p>';
+        }
+        function handleClick3() {
+            document.getElementById('paragraph').innerHTML = '<h1>Tokyo</h1> <p>Tokyo is the capital city of England. It is the most populous city in the United Kingdom, with a\
+                metropolitan area of over 13 million inhabitants.</p>\
+            <p>Standing on the River Thames, London has been a major settlement for two millennia, its history going\
+                back to its founding by the Romans, who named it Londinium.</p>'
+        }
+        function handleClick4() {
+            document.getElementById('paragraph').innerHTML = '<h1>Ha Noi</h1> <p>Ha Noi is the capital city of England. It is the most populous city in the United Kingdom, with a\
+                metropolitan area of over 13 million inhabitants.</p>\
+            <p>Standing on the River Thames, London has been a major settlement for two millennia, its history going\
+                back to its founding by the Romans, who named it Londinium.</p>'
+        }
+    </script>
+</body>
+
+</html>
