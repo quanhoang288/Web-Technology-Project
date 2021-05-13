@@ -14,27 +14,31 @@ class UserController extends Controller {
     }
 
 
-    // public function get_all($params=null){
-    //     if (!$params)
-    //         parent::get_all();
-    //     else{
-    //         try{
-    //             foreach($params as $key=>$value){
-    //                 $this->_model->where($key, $value);
+    public function get_all($params=null){
+        if (!$params)
+            parent::get_all();
+        else{
+            try{
+                foreach($params as $key=>$value){
+                    $this->_model->where($key, $value);
                     
-    //             }
-    //             $data = $this->_model->search();
-    //             if (count($data))
-    //                 $this->send(200, ['response'=>'OK', 'data'=>$data]);
-    //             else 
-    //                 $this->send(204, ['response'=> 'No content']);
-    //         }
-    //         catch(PDOException $e){
-    //             $this->send(400, ['response'=> $e->getMessage()]);
-    //         }
+                }
+                $data = $this->_model->search();
+                if ($data)
+                    $this->send(200, ['data'=>$data]);
+                else 
+                    $this->send(400, ['error'=>'Bad request']);
+                // if (count($data))
+                //     $this->send(200, ['response'=>'OK', 'data'=>$data]);
+                // else 
+                //     $this->send(200, ['response'=> 'No content']);
+            }
+            catch(PDOException $e){
+                $this->send(400, ['response'=> $e->getMessage()]);
+            }
 
-    //     }
-    // }
+        }
+    }
 
     // public function get($id, $params=null){
     //     $this->_model->id = $id;

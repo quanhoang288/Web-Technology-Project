@@ -79,6 +79,7 @@ class Model {
 		$conditions = '\'1\'=\'1\' AND ';
 		$conditionsChild = '';
 		$fromChild = '';
+
         if ($this->_hO == 1 && isset($this->hasOne)) {
 			
 			foreach ($this->hasOne as $alias=>$model) {
@@ -186,7 +187,7 @@ class Model {
 						$conditionsChild = '';
 						$fromChild = '';
 						// $select = '`' . $aliasChild . '`' . '.*';
-						$select = '*';
+				
 						// $tableChild = strtolower($tableChild);
 						// $pluralAliasChild = strtolower($inflect->pluralize($aliasChild));
 						// $singularAliasChild = strtolower($aliasChild);
@@ -201,12 +202,12 @@ class Model {
 
 						 
 						$conditionsChild .= '`'.$joinTable.'`.`'.$aliasChild.'_id` = `'.$aliasChild.'`.`id` AND ';
-						if (isset($this->childID))
-							$conditionsChild .= '`'.$joinTable.'`.`'.$aliasChild.'_id` = '. $this->childID . ' AND ';
+						// if (isset($this->childID))
+						// 	$conditionsChild .= '`'.$joinTable.'`.`'.$aliasChild.'_id` = '. $this->childID . ' AND ';
 						$conditionsChild .= '`'.$joinTable.'`.`'.strtolower($this->_table).'_id` = \''.$tempResults[$this->_table]['id'].'\'';
 						$fromChild = substr($fromChild,0,-1);
 
-						$queryChild =  'SELECT ' . $select . ' FROM '.$fromChild.' WHERE '.$conditionsChild;	
+						$queryChild =  'SELECT * FROM '.$fromChild.' WHERE '.$conditionsChild;	
 						
 						echo '<!--'.$queryChild.'-->' . PHP_EOL;
 						$resultChild = $this->_db->query($queryChild);

@@ -34,6 +34,18 @@
 #delete student enrollment
 
 
+/*
+course: 
+1. get all courses 
+2. get 1 course 
+3. get course's notification 
+4. get course's documents 
+5. get course's exams 
+6. get schedule of a student/teacher 
+
+user: 
+*/
+
 // echo "herereeererer" . PHP_EOL;
 #routers for course 
 $router->get('/courses', 'course@get_all');
@@ -51,6 +63,8 @@ $router->post('/users', 'user@create');
 $router->put('/users/:id', 'user@update');
 $router->delete('/users/:id', 'user@delete');
 
+
+$router->post('/course_student', 'course@enroll');
 
 
 
@@ -78,18 +92,14 @@ $router->delete('/course_notifications/:id', 'course_notification@delete');
 #router for exam 
 $router->get('/exams', 'exam@get_all');
 
-#router for course's test results
-$router->get('/results?course_id=?exam_id=?student_id=?', 'result@get');
-$router->post('/results', 'result@create');
-$router->put('/results/:id', 'result@update');
-$router->delete('/results/:id', 'result@delete');
 
-#router for student's payment
-$router->get('/payments', 'payment@get_all');
-$router->get('/payments/:id', 'payment@get');
-$router->post('/payments', 'payment@create');
-$router->put('/payments/:id', 'payment@update');
-$router->delete('/payments/:id', 'payment@delete');
+
+// #router for student's payment
+// $router->get('/payments', 'payment@get_all');
+// $router->get('/payments/:id', 'payment@get');
+// $router->post('/payments', 'payment@create');
+// $router->put('/payments/:id', 'payment@update');
+// $router->delete('/payments/:id', 'payment@delete');
 
 
 #router for schedule 

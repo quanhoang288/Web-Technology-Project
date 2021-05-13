@@ -25,7 +25,7 @@ class CourseController extends Controller {
                 }
                 else{
                     $filters = ['course', 'teacher', 'student', 'schedule'];
-                    $this->_model->childID = $user_id;
+                    // $this->_model->childID = $user_id;
                     $this->_model->showHasOne();
                     $this->_model->showHMABTM();
                 } 
@@ -37,14 +37,33 @@ class CourseController extends Controller {
                 }
                 else {
                     $filteredResult = array();
+                   
                     foreach($result as $course){
+                        // if ($course[$role]['id'] != $user_id)
+                        //     continue;
+                        if ($role == 'teacher' && $course[$role]['id'] != $user_id)
+                            continue; 
+                        else if ($role == 'student'){
+                            $found = false;
+                            foreach ($course[$role] as $student){
+                                if ($student['id'] == $user_id){
+                                    $found = true;
+                                    break;
+                                }
+                            }
+                            if (!$found) 
+                                continue;
+                        }
                         $filteredCourse = filter($course, $filters);
                         if (in_array('student', $filters) && count($filteredCourse['student'])){
-                            $filteredCourse['student'] = filter($filteredCourse['student'][0], ['username', 'password'], true);
+                            foreach($filteredCourse['student'] as $student){
+                                $student = filter($student, ['username', 'password'], true);
+                            }
+                            // $filteredCourse['student'] = filter($filteredCourse['student'][0], ['username', 'password'], true);
                         }
                         $filteredCourse['teacher'] = filter($filteredCourse['teacher'], ['username', 'password'], true);
-                        if (count($filteredCourse['student']))
-                            array_push($filteredResult, $filteredCourse);
+                        // if (count($filteredCourse['student']))
+                        array_push($filteredResult, $filteredCourse);
                     }
 
                     $this->send(200, ['response'=> $filteredResult]);
@@ -69,7 +88,15 @@ class CourseController extends Controller {
         $this->_model->showHMABTM();
         parent::get($params);
     }
-
+    public function create()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $result = $this->_model->create($data);
+        if ($result) 
+            $this->response->sendStatus(201);
+        else 
+            $this->response->sendStatus(400);
+    }
     // public function get($params=null){
     //     // if (!$params || !isset($params['user_id']))
     // }
