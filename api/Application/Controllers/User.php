@@ -3,37 +3,106 @@
 use MVC\Controller;
 use JWT\JWT;
 require SYSTEM . 'JWT.php';
-class ControllersUser extends Controller {
-    private $model ;
+class UserController extends Controller {
+   
     public function __construct()
     {
         Controller::__construct();
-        $this->model = $this->model('user');
+        
+      
+     
     }
-    public function register()
-    {
+
+
+    public function get_all($params=null){
+        if (!$params)
+            parent::get_all();
+        else{
+            try{
+                foreach($params as $key=>$value){
+                    $this->_model->where($key, $value);
+                    
+                }
+                $data = $this->_model->search();
+                if ($data)
+                    $this->send(200, ['data'=>$data]);
+                else 
+                    $this->send(400, ['error'=>'Bad request']);
+                // if (count($data))
+                //     $this->send(200, ['response'=>'OK', 'data'=>$data]);
+                // else 
+                //     $this->send(200, ['response'=> 'No content']);
+            }
+            catch(PDOException $e){
+                $this->send(400, ['response'=> $e->getMessage()]);
+            }
+
+        }
+    }
+
+    // public function get($id, $params=null){
+    //     $this->_model->id = $id;
+    //     if ($params){
+    //         if (isset($params['resource'])){
+    //             if (!isset($params['role']) || !in_array($params['role'], ['teacher', 'student']))
+    //                 $this->send(400, ['error'=>'Bad request']);
+    //             else{
+    //                 $role = $params['role'];
+    //                 $resource = $params['resource'];
+    //                 if ($resource == 'courses'){
+    //                     $this->_model->showHMABTM();
+    //                     $this->_model->search();
+    //                 }
+    //                 else if ($resource == 'schedule');
+    //             }
+
+    //         }
+    //     }
+    //     else 
+    //         parent::get($id);
+    // }
+    
+    public function create(){
         $data = json_decode(file_get_contents('php://input'), true);
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
         $response ='Succesfully Registerd ';
         try{
-            
-            $this->model->register($data);
-            $this->response->setContent(['message'=>$response,'code'=>201]);
-            $this->response->sendStatus(201);
+            $this->_model->setAtrributes($data);
+            $this->_model->save();
+            $this->send(201, ['response'=>$response]);
         }
-        catch(PDOException $e)
-        {
-            $response = $e ->getMessage();
-            $this->response->setContent(['message'=>$response,'code'=>400]);
-            $this->response->sendStatus(200);
-        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
     }
-    public function validate_user()
+
+    
+    
+    // public function register()
+    // {
+    //     $data = json_decode(file_get_contents('php://input'), true);
+    //     $response ='Succesfully Registerd ';
+    //     try{
+            
+    //         $this->_model->register($data);
+    //         $this->response->setContent(['message'=>$response,'code'=>201]);
+    //         $this->response->sendStatus(201);
+    //     }
+    //     catch(PDOException $e)
+    //     {
+    //         $response = $e ->getMessage();
+    //         $this->response->setContent(['message'=>$response,'code'=>400]);
+    //         $this->response->sendStatus(200);
+    //     }
+    // }
+    public function validate()
     {        
         
         $data = json_decode(file_get_contents('php://input'), true);
         $username = $data['username'];
         $password = $data['password'];
-        $user = ($this->model->find_username($username));
+        $user = ($this->_model->find_username($username));
 
         $response ='';
         if(sizeof($user) == 0)

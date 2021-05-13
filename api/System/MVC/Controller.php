@@ -7,13 +7,9 @@
  */
 namespace MVC;
 use \Exception as Exception;
-/**
- * Class Controller, a port of MVC
- *
- * @author Mohammad Rahmani <rto1680@gmail.com>
- *
- * @package MVC
- */
+use PDOException;
+
+
 class Controller {
 
     /**
@@ -25,13 +21,112 @@ class Controller {
      * Response Class.
      */
     public $response;
-
+    protected $_model;
 	/**
 	*  Construct
 	*/
     public function __construct() {
         $this->request = $GLOBALS['request'];
         $this->response = $GLOBALS['response'];
+        $model = str_replace('Controller', '', get_class($this));
+                
+        $this->_model = $this->model($model);
+    }
+    public function get_all($params=null){
+        try{
+            if ($params){
+                foreach($params as $key=>$value){
+                    $this->_model->where($key, $value);
+                }
+            }
+            $data = $this->_model->search();
+            if (count($data))
+                $this->send(200, ['response'=>'OK', 'data'=>$data]);
+            else 
+                $this->send(404, ['response'=> 'No resource found']);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+    }
+
+    public function get($params){
+        if (!$params){
+            $this->send(400, ['error'=>'Bad request']);
+        }
+        else {
+            $id = $params['id'];
+            try{
+                if (count($params) > 1){
+                    foreach($params as $key=>$value){
+                        $this->_model->where($key, $value);
+                    }
+                }
+                $this->_model->id = $id;
+                $data = $this->_model->search();
+                if (count($data))
+                    $this->send(200, ['response'=>'OK', 'data'=>$data]);
+                else 
+                    $this->send(404, ['response'=> 'No resource found']);
+            }
+            catch(PDOException $e){
+                $this->send(400, ['response'=> $e->getMessage()]);
+            } 
+        }
+
+        
+    }
+
+    public function create(){
+        
+        $data = json_decode(file_get_contents('php://input'), true);
+        try{
+            $this->_model->setAtrributes($data);
+            $this->_model->save();
+            $this->send(200, ['response'=>'OK']);
+        }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+
+    }
+    public function update($params){
+        if (!$params){
+            $this->send(400, ['error' => 'Bad Request']);
+        }
+        else {
+            $id = $params['id'];
+            $data = json_decode(file_get_contents('php://input'), true);
+            try{
+                $this->_model->setAtrributes($data);
+                $this->_model->id = $id;
+                $this->_model->save();
+                $this->send(200, ['response'=>'OK']);
+            }
+            catch(PDOException $e){
+                $this->send(400, ['response'=> $e->getMessage()]);
+            } 
+        }
+
+
+    }
+
+    public function delete($params){
+        if (!$params){
+            $this->send(400, ['error' => 'Bad Request']);
+        }
+        else {
+            $id = $params['id'];
+            try{  
+                $this->_model->id = $id;
+                $this->_model->delete();
+                $this->send(200, ['response'=>'OK']);
+            }
+            catch(PDOException $e){
+                $this->send(400, ['response'=> $e->getMessage()]);
+            } 
+        }
+
     }
 
     /**
@@ -41,20 +136,30 @@ class Controller {
      * 
      * @return object
      */
-    public function model($model) {
+    private function model($model) {
+        // echo $model . PHP_EOL;
         $file = MODELS . ucfirst($model) . '.php';
 
 		// check exists file
         if (file_exists($file)) {
             require_once $file;
-
-            $model = 'Models' . str_replace('/', '', ucwords($model, '/'));
+            
+       
+            $model = ucfirst($model) . 'Model';
+            
 			// check class exists
-            if (class_exists($model))
+            if (class_exists($model)){
+                // echo "Inside controller - Model: $model" . PHP_EOL;
                 return new $model;
-            else 
+            }
+                
+            else{
+         
                 throw new Exception(sprintf('{ %s } this model class not found', $model));
+            }
+                
         } else {
+            // echo "error";
             throw new Exception(sprintf('{ %s } this model file not found', $file));
         }
     }
