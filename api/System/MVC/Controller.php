@@ -40,13 +40,15 @@ class Controller {
                 }
             }
             $data = $this->_model->search();
-            if (count($data))
-                $this->send(200, ['response'=>'OK', 'data'=>$data]);
-            else 
-                $this->send(404, ['response'=> 'No resource found']);
+            return $data;
+            // if (count($data))
+            //     $this->send(200, $data);
+            // else 
+            //     $this->send(404, ['response'=> 'No resource found']);
         }
         catch(PDOException $e){
-            $this->send(400, ['response'=> $e->getMessage()]);
+            return false;
+            // $this->send(400, ['response'=> $e->getMessage()]);
         } 
     }
 
