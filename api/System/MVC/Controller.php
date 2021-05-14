@@ -85,7 +85,7 @@ class Controller {
         try{
             $this->_model->setAtrributes($data);
             $this->_model->save();
-            $this->send(200, ['response'=>'OK']);
+            $this->send(201, ['response'=>'OK']);
         }
         catch(PDOException $e){
             $this->send(400, ['response'=> $e->getMessage()]);

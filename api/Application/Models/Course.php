@@ -20,13 +20,11 @@ class CourseModel extends Model{
         $img = $course_data['img'];
         $img_exploded = explode(';', $img);
         $img_format = explode('/',$img_exploded[0])[1];
-
-
         $course_data['img'] = $course_name . '.' . $img_format;
         base64_to_jpeg($img, UPLOAD . 'courses/'. $course_data['img']);
-
         $schedule_data = $data['schedule'];
         $this->setAtrributes($course_data);
+        
         $result = $this->save();
         if (!$result)
             return false;
