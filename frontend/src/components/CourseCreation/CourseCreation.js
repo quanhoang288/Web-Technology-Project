@@ -42,10 +42,6 @@ export class CourseCreation extends Component {
       course: raw_course, 
       schedule: raw_sched
     });
-    // var raw = {
-    //   course: raw_course,
-    //   schedule: raw_sched,
-    // };
     
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");  

@@ -50,7 +50,6 @@ export class Table extends Component {
         const indexOfFirstPost = indexOfLastPost - this.props.rowPerPage;
         const data = this.filterData(this.props.data)
         const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
-        
         const padding_row = []
         for(let i=0 ; i < this.props.rowPerPage - currentRows.length; i++)
         {

@@ -2,7 +2,7 @@ import { React, useState,useEffect } from 'react';
 import './Modal.css';
 import axios from 'axios'
 import { HOST_URL } from '../../config'
-export const Modal = ({ show, closeHandler, info }) => {
+export const Modal = ({ show, closeHandler, info,onSubmit }) => {
   const [update_info, setInfo] = useState(info)
   const fieldOnChangeHandler = (field, e) => {
     const processed_info = {...update_info}
@@ -46,7 +46,7 @@ export const Modal = ({ show, closeHandler, info }) => {
         </div>
         <div className="modal-footer">
           <button onClick={closeHandler} className="btn-cancel">Close</button>
-          <button onClick={closeHandler} className="btn-cancel">Update</button>
+          <button onClick={onSubmit} className="btn-cancel">Update</button>
         </div>
       </div>
     </div>
