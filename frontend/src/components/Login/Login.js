@@ -22,34 +22,6 @@ class Login extends Component {
             "password": this.state.password
         });
 
-        // var config = {
-        //     method: 'post',
-        //     url: `${HOST_URL}/login`,
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     data: data
-        // };
-
-        // axios(config)
-            // .then(res => {
-            //     if(res.data['response']['token'])
-            //     {
-            //         this.props.login_success(res.data['response']);
-            //     }
-            //     else
-            //     {
-                    
-            //         this.props.login_fail();
-            //     }
-            // })
-            // .catch(err => {
-                
-            //     this.props.login_fail()
-            // })
-
-
-
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         

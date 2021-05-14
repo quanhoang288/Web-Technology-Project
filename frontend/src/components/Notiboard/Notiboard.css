@@ -1,6 +1,7 @@
 .plan-item{
     display: flex;
     
+    
 }
 .plan-item > * {
     margin: 20px;
@@ -14,6 +15,9 @@
     background-color: #eeeeee;
 }
 
-
+.notiboard{
+    width: 50%;
+    height: 25vh;
+}
 
 

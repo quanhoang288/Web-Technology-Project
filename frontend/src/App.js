@@ -18,12 +18,13 @@ import StudentManagement from "./containers/Admin/StudentManagement/StudentManag
 import TeacherManagement from "./containers/Admin/TeacherManagement/TeacherManagement";
 import CourseManagement from "./containers/Admin/CourseManagement/CourseManagement";
 import CourseCreation from "./components/CourseCreation/CourseCreation";
+import { connect } from "react-redux";
 import CourseDetail from "./components/CourseDetail/CourseDetail";
 import StudentInfo from "./containers/Student/StudentInfo/StudentInfo";
 import StudentCourse from "./containers/Student/StudentCourse/StudentCourse";
 import StudentCourseDetail from './containers/Student/StudentCourseDetail/StudentCourseDetail'
 import Assignment from "./containers/Student/Assignment/Assignment";
-import { connect } from "react-redux";
+
 
 import Test from "./components/Test/Test";
 

@@ -32,11 +32,11 @@ export class Notiboard extends Component {
             currentRows.map((item, idx) => {
               return (<div className='plan-item' key={idx}>
                 <div className="datetime">
-                  {item.date}
+                  {item.created_at}
                 </div>
                 <div className='content'>
                   <Link to='#'>
-                    <p>{item.title}</p>
+                    <p>{item.content}</p>
                   </Link>
                 </div>
                 <i class="fas fa-edit" ></i>

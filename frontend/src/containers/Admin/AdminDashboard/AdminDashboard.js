@@ -16,7 +16,7 @@ export class Dashboard extends Component {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({ content: this.ref.current.value,created_at:Date().toString() });
-
+    console.log(raw)
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -25,10 +25,10 @@ export class Dashboard extends Component {
 
     fetch(`${HOST_URL}/${slug}`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => this.fetch_noti())
       .catch((error) => console.log("error", error));
   };
-  componentDidMount() {
+  fetch_noti(){
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -39,8 +39,11 @@ export class Dashboard extends Component {
 
     fetch(`${HOST_URL}/system_notifications`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => this.setState({noti_data:result}))
       .catch((error) => console.log("error", error));
+  }
+  componentDidMount() {
+    this.fetch_noti()
   }
 
   render() {
@@ -60,8 +63,8 @@ export class Dashboard extends Component {
           })}
         </div>
 
-        <div className="notiboard">
-          <Notiboard data={MOCKDATA} rowPerPage={2}></Notiboard>
+        <div className="notiboards">
+          <Notiboard data={this.state.noti_data} rowPerPage={2}></Notiboard>
           <div className="create-plan">
             <h1>Update plan</h1>
             <hr></hr>

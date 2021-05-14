@@ -4,6 +4,7 @@ import InputField from "../InputField/InputField";
 import ImageUploader from "../ImageUploader/ImageUploader";
 import Dropdown from "../Dropdown/Dropdown";
 import Button from "../Button/Button";
+import { HOST_URL } from "../../config";
 export class CourseCreation extends Component {
   state = {
     title: "",
@@ -16,8 +17,43 @@ export class CourseCreation extends Component {
     category: "",
   };
   textarea_ref = React.createRef("");
+  process_sched(sched) {
+    var process_sched = [];
+    sched.forEach((item, index) => {
+      if (item !== -1) {
+        process_sched.push({ weekday_id: index + 2, time_id: item });
+      }
+    });
+    return process_sched;
+  }
   onSubmit = () => {
-    console.log(this.state);
+    var { title, teacher_option, description, category, sched, img, price } =
+      this.state;
+    var raw_course = {
+      name: title,
+      fee: price,
+      teacher_id: teacher_option["id"],
+      subject: category,
+      description: description,
+      img: img,
+    };
+    var raw_sched = sched;
+    var raw = {
+      course: raw_course,
+      schedule: raw_sched,
+    };
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");  
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+    fetch(`${HOST_URL}/courses`, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   };
   render() {
     const weekday = [
@@ -50,6 +86,14 @@ export class CourseCreation extends Component {
     const teacher_option = [
       {
         id: 1,
+        name: "Mr Nguyen Duc Tung",
+      },
+      {
+        id: 2,
+        name: "Mr Nguyen Duc Thang",
+      },
+      {
+        id: 3,
         name: "Mr Nguyen Duc Thang",
       },
     ];
@@ -136,22 +180,29 @@ export class CourseCreation extends Component {
 
             <div className="time-picker">
               {this.state.sched.map((shift, idx) => {
-                if (shift !==-1) {
-                  
+                if (shift !== -1) {
                   return (
-                    <Dropdown
-                      key={idx}
-                      options={shift_option}
-                      prompt={`Select Shift for ${weekday[idx]}`}
-                      value={shift_option[shift]['duration']}
-                      field="duration"
-                      
-                      onChange={(option) => {
-                        var newSched = {...this.state}.sched
-                        newSched[idx] = option['id']
-                        this.setState({sched:newSched})
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
                       }}
-                    ></Dropdown>
+                    >
+                      <label> {`Select Shift for ${weekday[idx]}`} </label>
+                      <Dropdown
+                        key={idx}
+                        options={shift_option}
+                        prompt={`Select Shift for ${weekday[idx]}`}
+                        value={shift_option[shift]["duration"]}
+                        field="duration"
+                        onChange={(option) => {
+                          var newSched = { ...this.state }.sched;
+                          newSched[idx] = option["id"];
+                          this.setState({ sched: newSched });
+                        }}
+                      ></Dropdown>
+                    </div>
                   );
                 }
               })}

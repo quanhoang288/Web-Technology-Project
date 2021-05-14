@@ -19,7 +19,7 @@ export class HomePage extends Component {
     };
     fetch(`${HOST_URL}/system_notifications`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => this.setState({notifications:result}))
       .catch((error) => console.log("error", error));
   }
   render() {
@@ -42,7 +42,7 @@ export class HomePage extends Component {
           </div>
         </div>
 
-        <Notiboard data={MOCKDATA} rowPerPage={3}></Notiboard>
+        <Notiboard data={this.state.notifications} rowPerPage={3}></Notiboard>
         <div className="featuring-courses">
           <div className="open-course">
             <h1>Best seller</h1>
