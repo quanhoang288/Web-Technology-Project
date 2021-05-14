@@ -7,6 +7,11 @@ import './Notiboard.css'
 export class Notiboard extends Component {
   state = {
     currentPage: 1,
+    
+  }
+  componentDidMount()
+  {
+    
   }
   paginate = pageNumber => this.setState({ currentPage: pageNumber })
   render() {
@@ -16,10 +21,10 @@ export class Notiboard extends Component {
     const indexOfLastPost = this.state.currentPage * this.props.rowPerPage;
     const indexOfFirstPost = indexOfLastPost - this.props.rowPerPage;
     const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
-
+    
     return (
       <div className="notiboard">
-
+        
         <div className="plan">
           <h1>Plan</h1>
           <hr></hr>

@@ -2,13 +2,28 @@ import React, { Component } from "react";
 import img from "../../asset/eclass.png";
 import Notiboard from "../../components/Notiboard/Notiboard";
 import MOCKDATA from "../../components/Notiboard/mock.json";
+import { HOST_URL } from "../../config";
 import Card from "../../components/Card/Card";
 import Carousel from "../../components/Carousel/Carousel";
 export class HomePage extends Component {
-    state = {
-        
-    }
-    render() {
+  state = {
+    notifications: [],
+  };
+  componentDidMount() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+
+    fetch(`${HOST_URL}/system_notifications`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  }
+  render() {
     return (
       <div className="homepage">
         <div className="billboard">

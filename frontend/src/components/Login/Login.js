@@ -60,7 +60,7 @@ class Login extends Component {
           
         };
         
-        fetch(`${HOST_URL}/login`, requestOptions)
+        fetch(`${HOST_URL}/users/login`, requestOptions)
           .then(response => response.json())
           .then(res => {
             if(res['response']['token'])

@@ -31,19 +31,19 @@ export class CourseCreation extends Component {
     ];
     const shift_option = [
       {
-        id: 1,
+        id: 0,
         duration: "6h-9h",
       },
       {
-        id: 2,
+        id: 1,
         duration: "9h-12h",
       },
       {
-        id: 3,
+        id: 2,
         duration: "12h-15h",
       },
       {
-        id: 4,
+        id: 3,
         duration: "15h-18h",
       },
     ];

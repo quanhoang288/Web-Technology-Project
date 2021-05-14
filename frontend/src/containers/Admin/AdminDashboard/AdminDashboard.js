@@ -7,11 +7,11 @@ import MOCKDATA from "../../../components/Notiboard/mock.json";
 import { HOST_URL } from "../../../config";
 export class Dashboard extends Component {
   state = {
-    noti_data : []
-  }
+    noti_data: [],
+  };
   ref = React.createRef();
   addNotificationHandler = () => {
-    var slug = null;
+    var slug = 'system_notifications'
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -30,20 +30,17 @@ export class Dashboard extends Component {
   };
   componentDidMount() {
     var myHeaders = new Headers();
-    var slug = null
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({ username: "thangnd", password: "sdf" });
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
-      body: raw,
     };
-    fetch(`${HOST_URL}`, requestOptions)
+
+    fetch(`${HOST_URL}/system_notifications`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
-
-    
   }
 
   render() {
