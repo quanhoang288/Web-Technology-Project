@@ -1,22 +1,28 @@
 import React, { Component } from "react";
 import "./InputField.css";
 export class InputField extends Component {
-  state = {
-    input: "",
-  };
+  ref = React.createRef()
   inputOnChange = (e)=> {
-      this.setState({input:e.target.value})
+      this.setState(prevState => {
+        return({
+          ...prevState,
+          input:e.target.value
+        })
+      })
   }
   render() {
+    
     return (
       <div className="field">
         <input
           type={this.props.type}
           required
-          value={this.state.input}
+          ref={this.ref}
           onChange={(e) => {
+            
             this.inputOnChange(e)
-            this.props.onChange(this.props.field, this.state.input)
+            this.props.onChange(this.props.field, this.ref.current.value)
+            
           }}
         />
         <label>{this.props.label}</label>

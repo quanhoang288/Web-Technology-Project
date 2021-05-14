@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Container, BoxUpload, ImagePreview } from "./style";
 import FolderIcon from "./assets/folder_icon_transparent.png";
 import CloseIcon from "./assets/CloseIcon.svg";
 
-function ImageUploader() {
+function ImageUploader(props) {
   const [image, setImage] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
   const [typeFile, setTypeFile] = useState("");
@@ -21,12 +21,15 @@ function ImageUploader() {
       reader.readAsDataURL(e.target.files[0]);
     }
   }
-  
+  useEffect(() => {
+    props.onChange(image)
+    
+  },[image]);
+
   return (
     <Layout>
       <Container>
         <h2>Upload your image</h2>
-        
 
         <BoxUpload>
           <div className="image-upload">
@@ -83,8 +86,6 @@ function ImageUploader() {
         </BoxUpload>
 
         {isUploaded ? <h2>Type is {typeFile}</h2> : null}
-
-       
       </Container>
     </Layout>
   );

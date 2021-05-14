@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import StudentTable from "../../components/Table/Table";
 import MOCKDATA from "../../components/Table/MOCK.json";
 import Dropdown from "../../components/Dropdown/Dropdown";
-import Button from '../../components/Button/Button'
-import axios from "axios";
+import Button from "../../components/Button/Button";
+
 import { HOST_URL } from "../../config";
 import "./CourseDetail.css";
 export default function CourseDetail() {
@@ -29,16 +29,16 @@ export default function CourseDetail() {
       <div className="course-general-info">
         <h1> General Info </h1>
         <div className="course-field">
-          <input required ></input>
+          <input required></input>
           <label>Course Title</label>
         </div>
         <div className="course-field">
-          <input required ></input>
+          <input required></input>
           <label>Description</label>
         </div>
 
         <div className="teacher-selection">
-          <Dropdown 
+          <Dropdown
             options={MOCKDATA}
             prompt="select teacher"
             value={teacher}
@@ -46,13 +46,13 @@ export default function CourseDetail() {
             onChange={(teacher) => setTeacher(teacher)}
           />
         </div>
-        
+
         <Button> Update </Button>
       </div>
       <div className="student-table">
+        <h1>  Pending Request  </h1>
         <StudentTable rowPerPage={6} data={MOCKDATA}></StudentTable>
       </div>
-      
     </div>
   );
 }

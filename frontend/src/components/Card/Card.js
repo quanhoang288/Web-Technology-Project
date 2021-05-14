@@ -1,12 +1,36 @@
 import React, { useState, useEffect } from 'react'
 
 import img from '../../asset/eclass.png'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './Card.css'
-const Card = ({ title, overview, price, id }) => {
-    const path = useLocation().pathname
+import { connect } from "react-redux";
+
+
+
+
+
+const Card = ({ title, overview, price, id, user }) => {
+    let path = ''
+    if(user)
+    {
+        if(user.role === 'admin')
+        {
+            path = `admin/manage/courses/${id}`
+        }
+        else if(user.role === 'student')
+        {
+            path = `student/courses/${id}`
+        }
+        else if(user.role === 'teacher')
+        {
+            path = `teacher/courses/${id}`
+        }
+    }
+    else{
+        path = `/courses/${id}`
+    }
     return (
-        <Link to={`${path}/${id}`}>
+        <Link to={path}>
             <div class="card">
                 <div className="card-header">
                     <img src={img} className='bigger_img' />
@@ -37,4 +61,10 @@ const Card = ({ title, overview, price, id }) => {
     )
 }
 
-export default Card
+const mapStateToProps = (state) => ({
+    user:state.authReducer.user
+})
+
+
+
+export default connect(mapStateToProps, null)(Card)

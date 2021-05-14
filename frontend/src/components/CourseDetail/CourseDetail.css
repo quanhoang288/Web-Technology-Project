@@ -2,12 +2,17 @@
     display: flex;
     justify-content: space-around;
 }
+
 .course-detail h1{
   font-size: 3em;
 }
 .student-table{
     width: 50%;
-    margin:auto ;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 60px;
 }
 .course-general-info{
     width: 40%;
@@ -28,10 +33,7 @@
 .course-field{
     height: 50px;
     width: 95%;
-    
     position: relative;
-    
-    
   }
   .course-field input{
     height: 100%;

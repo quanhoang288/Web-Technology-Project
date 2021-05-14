@@ -7,13 +7,17 @@ import Button from "../Button/Button";
 export class CourseCreation extends Component {
   state = {
     title: "",
-    teacher_id: "",
+    teacher_option: null,
     description: "",
-    category:"",
-    sched: { Monday: "", Tuesday: "" },
-    img_path: "",
+    category: "",
+    sched: [-1, -1, -1, -1, -1, -1, -1],
+    img: "",
     price: "",
     category: "",
+  };
+  textarea_ref = React.createRef("");
+  onSubmit = () => {
+    console.log(this.state);
   };
   render() {
     const weekday = [
@@ -28,22 +32,27 @@ export class CourseCreation extends Component {
     const shift_option = [
       {
         id: 1,
-        duration:'6h-9h'
+        duration: "6h-9h",
       },
       {
-        id:2 ,
-        duration:'9h-12h'
+        id: 2,
+        duration: "9h-12h",
       },
       {
         id: 3,
-        duration:'12h-15h'
+        duration: "12h-15h",
       },
       {
         id: 4,
-        duration:'15h-18h'
+        duration: "15h-18h",
       },
-    ]
-
+    ];
+    const teacher_option = [
+      {
+        id: 1,
+        name: "Mr Nguyen Duc Thang",
+      },
+    ];
     return (
       <div className="course-create">
         <div className="course-create-form">
@@ -73,19 +82,30 @@ export class CourseCreation extends Component {
             }}
           ></InputField>
           <label>Description</label>
-          <textarea></textarea>
+          <textarea
+            ref={this.textarea_ref}
+            onChange={() =>
+              this.setState({ description: this.textarea_ref.current.value })
+            }
+          ></textarea>
 
           <Dropdown
-            options={[
-              {
-                id: 1,
-                weekday: "Sunday",
-                
-              },
-            ]}
-            prompt="select weekday"
+            options={teacher_option}
+            prompt="select teacher"
             value="Teacher"
-            field="weekday"
+            field="name"
+            value={
+              this.state.teacher_option
+                ? this.state.teacher_option["name"]
+                : null
+            }
+            onChange={(option) => {
+              if (option) {
+                this.setState({ teacher_option: option });
+              } else {
+                this.setState({ teacher_option: null });
+              }
+            }}
           ></Dropdown>
 
           <div className="schedule">
@@ -97,13 +117,13 @@ export class CourseCreation extends Component {
                       id={idx}
                       key={idx}
                       type="checkbox"
-                      checked={this.state.sched[day] != null ? true : false}
+                      checked={this.state.sched[idx] !== -1 ? true : false}
                       onChange={(e) => {
                         let newState = { ...this.state };
-                        if (this.state.sched[day] != null) {
-                          delete newState.sched[day];
+                        if (this.state.sched[idx] !== -1) {
+                          newState.sched[idx] = -1;
                         } else {
-                          newState.sched[day] = "";
+                          newState.sched[idx] = 0;
                         }
                         this.setState(newState);
                       }}
@@ -115,30 +135,38 @@ export class CourseCreation extends Component {
             </div>
 
             <div className="time-picker">
-              {Object.keys(this.state.sched).map((weekday, idx) => {
-                return (
-                  <Dropdown
-                    options={shift_option}
-                    prompt={`Select Shift for ${weekday}`}
-                    value={this.state.sched[weekday]}
-                    field="duration"
-                    value={this.state.sched[weekday]}
-                    onChange={(option) => {
-                      let sched = {...this.state.sched}
-                      sched[weekday] = option
-                      this.setState({sched:sched})
+              {this.state.sched.map((shift, idx) => {
+                if (shift !==-1) {
+                  
+                  return (
+                    <Dropdown
+                      key={idx}
+                      options={shift_option}
+                      prompt={`Select Shift for ${weekday[idx]}`}
+                      value={shift_option[shift]['duration']}
+                      field="duration"
                       
-                    }}
-
-                  ></Dropdown>
-                );
+                      onChange={(option) => {
+                        var newSched = {...this.state}.sched
+                        newSched[idx] = option['id']
+                        this.setState({sched:newSched})
+                      }}
+                    ></Dropdown>
+                  );
+                }
               })}
             </div>
           </div>
         </div>
         <div className="img-uploader">
-          <ImageUploader></ImageUploader>
-          <Button>Submit</Button>
+          <ImageUploader
+            onChange={(img) => {
+              var prevState = { ...this.state };
+              prevState.img = img;
+              this.setState(prevState);
+            }}
+          ></ImageUploader>
+          <Button onClick={this.onSubmit}>Submit</Button>
         </div>
       </div>
     );

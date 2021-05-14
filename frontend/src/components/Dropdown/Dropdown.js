@@ -59,7 +59,7 @@ export default function Dropdown({
                         return(
                             <div className={`option ${value === option[field] ? 'selected' :null}`}
                                 onClick = {() => {
-                                    onChange(option[field])
+                                    onChange(option)
                                     setOpen(false)
                                     setQ("")
                                 }}
