@@ -27,7 +27,15 @@ class UserController extends Controller {
                     
                 }
                 $data = $this->_model->search();
+<<<<<<< HEAD
 
+=======
+                if ($data)
+                    $this->send(200, $data);
+                    
+                else 
+                    $this->send(400, ['error'=>'Bad request']);
+>>>>>>> 51aa405... 'updae'
                 // if (count($data))
                 //     $this->send(200, ['response'=>'OK', 'data'=>$data]);
                 // else 
