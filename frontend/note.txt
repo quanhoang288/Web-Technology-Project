@@ -1,0 +1,19 @@
+duyet hoc sinh vao lop 
+mo lop
+- chon giao vien
+
+admin bam vao chi tiet lop
+ 
+- thay doi thong tin lop 
+- kick trong lop
+
+
+giao vien
+dang thong bao giao vien
+giao bai tap
+
+
+hoc sinh
+xem lich hoc
+xem lop
+xem thong tin ca nhan
