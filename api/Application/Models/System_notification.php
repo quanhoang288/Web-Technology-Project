@@ -13,4 +13,6 @@ class System_notificationModel extends Model{
 
 
     }
+
+    
 }

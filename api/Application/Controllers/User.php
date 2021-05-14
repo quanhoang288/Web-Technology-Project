@@ -15,8 +15,11 @@ class UserController extends Controller {
 
 
     public function get_all($params=null){
-        if (!$params)
-            parent::get_all();
+        if (!$params){
+            $data = parent::get_all();
+
+        }
+            
         else{
             try{
                 foreach($params as $key=>$value){
@@ -24,20 +27,25 @@ class UserController extends Controller {
                     
                 }
                 $data = $this->_model->search();
-                if ($data)
-                    $this->send(200, ['data'=>$data]);
-                else 
-                    $this->send(400, ['error'=>'Bad request']);
+
                 // if (count($data))
                 //     $this->send(200, ['response'=>'OK', 'data'=>$data]);
                 // else 
                 //     $this->send(200, ['response'=> 'No content']);
             }
             catch(PDOException $e){
-                $this->send(400, ['response'=> $e->getMessage()]);
+                $this->send(400, ['error'=>'Bad request']);
             }
 
         }
+        if ($data){
+            $res = array();
+            foreach($data as $user)
+                array_push($res, $user['user']);
+            $this->send(200, $res);
+        }
+        else 
+            $this->send(400, ['error'=>'Bad request']);
     }
 
     // public function get($id, $params=null){

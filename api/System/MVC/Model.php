@@ -106,7 +106,7 @@ class Model {
 
 		
 		$this->_query = 'SELECT * FROM '.$from.' WHERE '.$conditions;
-		echo '<!--'.$this->_query.'-->' . PHP_EOL;
+		// echo '<!--'.$this->_query.'-->' . PHP_EOL;
 
 		$this->_result = $this->_db->query($this->_query);
 		$result = array();
@@ -144,7 +144,7 @@ class Model {
 						$conditionsChild .= $this->_table.'_id = ' . $tempResults[$this->_table]['id'];
 	
 						$queryChild =  'SELECT * FROM '.$fromChild.' WHERE '.$conditionsChild;	
-						echo '<!--'.$queryChild.'-->' . PHP_EOL;
+						// echo '<!--'.$queryChild.'-->' . PHP_EOL;
 						$resultChild = $this->_db->query($queryChild);
 				
 						$tableChildArr = array();
@@ -209,7 +209,7 @@ class Model {
 
 						$queryChild =  'SELECT * FROM '.$fromChild.' WHERE '.$conditionsChild;	
 						
-						echo '<!--'.$queryChild.'-->' . PHP_EOL;
+						// echo '<!--'.$queryChild.'-->' . PHP_EOL;
 						$resultChild = $this->_db->query($queryChild);
 				
 						$tableChildArr = array();
@@ -337,7 +337,7 @@ class Model {
 			$query = 'INSERT INTO '.$this->_table.' ('.$fields.') VALUES ('.$values.')';
 		
 		}
-		echo $query . PHP_EOL;
+		// echo $query . PHP_EOL;
         $stmt = $this->_db->prepare($query);
 		$this->_result = $stmt->execute();
 
@@ -362,7 +362,7 @@ class Model {
                     $conditionsChild .= $this->_table.'_id = '.$this->id;
 
                     $queryChild = 'DELETE FROM ' . $childTable . ' WHERE ' . $conditionsChild ;
-					echo $queryChild . PHP_EOL;
+					// echo $queryChild . PHP_EOL;
                     $stmt = $this->_db->prepare($queryChild);
                     $this->_result = $stmt->execute();
                     if (!$this->_result){
@@ -389,7 +389,7 @@ class Model {
                     $queryChild =  'DELETE  FROM '.$fromChild.' WHERE '.$conditionsChild;	
 
                     $stmt = $this->_db->prepare($queryChild);
-					echo $queryChild;
+					// echo $queryChild;
                     $this->_result = $stmt->execute();
                     if (!$this->_result){
                         return false;
