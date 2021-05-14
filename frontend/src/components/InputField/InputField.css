@@ -1,0 +1,40 @@
+
+.field{
+    position: relative;
+    height: 50px;
+    width: 90%;
+}
+.field input{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    font-size: 17px;
+    padding-left: 20px;
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+  }
+  .field input:focus,
+  .field input:valid{
+    border-color: #4158d0;
+  }
+  .field label{
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color: #999999;
+    font-weight: 400;
+    font-size: 17px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+  }
+  .field input:focus ~ label,
+  .field input:valid ~ label{
+    top: 0%;
+    font-size: 16px;
+    color: #4158d0;
+    background: #fff;
+    transform: translateY(-50%);
+  }
+  

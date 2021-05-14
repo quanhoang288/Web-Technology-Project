@@ -1,0 +1,93 @@
+.course-detail{
+    display: flex;
+    justify-content: space-around;
+}
+
+.course-detail h1{
+  font-size: 3em;
+}
+.student-table{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 60px;
+}
+.course-general-info{
+    width: 40%;
+    border: 1px solid #dcdacb;
+    margin-top: 20px;
+    border-radius: 15px;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.teacher-selection{
+    padding: 15px;
+    width: 100%;
+    margin: 20px auto;
+}
+.course-field{
+    height: 50px;
+    width: 95%;
+    position: relative;
+  }
+  .course-field input{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    font-size: 17px;
+    padding-left: 20px;
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+  }
+  .course-field input:focus,
+  .course-field input:valid
+  {
+    border-color: #4158d0;
+  }
+  .course-field label{
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color: #999999;
+    font-weight: 400;
+    font-size: 17px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    
+    
+  }
+  .course-field input:focus ~label,
+  .course-field input:valid ~ label
+  {
+    top: 0%;
+    font-size: 16px;
+    color: #4158d0;
+    background: #fff;
+    transform: translateY(-50%);
+    
+
+  }
+  .course-general-info button{
+    margin: 20px auto;
+  }
+  .sched{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+  }
+  .sched .date-picker{
+    margin: auto 30px;
+  }
+  .sched .time-picker{
+    margin: auto 30px;
+  }
+
+

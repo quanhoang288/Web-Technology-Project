@@ -11,11 +11,8 @@ class Layout extends Component {
             <div>
                 <NavBar></NavBar>
                 <Sidebar permission={this.props.permission} ></Sidebar>
-                
-                
-                
                 {this.props.children}
-                <Footer></Footer>
+                {/* <Footer></Footer> */}
                 
 
             </div>

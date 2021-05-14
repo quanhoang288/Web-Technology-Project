@@ -1,40 +1,49 @@
-import React, { Component } from 'react'
-import './StudentCourse.css'
-import Card from '../../../components/Card/Card'
+import React, { Component } from "react";
+import "./StudentCourse.css";
+import Card from "../../../components/Card/Card";
+import Carousel from "../../../components/Carousel/Carousel";
+import Button from "../../../components/Button/Button";
+import { Link } from "react-router-dom";
 export class StudentCourse extends Component {
-    render() {
-        return (
-            <div className='courses'>
-                
-                <div className='course-lists'>
-                    <p>Enrolled</p>
-                    <Card></Card>
-                    <Card></Card>
-                    
-                </div>
-                <div className='course-lists'>
-                    <p>Ongoing</p>
-                    <Card></Card>
-                    <Card></Card>
-                    
-                </div>
-                <div className='course-lists'>
-                    <p>Upcoming</p>
-                    <Card></Card>
-                    <Card></Card>
-                    
-                </div>
-                <div className='course-lists'>
-                    <p>Closed</p>
-                    <Card></Card>
-                    <Card></Card>
-                    
-                </div>
+  render() {
+    return (
+      <div>
+        <div className="enrol">
+          <h1> Courses </h1>
+          <Link to ='/student'>
+            <Button>Enrol a new course</Button>
+          </Link>
+        </div>
+        <div className="courses">
+          <div>
+            <Card id={1}></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
 
-
-            </div>
-        )
-    }
+          <div>
+            <Card></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-export default StudentCourse
+export default StudentCourse;

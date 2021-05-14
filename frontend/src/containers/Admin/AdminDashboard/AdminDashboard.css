@@ -26,6 +26,8 @@
 
 
 .create-plan{
+    display: flex;
+    flex-direction: column;
     margin-left:  50px;
     width: 40%;
 }
@@ -35,7 +37,7 @@
     height: 220px;
     margin-top: 20px;
     box-sizing: border-box;
-    background: gainsboro;
+    
     padding: 10px;
   }
   

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Link} from 'react-router-dom'
 import './CourseManagement.css'
 import Carousel from '../../../components/Carousel/Carousel'
 import Card from '../../../components/Card/Card'
@@ -8,6 +9,8 @@ export class CourseManagement extends Component {
     state = {
         
     }
+
+    
     render() {
 
         return (
@@ -126,9 +129,10 @@ export class CourseManagement extends Component {
 
                         </Carousel>
                     </div>
-                    <a href='#'>
+                    
+                    <Link to='/admin/manage/courses/new-course'>
                         <i class="fas fa-plus-circle fa-4x"></i>
-                    </a>
+                    </Link>
 
                 </div>
             </React.Fragment>

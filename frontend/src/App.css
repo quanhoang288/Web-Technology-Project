@@ -1,21 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
 * {
-    font-family:'Montserrat', sans-serif; 
-    margin: 0px;
-    padding: 0px;
-    font-size: 16px;
-    box-sizing: border-box;
-    
-   
+  font-family: "Montserrat", sans-serif;
+  margin: 0px;
+  padding: 0px;
+  font-size: 16px;
+  box-sizing: border-box;
 }
-li, a, button{
-    
-    font-weight: 400;
-    text-decoration: none;
-    color: black;
-    
+li,
+a,
+button {
+  font-weight: 400;
+  text-decoration: none;
+  color: black;
 }
 
-body{
-    background-color: 	#F8F8F8;
+html,
+body,
+#root,
+.App {
+  height: 100%;
+}
+
+body {
+  background-color: #f8f8f8;
 }
