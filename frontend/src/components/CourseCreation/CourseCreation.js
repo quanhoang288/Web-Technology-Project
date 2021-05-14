@@ -37,11 +37,16 @@ export class CourseCreation extends Component {
       description: description,
       img: img,
     };
-    var raw_sched = sched;
-    var raw = {
-      course: raw_course,
-      schedule: raw_sched,
-    };
+    var raw_sched = this.process_sched(sched);
+    var raw = JSON.stringify({
+      course: raw_course, 
+      schedule: raw_sched
+    });
+    // var raw = {
+    //   course: raw_course,
+    //   schedule: raw_sched,
+    // };
+    
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");  
     var requestOptions = {
