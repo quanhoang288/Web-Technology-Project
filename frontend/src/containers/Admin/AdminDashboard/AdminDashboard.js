@@ -15,7 +15,7 @@ export class Dashboard extends Component {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({ content: this.ref.current.value });
+    var raw = JSON.stringify({ content: this.ref.current.value,created_at:Date().toString() });
 
     var requestOptions = {
       method: "POST",

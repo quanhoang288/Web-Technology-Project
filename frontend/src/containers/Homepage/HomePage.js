@@ -10,14 +10,13 @@ export class HomePage extends Component {
     notifications: [],
   };
   componentDidMount() {
+    console.log("Get notis")
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
     };
-
     fetch(`${HOST_URL}/system_notifications`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
