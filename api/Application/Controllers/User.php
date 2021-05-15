@@ -17,7 +17,7 @@ class UserController extends Controller {
     public function get_all($params=null){
         if (!$params){
             $data = parent::get_all();
-
+            
         }
             
         else{
@@ -27,6 +27,14 @@ class UserController extends Controller {
                     
                 }
                 $data = $this->_model->search();
+<<<<<<< HEAD
+=======
+                if ($data)
+                    $this->send(200, $data);
+                    
+                else 
+                    $this->send(400, ['error'=>'Bad request']);
+>>>>>>> fa09aae... 'update-modal'
                 // if (count($data))
                 //     $this->send(200, ['response'=>'OK', 'data'=>$data]);
                 // else 
