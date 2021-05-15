@@ -1,4 +1,4 @@
-.course-detail{
+/* .course-detail{
     display: flex;
     justify-content: space-around;
 }
@@ -88,6 +88,27 @@
   }
   .sched .time-picker{
     margin: auto 30px;
-  }
+  } */
 
-
+.toggle-bar{
+  display: flex;
+  justify-content: space-around;
+  margin-right: auto;
+  font-size: 2rem;
+}
+.toggle-arrow{
+  padding: 20px;
+}
+.toggle-title{
+  padding: 20px;
+  font-size: 2rem;
+}
+.course_detail{
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: none;
+}
+.course_detail:hover{
+  cursor: pointer;
+}
