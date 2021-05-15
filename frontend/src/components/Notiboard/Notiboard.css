@@ -16,8 +16,10 @@
 }
 
 .notiboard{
+    padding: 40px;
     width: 50%;
-    height: 25vh;
+    
+    margin: 0 auto;
 }
 
 

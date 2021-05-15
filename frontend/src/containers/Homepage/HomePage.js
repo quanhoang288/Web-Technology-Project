@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import img from "../../asset/eclass.png";
+import './HomePage.css'
 import Notiboard from "../../components/Notiboard/Notiboard";
 import MOCKDATA from "../../components/Notiboard/mock.json";
 import { HOST_URL } from "../../config";
