@@ -12,6 +12,7 @@
   .modal-wrapper {
     background: #fff;
     width: 80%;
+    position: relative;
     max-width: 800px;
     margin: 2rem auto;
     transition: all .5s ease;
@@ -60,9 +61,13 @@
     margin: 1rem 0 2rem 0;
   }
   .modal-footer{
-    margin-top: 90px;
+    
+    position: absolute;
+    bottom: 20px;
+    left: 260px;
     display: flex;
     justify-content: flex-end;
+
     
   }
   .modal-footer button {

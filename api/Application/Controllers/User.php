@@ -17,7 +17,7 @@ class UserController extends Controller {
     public function get_all($params=null){
         if (!$params){
             $data = parent::get_all();
-
+            
         }
             
         else{

@@ -26,8 +26,8 @@ export class StudentManagement extends Component {
       headers: myHeaders,
     };
     fetch("http://localhost/webproject/api/users?role=student", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((response) => response.json())
+      .then((result) => this.setState({ student_info: result }))
       .catch((error) => console.log("error", error));
   }
 
@@ -35,34 +35,38 @@ export class StudentManagement extends Component {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var requestOptions = {
-      method: "POST",
+      method: "PUT",
       headers: myHeaders,
       body: this.state.targetRow,
     };
+    console.log(this.state.targetRow)
     fetch("http://localhost/webproject/api/users?role=student", requestOptions)
-      .then((response) => response.text())
+      .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
   };
-
   componentDidMount() {
-    // this.fetch_data();
+    this.fetch_data();
+    console.log(this.state.student_info)
   }
   render() {
     return (
       <div>
         <h1 className="title">Student Management</h1>
-
-        <DataTables
-          data={MOCK_DATA}
-          rowPerPage={5}
-          rowClick={this.editHander}
-        ></DataTables>
+        {this.state.student_info.length > 0 ? 
+          <DataTables
+            data={this.state.student_info}
+            rowPerPage={5}
+            rowClick={this.editHander}
+          ></DataTables>
+         : null}
 
         <div className={this.state.modalShow ? "back-drop" : null}></div>
         <Modal
+          disable_field = {[]}
           show={this.state.modalShow}
           closeHandler={this.toggleModal}
+          onSubmit={this.onSubmit}
           info={this.state.targetRow}
         ></Modal>
       </div>
