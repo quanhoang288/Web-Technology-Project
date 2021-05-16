@@ -75,9 +75,22 @@ class CourseController extends Controller {
         }
         else{
             $this->_model->showHasOne();
-            $this->_model->showHasMany();
-            $this->_model->showHMABTM();
-            parent::get_all($params);
+            $data = parent::get_all();
+            if ($data){
+                $res = array();
+                foreach($data as $course){
+                    $img = $course['course']['img'];
+                    $course['course']['img'] = img_to_base64($img);
+                    $course['course']['teacher_name'] = $course['teacher']['firstname'] . ' ' . $course['teacher']['lastname'];
+                    array_push($res, $course['course']);
+                }
+
+                $this->send(200, $res);
+                // $this->send(200, $data);
+            }
+            else{
+                $this->response->sendStatus(500);
+            }
         }
         
     }

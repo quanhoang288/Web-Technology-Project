@@ -49,6 +49,7 @@ class Model {
 
 	public function setAtrributes($arr){
 		foreach($arr as $key=>$value){
+			// echo $key . ': ' . $value . PHP_EOL; 
 			$this->$key = $value;
 		}
 	}

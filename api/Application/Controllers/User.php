@@ -39,8 +39,12 @@ class UserController extends Controller {
         }
         if ($data){
             $res = array();
-            foreach($data as $user)
-                array_push($res, $user['user']);
+
+            foreach($data as $user){
+                $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
+                array_push($res, filter($user['user'], ['username', 'password'], true));
+            }
+
             $this->send(200, $res);
         }
         else 

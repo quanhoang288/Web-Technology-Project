@@ -41,7 +41,7 @@ function base64_to_jpeg($base64_string, $output_file) {
     // split the string on commas
     $data = explode( ',', $base64_string );
     
-    echo count($data);
+    // echo count($data);
     // we could add validation here with ensuring count( $data ) > 1
     fwrite( $ifp, base64_decode( $data[ 1 ] ) );
 
@@ -49,4 +49,12 @@ function base64_to_jpeg($base64_string, $output_file) {
     fclose( $ifp ); 
 
     return $output_file; 
+}
+
+function img_to_base64($img_file){
+   $path = UPLOAD . 'courses/' . $img_file;
+   $type = pathinfo($path, PATHINFO_EXTENSION);
+   $data = file_get_contents($path);
+   $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+   return $base64;
 }
