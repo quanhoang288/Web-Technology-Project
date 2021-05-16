@@ -8,9 +8,6 @@ class UserController extends Controller {
     public function __construct()
     {
         Controller::__construct();
-        
-      
-     
     }
 
 
@@ -47,27 +44,7 @@ class UserController extends Controller {
             $this->send(400, ['error'=>'Bad request']);
     }
 
-    // public function get($id, $params=null){
-    //     $this->_model->id = $id;
-    //     if ($params){
-    //         if (isset($params['resource'])){
-    //             if (!isset($params['role']) || !in_array($params['role'], ['teacher', 'student']))
-    //                 $this->send(400, ['error'=>'Bad request']);
-    //             else{
-    //                 $role = $params['role'];
-    //                 $resource = $params['resource'];
-    //                 if ($resource == 'courses'){
-    //                     $this->_model->showHMABTM();
-    //                     $this->_model->search();
-    //                 }
-    //                 else if ($resource == 'schedule');
-    //             }
-
-    //         }
-    //     }
-    //     else 
-    //         parent::get($id);
-    // }
+    
     
     public function create(){
         $data = json_decode(file_get_contents('php://input'), true);
