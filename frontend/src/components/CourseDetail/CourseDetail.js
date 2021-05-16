@@ -10,11 +10,6 @@ import { HOST_URL } from "../../config";
 import "./CourseDetail.css";
 export default function CourseDetail() {
   let { id } = useParams(); // id cua lop hoc lay o day nay`
-
-
-
-
-  
   // const [teacher, setTeacher] = useState(null);
   // const [detail, setDetail] = useState({
   //   id: 1,

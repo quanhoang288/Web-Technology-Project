@@ -11,6 +11,7 @@ export class CourseManagement extends Component {
     courses: [],
   };
   
+<<<<<<< HEAD
 
   fetch_data() {
     var myHeaders = new Headers();
@@ -31,6 +32,9 @@ export class CourseManagement extends Component {
   componentDidMount() {
     this.fetch_data();
   }
+=======
+  componentDidMount() {}
+>>>>>>> 61b99ac... 'update-FE'
   render() {
 	console.log(this.state.courses);
     return (
@@ -92,6 +96,7 @@ export class CourseManagement extends Component {
             <h1>Finished</h1>
 			<Carousel
               show={5}
+<<<<<<< HEAD
               children={
                 this.state.courses.map((course)=>{
 					if (course.status === 'finished'){
@@ -102,6 +107,15 @@ export class CourseManagement extends Component {
 				)
                 }
             />
+=======
+              children={[
+                
+                <div>
+                  <Card></Card>
+                </div>,
+              ]}
+            ></Carousel>
+>>>>>>> 61b99ac... 'update-FE'
           </div>
 
           <Link to="/admin/manage/courses/new-course">

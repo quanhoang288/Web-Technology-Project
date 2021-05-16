@@ -47,7 +47,7 @@ export class StudentManagement extends Component {
   };
   componentDidMount() {
     this.fetch_data();
-    console.log(this.state.student_info)
+    
   }
   render() {
     return (
