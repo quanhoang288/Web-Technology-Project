@@ -5,29 +5,34 @@ import Carousel from "../../../components/Carousel/Carousel";
 import Card from "../../../components/Card/Card";
 import img from "../../../asset/eclass.png";
 import "./CourseManagement.css";
+import {HOST_URL} from '../../../config';
 export class CourseManagement extends Component {
   state = {
     courses: [],
   };
-//   fetch_data() {
-//     var myHeaders = new Headers();
-//     myHeaders.append("Content-Type", "application/json");
+  
 
-//     var requestOptions = {
-//       method: "POST",
-//       headers: myHeaders,
-//       body: raw,
-//       redirect: "follow",
-//     };
+  fetch_data() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-//     fetch("http://localhost/webproject/api/users?role=student", requestOptions)
-//       .then((response) => response.text())
-//       .then((result) => console.log(result))
-//       .catch((error) => console.log("error", error));
-//   }
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  componentDidMount() {}
+    fetch(HOST_URL + "/courses", requestOptions)
+      .then((response) => response.json())
+      .then((result) => this.setState({courses: result}))
+      .catch((error) => console.log("error", error));
+  	}
+
+  componentDidMount() {
+    this.fetch_data();
+  }
   render() {
+	console.log(this.state.courses);
     return (
       <React.Fragment>
         <div className="billboard">
@@ -57,59 +62,46 @@ export class CourseManagement extends Component {
             <h1>Course registration now open online</h1>
             <Carousel
               show={5}
-              children={[
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-              ]}
-            ></Carousel>
+              children={
+                this.state.courses.map((course)=>{
+					if (course.status === 'new'){
+						return <div><Card id={course.id} title={course.name} description={course.description} teacher={course.teacher_name} price={course.fee} img={course.img}/></div>
+					}
+				}
+					
+				)
+                }
+            />
           </div>
           <div className="open-course">
-            <h1>Due</h1>
-            <Carousel
+            <h1>In progress</h1>
+			<Carousel
               show={5}
-              children={[
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-              ]}
-            ></Carousel>
+              children={
+                this.state.courses.map((course)=>{
+					if (course.status === 'ongoing'){
+						return <div><Card id={course.id} title={course.name} description={course.description} teacher={course.teacher_name} price={course.fee} img={course.img}/></div>
+					}
+				}
+					
+				)
+                }
+            />
+          </div>
+		  <div className="open-course">
+            <h1>Finished</h1>
+			<Carousel
+              show={5}
+              children={
+                this.state.courses.map((course)=>{
+					if (course.status === 'finished'){
+						return <div><Card id={course.id} title={course.name} description={course.description} teacher={course.teacher_name} price={course.fee} img={course.img}/></div>
+					}
+				}
+					
+				)
+                }
+            />
           </div>
 
           <Link to="/admin/manage/courses/new-course">

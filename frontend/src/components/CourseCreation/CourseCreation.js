@@ -6,60 +6,89 @@ import Dropdown from "../Dropdown/Dropdown";
 import Button from "../Button/Button";
 import { HOST_URL } from "../../config";
 export class CourseCreation extends Component {
-  state = {
-    title: "",
-    teacher_option: null,
-    description: "",
-    category: "",
-    sched: [-1, -1, -1, -1, -1, -1, -1],
-    img: "",
-    price: "",
-    category: "",
-  };
-  textarea_ref = React.createRef("");
-  process_sched(sched) {
-    var process_sched = [];
-    sched.forEach((item, index) => {
-      if (item !== -1) {
-        process_sched.push({ weekday_id: index + 2, time_id: item });
-      }
-    });
-    return process_sched;
-  }
-  onSubmit = () => {
-    var { title, teacher_option, description, category, sched, img, price } =
-      this.state;
-    var raw_course = {
-      name: title,
-      fee: price,
-      teacher_id: teacher_option["id"],
-      subject: category,
-      description: description,
-      img: img,
-    };
-    var raw_sched = this.process_sched(sched);
-    var raw = JSON.stringify({
-      course: raw_course, 
-      schedule: raw_sched
-    });
-    // var raw = {
-    //   course: raw_course,
-    //   schedule: raw_sched,
-    // };
-    
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");  
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-    fetch(`${HOST_URL}/courses`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  };
+
+	state = {
+		title: "",
+		teachers: [],
+		teacher_option: null,
+		subject_option: null,
+		level_option:null,
+		min: 0,
+		max: 0,
+		description: "",
+		category: "",
+		sched: [-1, -1, -1, -1, -1, -1, -1],
+		img: "",
+		price: "",
+		category: "",
+	};
+	textarea_ref = React.createRef("");
+	fetch_data = () => {
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+	
+		var requestOptions = {
+		  method: "GET",
+		  headers: myHeaders,
+		  redirect: "follow",
+		};
+	
+		fetch(HOST_URL + "/users?role=teacher", requestOptions)
+		  .then((response) => response.json())
+		  .then((result) => this.setState({teachers: result}))
+		  .catch((error) => console.log(error));
+	}
+
+	componentDidMount(){
+		this.fetch_data();
+	}
+
+	process_sched(sched) {
+		var process_sched = [];
+		sched.forEach((item, index) => {
+		if (item !== -1) {
+			process_sched.push({ weekday_id: index + 2, time_id: item });
+		}
+		});
+		return process_sched;
+	}
+	onSubmit = () => {
+		var { title, teacher_option, subject_option, level_option, min, max, description, sched, img, price } =
+		this.state;
+		var raw_course = {
+		name: title,
+		fee: price,
+		min: min, 
+		max: max,
+		teacher_id: teacher_option["id"],
+		subject: subject_option["name"],
+		level: level_option["name"],
+		description: description,
+		img: img,
+		};
+		var raw_sched = this.process_sched(sched);
+		var raw = JSON.stringify({
+		course: raw_course, 
+		schedule: raw_sched
+		});
+		// var raw = {
+		//   course: raw_course,
+		//   schedule: raw_sched,
+		// };
+		
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");  
+		var requestOptions = {
+		method: "POST",
+		headers: myHeaders,
+		body: raw,
+		redirect: "follow",
+		};
+		fetch(`${HOST_URL}/courses`, requestOptions)
+		.then((response) => response.text())
+		.then((result) => console.log(result))
+		.catch((error) => console.log("error", error));
+	};
   render() {
     const weekday = [
       "Monday",
@@ -88,20 +117,20 @@ export class CourseCreation extends Component {
         duration: "15h-18h",
       },
     ];
-    const teacher_option = [
-      {
-        id: 1,
-        name: "Mr Nguyen Duc Tung",
-      },
-      {
-        id: 2,
-        name: "Mr Nguyen Duc Thang",
-      },
-      {
-        id: 3,
-        name: "Mr Nguyen Duc Thang",
-      },
-    ];
+	// console.log(this.fetch_data());
+	const teacher_option = this.state.teachers;
+
+	const subject_option = [
+		{name: "English"},
+		{name: "Math"},
+		{name: "Literature"},
+		{name: "Physics"},
+		{name: "Chemistry"},
+		{name: "Biology"},
+		{name: "History"},
+		{name: "Geography"},
+	];
+	const level_options = [{name:"Beginner"}, {name:"Intermidiate"}, {name:"Upper-Intermidiate"}, {name:"Advanced"}];
     return (
       <div className="course-create">
         <div className="course-create-form">
@@ -113,16 +142,7 @@ export class CourseCreation extends Component {
               this.setState({ [`${field}`]: input });
             }}
           ></InputField>
-          <InputField
-            type="text"
-            field="category"
-            label="Catergory"
-            onChange={(field, input) => {
-              this.setState({ [`${field}`]: input });
-            }}
-          ></InputField>
-
-          <InputField
+		<InputField
             type="number"
             field="price"
             label="Price - in $"
@@ -130,17 +150,72 @@ export class CourseCreation extends Component {
               this.setState({ [`${field}`]: input });
             }}
           ></InputField>
-          <label>Description</label>
-          <textarea
-            ref={this.textarea_ref}
-            onChange={() =>
-              this.setState({ description: this.textarea_ref.current.value })
+				<InputField
+            type="number"
+            field="min"
+            label="Min number of students"
+            onChange={(field, input) => {
+              this.setState({ [`${field}`]: input });
+            }}
+          ></InputField>
+		<InputField
+            type="number"
+            field="max"
+            label="Max number of students"
+            onChange={(field, input) => {
+              this.setState({ [`${field}`]: input });
+            }}
+          ></InputField>
+		<Dropdown
+            options={subject_option}
+            prompt="Choose a subject"
+            value="subject"
+            field="name"
+            value={
+              this.state.subject_option
+                ? this.state.subject_option['name']
+                : null
             }
-          ></textarea>
+            onChange={(option) => {
+              if (option) {
+                this.setState({ subject_option: option });
+              } else {
+                this.setState({ subject_option: null });
+              }
+            }}
+          ></Dropdown>
+		<Dropdown
+            options={level_options}
+            prompt="Choose a level"
+            value="level"
+            field="name"
+            value={
+              this.state.level_option
+                ? this.state.level_option['name']
+                : null
+            }
+            onChange={(option) => {
+              if (option) {
+                this.setState({ level_option: option });
+              } else {
+                this.setState({ level_option: null });
+              }
+            }}
+        ></Dropdown>
+          {/* <InputField
+            type="text"
+            field="category"
+            label="Catergory"
+            onChange={(field, input) => {
+              this.setState({ [`${field}`]: input });
+            }}
+          ></InputField> */}
 
-          <Dropdown
+
+         
+        <Dropdown
             options={teacher_option}
-            prompt="select teacher"
+            prompt="Choose a teacher"
             value="Teacher"
             field="name"
             value={
@@ -155,7 +230,15 @@ export class CourseCreation extends Component {
                 this.setState({ teacher_option: null });
               }
             }}
-          ></Dropdown>
+        ></Dropdown>
+
+		 <label>Description</label>
+          <textarea
+            ref={this.textarea_ref}
+            onChange={() =>
+              this.setState({ description: this.textarea_ref.current.value })
+            }
+          ></textarea>
 
           <div className="schedule">
             <div className="checkboxes">
