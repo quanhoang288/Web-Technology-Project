@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DataTables from "../../../components/Table/Table";
 import MOCK_DATA from "../../../components/Table/MOCK.json";
 import Modal from "../../../components/Modal/Modal";
-
+import {HOST_URL} from "../../../config";
 import "./StudentManagement.css";
 export class StudentManagement extends Component {
   state = {
@@ -25,7 +25,7 @@ export class StudentManagement extends Component {
       method: "GET",
       headers: myHeaders,
     };
-    fetch("http://localhost/webproject/api/users?role=student", requestOptions)
+    fetch(HOST_URL + "/users?role=student", requestOptions)
       .then((response) => response.json())
       .then((result) => this.setState({ student_info: result }))
       .catch((error) => console.log("error", error));
@@ -40,7 +40,7 @@ export class StudentManagement extends Component {
       body: this.state.targetRow,
     };
     console.log(this.state.targetRow)
-    fetch("http://localhost/webproject/api/users?role=student", requestOptions)
+    fetch(HOST_URL + "/users?role=student", requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));

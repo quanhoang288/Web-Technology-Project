@@ -43,7 +43,7 @@ class Registration extends Component {
 
         var config = {
             method: 'post',
-            url: `${HOST_URL}/register`,
+            url: `${HOST_URL}/users`,
             headers: {
                 'Content-Type': 'application/json'
             },
