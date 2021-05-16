@@ -11,24 +11,26 @@ import { connect } from "react-redux";
 
 const Card = ({ title, description, price, teacher, id, img, user }) => {
     let path = ''
+    
     if(user)
     {
         if(user.role === 'admin')
         {
-            path = `admin/manage/courses/${id}`
+            path = `/admin/manage/courses/${id}`
         }
         else if(user.role === 'student')
         {
-            path = `student/courses/${id}`
+            path = `/student/courses/${id}`
         }
         else if(user.role === 'teacher')
         {
-            path = `teacher/courses/${id}`
+            path = `/teacher/courses/${id}`
         }
     }
     else{
         path = `/courses/${id}`
     }
+    
     return (
         <Link to={path}>
             <div class="card">

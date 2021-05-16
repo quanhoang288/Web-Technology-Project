@@ -9,10 +9,7 @@ export class Notiboard extends Component {
     currentPage: 1,
     
   }
-  componentDidMount()
-  {
-    
-  }
+  
   paginate = pageNumber => this.setState({ currentPage: pageNumber })
   render() {
 

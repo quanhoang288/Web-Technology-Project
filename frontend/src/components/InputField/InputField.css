@@ -30,7 +30,9 @@
     transition: all 0.3s ease;
   }
   .field input:focus ~ label,
-  .field input:valid ~ label{
+  .field input:valid ~ label,
+  .field input:disabled ~ label
+  {
     top: 0%;
     font-size: 16px;
     color: #4158d0;

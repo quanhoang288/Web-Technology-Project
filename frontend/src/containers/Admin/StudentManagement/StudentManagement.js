@@ -63,7 +63,7 @@ export class StudentManagement extends Component {
 
         <div className={this.state.modalShow ? "back-drop" : null}></div>
         <Modal
-          disable_field = {[]}
+          disabled_field={['id','role']}
           show={this.state.modalShow}
           closeHandler={this.toggleModal}
           onSubmit={this.onSubmit}

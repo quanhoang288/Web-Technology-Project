@@ -53,6 +53,8 @@ export class Table extends Component {
         const padding_row = []
         for(let i=0 ; i < this.props.rowPerPage - currentRows.length; i++)
         {
+            if(!columns)
+            {break}
             padding_row.push(
                 <tr>
                     {columns.map((col, idx) => {

@@ -2,7 +2,7 @@ import { React, useState,useEffect } from 'react';
 import './Modal.css';
 import axios from 'axios'
 import { HOST_URL } from '../../config'
-export const Modal = ({ show, closeHandler, info,onSubmit }) => {
+export const Modal = ({ show, closeHandler,onSubmit, info , disabled_field}) => {
   const [update_info, setInfo] = useState(info)
   const fieldOnChangeHandler = (field, e) => {
     const processed_info = {...update_info}
@@ -32,6 +32,7 @@ export const Modal = ({ show, closeHandler, info,onSubmit }) => {
               return (
                 <div className="field" key={idx}>
                   <input value={update_info[field]}
+                    disabled = {disabled_field.indexOf(field) > -1 ? true :false}
                     onChange={(e) => {fieldOnChangeHandler(field, e)}}
                   ></input>
                   <label>{field}</label>

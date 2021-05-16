@@ -27,10 +27,6 @@ class UserController extends Controller {
                     
                 }
                 $data = $this->_model->search();
-                // if (count($data))
-                //     $this->send(200, ['response'=>'OK', 'data'=>$data]);
-                // else 
-                //     $this->send(200, ['response'=> 'No content']);
             }
             catch(PDOException $e){
                 $this->send(400, ['error'=>'Bad request']);

@@ -10,7 +10,7 @@ export class StudentCourseDetail extends Component {
   state = {
     id: this.props.match.params.id, // class id
     class_info : {
-        enrolled : false,
+        enrolled : 0,  // 0 - not ; 1 - pending ; 2 -enrolled
         description : "Hello this is the best class",
         teacher_name: '',
         img:"",
@@ -28,10 +28,19 @@ export class StudentCourseDetail extends Component {
 
 
   };
+  handleEnrollRequest = ()=>{
+      let class_info = {...this.state.class_info}
+      class_info.enrolled = 1
+      this.setState({class_info:class_info})
+  }
+  componentDidMount()
+  {
+      
+  }
   render() {
     let toggleState = this.state.toogleState;
     let enrolled = this.state.class_info.enrolled
-    if(enrolled)
+    if(enrolled === 2)
     {
         return (
         
@@ -109,13 +118,16 @@ export class StudentCourseDetail extends Component {
         <div className='student__course__detail'>
             <div className="scd_overview"> 
                 <h1> Title </h1>
-                <p>Description</p>
+                <p style={{"width":"50%","fontSize":"2em"}}>Spring Framework 5: Learn Spring Framework 5, Spring Boot 2, Spring MVC,
+                     Spring Data JPA, Spring Data MongoDB, Hibernate
+                </p>
+                <p style={{"fontSize":"1.5em"}}>Rating </p>
                 <h2>Teacher</h2>
              </div>
             <div className='scd_enrol'> 
                 <img src={img}></img>
-                <h1>$99</h1>
-                <Button>Enrol</Button>
+                <h1>$99.44</h1>
+                {enrolled === 0 ? <Button onClick={this.handleEnrollRequest}>Enrol</Button> : <Button>Pending</Button>}
             </div>
         </div>
     )

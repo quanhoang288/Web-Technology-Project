@@ -1,31 +1,33 @@
 import React, { Component } from "react";
-import img from "../../asset/eclass.png";
-import './HomePage.css'
-import Notiboard from "../../components/Notiboard/Notiboard";
-import MOCKDATA from "../../components/Notiboard/mock.json";
-import { HOST_URL } from "../../config";
-import Card from "../../components/Card/Card";
-import Carousel from "../../components/Carousel/Carousel";
-export class HomePage extends Component {
+import Card from '../../../components/Card/Card'
+import Carousel from '../../../components/Carousel/Carousel'
+import img from '../../../asset/eclass.png'
+import {Link } from 'react-router-dom'
+export class TeacherCourse extends Component {
   state = {
-    notifications: [],
+    courses: [],
   };
-  componentDidMount() {
-    console.log("Get notis")
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-    };
-    fetch(`${HOST_URL}/system_notifications`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => this.setState({notifications:result}))
-      .catch((error) => console.log("error", error));
-  }
+  //   fetch_data() {
+  //     var myHeaders = new Headers();
+  //     myHeaders.append("Content-Type", "application/json");
+
+  //     var requestOptions = {
+  //       method: "POST",
+  //       headers: myHeaders,
+  //       body: raw,
+  //       redirect: "follow",
+  //     };
+
+  //     fetch("http://localhost/webproject/api/users?role=student", requestOptions)
+  //       .then((response) => response.text())
+  //       .then((result) => console.log(result))
+  //       .catch((error) => console.log("error", error));
+  //   }
+
+  componentDidMount() {}
   render() {
     return (
-      <div className="homepage">
+      <React.Fragment>
         <div className="billboard">
           <img src={img} />
           <div className="billboard-content">
@@ -36,22 +38,26 @@ export class HomePage extends Component {
             </p>
             <form action="#">
               <div className="field">
-                <input type="text" required />
+                <input
+                  type="text"
+                  required
+                  onChange={(e) => {
+                    this.fieldOnChangeHandler("username", e);
+                  }}
+                />
                 <label>Search for courses</label>
               </div>
             </form>
           </div>
         </div>
-
-        <Notiboard data={this.state.notifications} rowPerPage={3}></Notiboard>
-        <div className="featuring-courses">
+        <div className="courses-section">
           <div className="open-course">
-            <h1>Best seller</h1>
+            <h1>Courses</h1>
             <Carousel
               show={5}
               children={[
                 <div>
-                  <Card id={1}></Card>
+                  <Card id={5}></Card>
                 </div>,
                 <div>
                   <Card></Card>
@@ -74,10 +80,13 @@ export class HomePage extends Component {
               ]}
             ></Carousel>
           </div>
+          
+
+          
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
 
-export default HomePage;
+export default TeacherCourse;

@@ -14,8 +14,7 @@ export class Dashboard extends Component {
     var slug = 'system_notifications'
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({ content: this.ref.current.value,created_at:Date().toString() });
+    var raw = JSON.stringify({ content: this.ref.current.value,created_at:(new Date()).toISOString().split('T')[0] });
     console.log(raw)
     var requestOptions = {
       method: "POST",
@@ -28,6 +27,8 @@ export class Dashboard extends Component {
       .then((result) => this.fetch_noti())
       .catch((error) => console.log("error", error));
   };
+  
+ 
   fetch_noti(){
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
