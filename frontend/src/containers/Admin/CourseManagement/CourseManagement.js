@@ -54,12 +54,12 @@ export class CourseManagement extends Component {
         </div>
         <div className="courses-section">
           <div className="open-course">
-            <h1>Course registration now open online</h1>
+            <h1>Classes</h1>
             <Carousel
               show={5}
               children={[
                 <div>
-                  <Card></Card>
+                  <Card id={1}></Card>
                 </div>,
                 <div>
                   <Card></Card>

@@ -22,11 +22,12 @@ import { connect } from "react-redux";
 import CourseDetail from "./components/CourseDetail/CourseDetail";
 import StudentInfo from "./containers/Student/StudentInfo/StudentInfo";
 import StudentCourse from "./containers/Student/StudentCourse/StudentCourse";
-import StudentCourseDetail from './containers/Student/StudentCourseDetail/StudentCourseDetail'
+import StudentCourseDetail from "./containers/Student/StudentCourseDetail/StudentCourseDetail";
 import Assignment from "./containers/Student/Assignment/Assignment";
-
-
+import TeacherCourseDetail from "./containers/Teacher/TeacherCourseDetail/TeacherCourseDetail";
+import TeacherCourse from './containers/Teacher/TeacherCourse/TeacherCourse'
 import Test from "./components/Test/Test";
+import CoursePreview from './containers/Homepage/CoursePreview'
 
 import "./App.css";
 class App extends Component {
@@ -42,7 +43,8 @@ class App extends Component {
             <Route path="/test" exact component={Test}></Route>
             <Route path="/login" exact component={Login}></Route>
             <Route path="/register" exact component={Register}></Route>
-            <Route path="/" exact  component={HomePage}></Route>
+            <Route path="/" exact component={HomePage}></Route>
+            <Route path='/courses/:id' exact component={CoursePreview}></Route>
 
             {/* admin routes */}
             <Route
@@ -52,6 +54,12 @@ class App extends Component {
                 return (
                   <>
                     <Switch>
+                    <PrivateRoute
+                        exact
+                        permission={permission}
+                        path={`${url}`}
+                        component={HomePage}
+                      />
                       <PrivateRoute
                         exact
                         permission={permission}
@@ -106,9 +114,17 @@ class App extends Component {
                   <>
                     <PrivateRoute
                       permission={permission}
-                      path={`${url}/dashboard`}
-                      component={AdminDashboard}
+                      exact
+                      path={`${url}/courses`}
+                      component={TeacherCourse}
                     />
+                    <PrivateRoute
+                      permission={permission}
+                      exact
+                      path={`${url}/courses/:id`}
+                      component={TeacherCourseDetail}
+                    />
+                    <Redirect to = {`${url}/courses`}></Redirect>
                   </>
                 );
               }}
@@ -121,6 +137,12 @@ class App extends Component {
                 const permission = "student";
                 return (
                   <Switch>
+                    <PrivateRoute
+                        exact
+                        permission={permission}
+                        path={`${url}`}
+                        component={HomePage}
+                      />
                     <PrivateRoute
                       exact
                       permission={permission}
@@ -145,7 +167,6 @@ class App extends Component {
                       path={`${url}/assignment`}
                       component={Assignment}
                     />
-                    
 
                     <Redirect to={`/`}></Redirect>
                   </Switch>

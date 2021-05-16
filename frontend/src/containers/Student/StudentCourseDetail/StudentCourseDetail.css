@@ -1,0 +1,54 @@
+.student__course__detail{
+    
+    padding: 20px;
+    position: relative;
+
+}
+.student__course__detail h1{
+    font-size: 4em;
+}
+.student__course__detail h2{
+    font-size: 2em;
+}
+
+.scd_overview{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    background-color: #1e1e1c;
+    color: white;
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 30px 60px;
+    line-height: 70px;
+}
+.scd_enrol{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    border: 1px solid lightgray;
+    position: absolute;
+    right: 15%;
+    top: 15%;
+    background-color: antiquewhite;
+    border-radius: 15px;
+    
+}
+.scd_enrol img{
+    max-width: 100%;
+    
+}
+.scd_enrol button{
+    width: 100%;
+    text-align: center;
+    
+    font-size: large;
+}
+.scd_enrol h1{
+    padding: 20px;
+}
+.scd_enrol a{
+    padding: 30px;
+}
