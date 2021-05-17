@@ -6,11 +6,14 @@ import MOCK_DATA from "../../../components/Table/MOCK.json";
 import InputField from "../../../components/InputField/InputField";
 import Button from '../../../components/Button/Button'
 import { Link } from "react-router-dom";
+import { HOST_URL } from '../../../config';
+import { connect } from 'react-redux';
 export class StudentCourseDetail extends Component {
   state = {
     id: this.props.match.params.id, // class id
+	enrolled : 0,  // 0 - not ; 1 - pending ; 2 -enrolled
     class_info : {
-        enrolled : 0,  // 0 - not ; 1 - pending ; 2 -enrolled
+        
         description : "Hello this is the best class",
         teacher_name: '',
         img:"",
@@ -18,16 +21,52 @@ export class StudentCourseDetail extends Component {
     toogleState: 1,
     class_notification_list: [],
     class_material_list: [],
+	class_student_list: []
   };
   toggleTab = (index) => {
     this.setState({ toogleState: index });
   };
   fetch_data = () => {
-    // api call 
+    // api call
+	console.log(this.props.user)
+	const user_id = this.props.user['id'];
+	
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+		if (result.length > 0){
+			this.setState({enrolled: result[0]['status']});
+		}
+	  })
+      .catch((error) => console.log("error", error)); 
 
-
+	fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+		// const course = result['course'];
+		// if (course['status'] !== 'new'){
+		// //   this.setState({class_info: result['course'],
+		// //    class_notification_list: result['course_notification'],
+		// //     class_material_list: result['document'],
+		// // 	class_student_list: result['student']
+		// // });
+		// }
+		// else {
+		// 	this.setState({class_info: result})
+		// }
+		console.log(result);
+		})
+      .catch((error) => console.log("error", error)); 
 
   };
+
+  
   handleEnrollRequest = ()=>{
       let class_info = {...this.state.class_info}
       class_info.enrolled = 1
@@ -35,7 +74,7 @@ export class StudentCourseDetail extends Component {
   }
   componentDidMount()
   {
-      
+      this.fetch_data();
   }
   render() {
     let toggleState = this.state.toogleState;
@@ -135,4 +174,11 @@ export class StudentCourseDetail extends Component {
   }
 }
 
-export default StudentCourseDetail;
+const mapState = (state) => {
+    return (
+        {
+            user: state.authReducer.user
+        }
+    )
+}
+export default connect(mapState, null)(StudentCourseDetail);

@@ -9,9 +9,10 @@ import Carousel from "../../components/Carousel/Carousel";
 export class HomePage extends Component {
   state = {
     notifications: [],
+    courses: []
   };
   componentDidMount() {
-    console.log("Get notis")
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var requestOptions = {
@@ -21,6 +22,11 @@ export class HomePage extends Component {
     fetch(`${HOST_URL}/system_notifications`, requestOptions)
       .then((response) => response.json())
       .then((result) => this.setState({notifications:result}))
+      .catch((error) => console.log("error", error));
+    
+    fetch(`${HOST_URL}/courses?status=new`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => this.setState({courses:result}))
       .catch((error) => console.log("error", error));
   }
   render() {
@@ -49,29 +55,11 @@ export class HomePage extends Component {
             <h1>Best seller</h1>
             <Carousel
               show={5}
-              children={[
-                <div>
-                  <Card id={1}></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-              ]}
+              children={
+                this.state.courses.map((course) => 
+                <Card id={course.id} title={course.name} price={course.fee} teacher={course.teacher_name} img={course.img} />
+                )
+                }
             ></Carousel>
           </div>
         </div>
