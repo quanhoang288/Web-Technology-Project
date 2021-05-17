@@ -53,6 +53,7 @@ export class StudentCourseDetail extends Component {
   };
 
   
+
   	handleEnrollRequest = ()=>{
 	  
 		let enrolled = this.state.enrolled;
@@ -92,6 +93,7 @@ export class StudentCourseDetail extends Component {
   	componentDidMount(){
       this.fetch_data();
   	}
+
   render() {
     const toggleState = this.state.toogleState;
     const enrolled = this.state.enrolled;
