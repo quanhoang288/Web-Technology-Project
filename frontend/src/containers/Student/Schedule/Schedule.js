@@ -4,7 +4,7 @@ export class Schedule extends Component {
     render() {
         return (
             <div>
-                
+                Schedule
             </div>
         )
     }

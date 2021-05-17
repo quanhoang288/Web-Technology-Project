@@ -31,6 +31,7 @@ import CoursePreview from './containers/Homepage/CoursePreview'
 import { connect } from "react-redux";
 //#endregion
 import "./App.css";
+import Schedule from "./containers/Student/Schedule/Schedule";
 class App extends Component {
   render() {
     return (
@@ -161,12 +162,14 @@ class App extends Component {
                       path={`${url}/courses/:id`}
                       component={StudentCourseDetail}
                     />
+                    
                     <PrivateRoute
                       exact
                       permission={permission}
-                      path={`${url}/assignment`}
-                      component={Assignment}
+                      path={`${url}/schedule`}
+                      component={Schedule}
                     />
+
 
                     <Redirect to={`/`}></Redirect>
                   </Switch>

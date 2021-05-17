@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 export class StudentCourseDetail extends Component {
   state = {
     id: this.props.match.params.id, // class id
-	enrolled : 0,  // 0 - not ; 1 - pending ; 2 -enrolled
+	  enrolled : 0,  // 0 - not ; 1 - pending ; 2 -enrolled
     class_info : null,
     toogleState: 1,
     class_notification_list: [],
@@ -97,65 +97,49 @@ export class StudentCourseDetail extends Component {
   render() {
     const toggleState = this.state.toogleState;
     const enrolled = this.state.enrolled;
-	const class_info = this.state.class_info;
 	
-    if(enrolled === 2)
+    if(this.state.class_info)
     {
-        return (
-        
-            <div>
-                
-              <div className="bloc-tabs">
-                <button
-                  className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => this.toggleTab(1)}
-                >
-                  General
-                </button>
-                <button
-                  className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-                  onClick={() => this.toggleTab(2)}
-                >
-                  Material
-                </button>
-                
-              </div>
-      
-              <div className="content-tabs">
-                <div // tab notification
-                  className={
-                    toggleState === 1 ? "contents  active-content" : "contents"
-                  }
-                >
+      const class_info = this.state.class_info
+      if(enrolled === 2 )
+      {
+          return (
+          
+              <div>
                   
-      
-                  <div className="plan-item">
-                    <div className="datetime">2020-05</div>
-                    <div className="content">
-                      <Link to="#">
-                        <p>HJjhdgasjhdjhgsajhgdjh</p>
-                      </Link>
-                    </div>
-                    
-                  </div>
-                  <div className="plan-item">
-                    <div className="datetime">2020-05</div>
-                    <div className="content">
-                      <Link to="#">
-                        <p>De bai 1 : mieu ta 1 con cho</p>
-                      </Link>
-                    </div>
-                    <i class="fas fa-edit"></i>
-                  </div>
+                <div className="bloc-tabs">
+                  <button
+                    className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => this.toggleTab(1)}
+                  >
+                    General
+                  </button>
+                  <button
+                    className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => this.toggleTab(2)}
+                  >
+                    Material
+                  </button>
+                  
                 </div>
-      
-                <div //tab material
-                  className={
-                    toggleState === 2 ? "contents  active-content" : "contents"
-                  }
-                >
-                  <div className="material">
+        
+                <div className="content-tabs">
+                  <div // tab notification
+                    className={
+                      toggleState === 1 ? "contents  active-content" : "contents"
+                    }
+                  >
                     
+        
+                    <div className="plan-item">
+                      <div className="datetime">2020-05</div>
+                      <div className="content">
+                        <Link to="#">
+                          <p>HJjhdgasjhdjhgsajhgdjh</p>
+                        </Link>
+                      </div>
+                      
+                    </div>
                     <div className="plan-item">
                       <div className="datetime">2020-05</div>
                       <div className="content">
@@ -163,39 +147,62 @@ export class StudentCourseDetail extends Component {
                           <p>De bai 1 : mieu ta 1 con cho</p>
                         </Link>
                       </div>
-                      <div className="datetime">Deadline 2020-05</div>
+                      <i class="fas fa-edit"></i>
                     </div>
                   </div>
+        
+                  <div //tab material
+                    className={
+                      toggleState === 2 ? "contents  active-content" : "contents"
+                    }
+                  >
+                    <div className="material">
+                      
+                      <div className="plan-item">
+                        <div className="datetime">2020-05</div>
+                        <div className="content">
+                          <Link to="#">
+                            <p>De bai 1 : mieu ta 1 con cho</p>
+                          </Link>
+                        </div>
+                        <div className="datetime">Deadline 2020-05</div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  
                 </div>
-      
-                
               </div>
-            </div>
-          );
-    }
-    return(
-        <div className='student__course__detail'>
-			{
-				class_info ? 
-				<>
-				 <div className="scd_overview"> 
-					<h1> {class_info.name} </h1>
-					<p style={{"width":"50%","fontSize":"2em"}}>{class_info.description}</p>
-					
-                <h2>{class_info.teacher_name}</h2>
-             	</div>
-				<div className='scd_enrol'> 
-					<img src={class_info.img}></img>
-					<h1>{class_info.fee}</h1>
-					{enrolled === 0 ? <Button onClick={this.handleEnrollRequest}>Enrol</Button> : <Button onClick={this.handleEnrollRequest}>Pending</Button>}
-				</div>
-				</> : ''
-			}
+            );
+      }
+      return(
+          <div className='student__course__detail'>
+        {
+          class_info ? 
+          <>
+           <div className="scd_overview"> 
+            <h1> {class_info.name} </h1>
+            <p style={{"width":"50%","fontSize":"2em"}}>{class_info.description}</p>
             
-        </div>
-    )
-    
-  }
+                  <h2>{class_info.teacher_name}</h2>
+                 </div>
+          <div className='scd_enrol'> 
+            <img src={class_info.img}></img>
+            <h1>{class_info.fee}</h1>
+            {enrolled === 0 ? <Button onClick={this.handleEnrollRequest}>Enrol</Button> : <Button onClick={this.handleEnrollRequest}>Pending</Button>}
+          </div>
+          </> : ''
+        }
+              
+          </div>
+      )
+      
+    }
+    return null
+    }
+
+	
+   
 }
 
 const mapState = (state) => {
