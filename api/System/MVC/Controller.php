@@ -40,8 +40,8 @@ class Controller {
                 }
             }
             $data = $this->_model->search();
-            // return $data;
-            $this->send(200, $data);
+            return $data;
+            // $this->send(200, $data);
             // if (count($data))
             //     $this->send(200, $data);
             // else 

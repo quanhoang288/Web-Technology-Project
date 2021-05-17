@@ -21,7 +21,7 @@ class UserModel extends Model{
         
         $stmt = $this->_db->prepare('
             insert into user
-            values (null,?,?,?,?,?,?,1,?)
+            values (null,?,?,?,?,?,1,?)
         ');
 
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);

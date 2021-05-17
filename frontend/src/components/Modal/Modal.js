@@ -47,7 +47,7 @@ export const Modal = ({ show, closeHandler,onSubmit, info , disabled_field}) => 
         </div>
         <div className="modal-footer">
           <button onClick={closeHandler} className="btn-cancel">Close</button>
-          <button onClick={onSubmit} className="btn-cancel">Update</button>
+          <button onClick={()=> {onSubmit(update_info)}} className="btn-cancel">Update</button>
         </div>
       </div>
     </div>
