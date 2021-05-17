@@ -41,7 +41,7 @@ const Card = ({ title, description, price, teacher, id, img, user }) => {
                 <div class="info">
                     <h1><b>{title}</b></h1>
                     <h3>Teacher: {teacher}</h3>
-                    <h3>Price: {price}</h3>
+                    {price ? <h3>Price: {price}</h3> : ''}
                 </div>
                 <div className="card-over">
                     <h1><b>{title}</b></h1>
@@ -52,7 +52,7 @@ const Card = ({ title, description, price, teacher, id, img, user }) => {
                         <li>Skil1</li>
                         <li>Skil1</li>
                     </ul> */}
-                    <h3>Price: {price}</h3>
+                    {price ? <h3>Price: {price}</h3> : ''}
 
 
 

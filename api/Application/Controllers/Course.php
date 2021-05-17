@@ -27,21 +27,29 @@ class CourseController extends Controller {
                 }
                 else {
                     $this->_model->showHMABTM();
+                    $this->_model->showHasOne();
                     $data = $this->_model->search();
                     
                     foreach($data as $course_info){
                         
+                        $course_info['course']['teacher_name'] = $course_info['teacher']['name'];
+                        $img = $course_info['course']['img'];
+                        $course_info['course']['img'] = img_to_base64($img);
                         $students = array_map(function($student){
                             return $student['id'];
                         }, $course_info['student']);
+                        // var_dump($students);
                         $idx = array_search($user_id, $students);
-                        if ($idx){
+                        
+                        if (is_int($idx)){
+                            // echo "found" . PHP_EOL;
                             $status = $course_info['student'][$idx]['course_student']['status'];
                             if ($status == '2' && $course_info['course']['status'] == 'new'){
                                 unset($course_info['student']);
                                 array_push($res, $course_info['course']);
                             }
                         }
+
                         // if (in_array($user_id, $students)){
                         //     unset($course_info['student']);
                         //     array_push($res, $course_info);
@@ -49,6 +57,7 @@ class CourseController extends Controller {
                             
                         
                     }
+                    
                     
                 }
                 $this->send(200, $res);
