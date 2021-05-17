@@ -66,8 +66,8 @@ $router->delete('/users/:id', 'user@delete');
 
 $router->get('/enroll', 'enroll@get');
 $router->post('/enroll', 'enroll@create');
-$router->put('/enroll/:id', 'enroll@update');
-$router->delete('/enroll/:id', 'enroll@delete');
+$router->put('/enroll', 'enroll@update');
+$router->delete('/enroll', 'enroll@delete');
 
 
 

@@ -12,12 +12,7 @@ export class StudentCourseDetail extends Component {
   state = {
     id: this.props.match.params.id, // class id
 	enrolled : 0,  // 0 - not ; 1 - pending ; 2 -enrolled
-    class_info : {
-        
-        description : "Hello this is the best class",
-        teacher_name: '',
-        img:"",
-    },
+    class_info : null,
     toogleState: 1,
     class_notification_list: [],
     class_material_list: [],
@@ -28,7 +23,7 @@ export class StudentCourseDetail extends Component {
   };
   fetch_data = () => {
     // api call
-	console.log(this.props.user)
+	// console.log(this.props.user.id);
 	const user_id = this.props.user['id'];
 	
     var myHeaders = new Headers();
@@ -37,48 +32,71 @@ export class StudentCourseDetail extends Component {
       method: "GET",
       headers: myHeaders,
     };
+    fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        this.setState({class_info: result});
+    })
+    .catch((error) => console.log("error", error)); 
+
     fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-		if (result.length > 0){
-			this.setState({enrolled: result[0]['status']});
-		}
-	  })
-      .catch((error) => console.log("error", error)); 
-
-	fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-		// const course = result['course'];
-		// if (course['status'] !== 'new'){
-		// //   this.setState({class_info: result['course'],
-		// //    class_notification_list: result['course_notification'],
-		// //     class_material_list: result['document'],
-		// // 	class_student_list: result['student']
-		// // });
-		// }
-		// else {
-		// 	this.setState({class_info: result})
-		// }
-		console.log(result);
+        if (result.length > 0){
+          	this.setState({enrolled:  parseInt(result[0]['status'])});
+        }
 		})
       .catch((error) => console.log("error", error)); 
+
+
 
   };
 
   
-  handleEnrollRequest = ()=>{
-      let class_info = {...this.state.class_info}
-      class_info.enrolled = 1
-      this.setState({class_info:class_info})
-  }
-  componentDidMount()
-  {
+  	handleEnrollRequest = ()=>{
+	  
+		let enrolled = this.state.enrolled;
+		const course_id = this.state.class_info['id'];
+		const user_id = this.props.user['id'];
+		var myHeaders = new Headers();
+
+		myHeaders.append("Content-Type", "application/json");
+		if (enrolled === 0){
+			const raw = JSON.stringify({
+				student_id: user_id, course_id: course_id
+			});
+			console.log(raw);
+			var requestOptions = {
+				method: "POST",
+				headers: myHeaders,
+				body: raw,
+				redirect: 'follow',
+			  };
+			  fetch(`${HOST_URL}/enroll`, requestOptions)
+			  .then((response) => this.setState({enrolled:  1}))
+			  .catch((error) => console.log("error", error));   
+		}
+		else {
+			var requestOptions = {
+				method: "DELETE",
+				headers: myHeaders,
+				redirect: 'follow',
+			  };
+			  fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
+			  .then((response) => this.setState({enrolled:  0}))
+			  .catch((error) => console.log("error", error)); 
+		}
+
+		
+  	}
+  	componentDidMount(){
       this.fetch_data();
-  }
+  	}
   render() {
-    let toggleState = this.state.toogleState;
-    let enrolled = this.state.class_info.enrolled
+    const toggleState = this.state.toogleState;
+    const enrolled = this.state.enrolled;
+	const class_info = this.state.class_info;
+	
     if(enrolled === 2)
     {
         return (
@@ -155,19 +173,23 @@ export class StudentCourseDetail extends Component {
     }
     return(
         <div className='student__course__detail'>
-            <div className="scd_overview"> 
-                <h1> Title </h1>
-                <p style={{"width":"50%","fontSize":"2em"}}>Spring Framework 5: Learn Spring Framework 5, Spring Boot 2, Spring MVC,
-                     Spring Data JPA, Spring Data MongoDB, Hibernate
-                </p>
-                <p style={{"fontSize":"1.5em"}}>Rating </p>
-                <h2>Teacher</h2>
-             </div>
-            <div className='scd_enrol'> 
-                <img src={img}></img>
-                <h1>$99.44</h1>
-                {enrolled === 0 ? <Button onClick={this.handleEnrollRequest}>Enrol</Button> : <Button>Pending</Button>}
-            </div>
+			{
+				class_info ? 
+				<>
+				 <div className="scd_overview"> 
+					<h1> {class_info.name} </h1>
+					<p style={{"width":"50%","fontSize":"2em"}}>{class_info.description}</p>
+					
+                <h2>{class_info.teacher_name}</h2>
+             	</div>
+				<div className='scd_enrol'> 
+					<img src={class_info.img}></img>
+					<h1>{class_info.fee}</h1>
+					{enrolled === 0 ? <Button onClick={this.handleEnrollRequest}>Enrol</Button> : <Button onClick={this.handleEnrollRequest}>Pending</Button>}
+				</div>
+				</> : ''
+			}
+            
         </div>
     )
     

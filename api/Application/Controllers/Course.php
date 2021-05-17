@@ -18,57 +18,46 @@ class CourseController extends Controller {
                 $this->send(400, ['error'=>'Bad Request']);
             else{
                 $role = $params['role'];
+                $res = array();
                 if ($role == 'teacher'){
-                    $filters = ['course', 'teacher', 'schedule'];
                     $this->_model->where('teacher_id', $user_id);
-                    $this->_model->showHasOne();
-                }
-                else{
-                    $filters = ['course', 'teacher', 'student', 'schedule'];
-                    // $this->_model->childID = $user_id;
-                    $this->_model->showHasOne();
-                    $this->_model->showHMABTM();
-                } 
-             
-                $this->_model->showHasMany();
-                $result = $this->_model->search();
-                if (!count($result)){
-                    $this->send(404, ['response'=>'No course found']);
+                    $data = $this->_model->search();
+                    foreach($data as $course)
+                        array_push($res, $course['course']);
                 }
                 else {
-                    $filteredResult = array();
-                   
-                    foreach($result as $course){
-                        // if ($course[$role]['id'] != $user_id)
-                        //     continue;
-                        if ($role == 'teacher' && $course[$role]['id'] != $user_id)
-                            continue; 
-                        else if ($role == 'student'){
-                            $found = false;
-                            foreach ($course[$role] as $student){
-                                if ($student['id'] == $user_id){
-                                    $found = true;
-                                    break;
-                                }
+                    $this->_model->showHMABTM();
+                    $data = $this->_model->search();
+                    
+                    foreach($data as $course_info){
+                        
+                        $students = array_map(function($student){
+                            return $student['id'];
+                        }, $course_info['student']);
+                        $idx = array_search($user_id, $students);
+                        if ($idx){
+                            $status = $course_info['student'][$idx]['course_student']['status'];
+                            if ($status == '2' && $course_info['course']['status'] == 'new'){
+                                unset($course_info['student']);
+                                array_push($res, $course_info['course']);
                             }
-                            if (!$found) 
-                                continue;
                         }
-                        $filteredCourse = filter($course, $filters);
-                        if (in_array('student', $filters) && count($filteredCourse['student'])){
-                            foreach($filteredCourse['student'] as $student){
-                                $student = filter($student, ['username', 'password'], true);
-                            }
-                            // $filteredCourse['student'] = filter($filteredCourse['student'][0], ['username', 'password'], true);
-                        }
-                        $filteredCourse['teacher'] = filter($filteredCourse['teacher'], ['username', 'password'], true);
-                        // if (count($filteredCourse['student']))
-                        array_push($filteredResult, $filteredCourse);
+                        // if (in_array($user_id, $students)){
+                        //     unset($course_info['student']);
+                        //     array_push($res, $course_info);
+                        // }
+                            
+                        
                     }
-
-                    $this->send(200, ['response'=> $filteredResult]);
-                    // $this->send(200, ['response'=>$result]);
+                    
                 }
+                $this->send(200, $res);
+                
+                
+                
+                
+                    // $this->send(200, ['response'=>$result]);
+                
 
                 
             }
@@ -84,7 +73,7 @@ class CourseController extends Controller {
                 foreach($result as $course){
                     $img = $course['course']['img'];
                     $course['course']['img'] = img_to_base64($img);
-                    $course['course']['teacher_name'] = $course['teacher']['firstname'] . ' ' . $course['teacher']['lastname'];
+                    $course['course']['teacher_name'] = $course['teacher']['name'];
                     array_push($res, filter($course['course'], ['id', 'name', 'subject', 'level', 'fee', 'teacher_name', 'img']));
                 }
                 $this->send(200, $res);
@@ -100,7 +89,7 @@ class CourseController extends Controller {
                 foreach($data as $course){
                     $img = $course['course']['img'];
                     $course['course']['img'] = img_to_base64($img);
-                    $course['course']['teacher_name'] = $course['teacher']['firstname'] . ' ' . $course['teacher']['lastname'];
+                    $course['course']['teacher_name'] = $course['teacher']['name'];
                     array_push($res, $course['course']);
                 }
 
@@ -121,17 +110,24 @@ class CourseController extends Controller {
         $this->_model->showHasOne();
         $this->_model->showHasMany();
         $this->_model->showHMABTM();
-        $data = $this->_model->search()[0];
-        
+        $data = $this->_model->search();
+      
+
         $status = $data['course']['status'];
         // $res = array();
+
         if ($status == 'new'){
-            $data['course']['teacher_name'] = $data['teacher']['firstname'] . $data['teacher']['lastname'];
+            $data['course']['teacher_name'] = $data['teacher']['name'];
             // foreach($data as $course){
             //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
             //     array_push($res, $course['course']);
             // }
-            $this->send(200, $data['course']);
+            $students = array();
+            foreach($data['student'] as $student){
+                // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
+                array_push($students, ['student'=> filter($student, ['username', 'password', 'subject', 'role', 'active', 'course_student'], true), 'status' => $student['course_student']['status']]);
+            }
+            $data['course']['students'] = $students; 
             
 
         }
@@ -140,14 +136,16 @@ class CourseController extends Controller {
             $students = array();
             foreach($data['student'] as $student){
                 // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
-                array_push($students, filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true));
+                array_push($students, filter($student, ['username', 'password', 'subject', 'role'], true));
             }
 
             $data['student'] = $students;
-            $data['course']['teacher_name'] = $data['teacher']['firstname'] . $data['teacher']['lastname'];
-            unset($data['teacher']);
-            // $data['course']['notifications'] = $data['course_notification'];
-            // $data['course']['students'] = $students;
+            $data['course']['teacher_name'] = $data['teacher']['name'];
+            // unset($data['teacher']);
+            $data['course']['notifications'] = $data['course_notification'];
+            $data['course']['material'] = $data['document'];
+            $data['course']['exam'] = $data['exam'];
+            $data['course']['students'] = $students;
             // foreach($data as $course){
             //     $course['course']['material'] = $course['document'];
             //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
@@ -155,9 +153,12 @@ class CourseController extends Controller {
             //     $course['course']['students'] = $course['student'];
             //     array_push($res, $course['course']);
             // }
-            $this->send(200, $data);
+            // $this->send(200, $data);
             
         }
+        $img = $data['course']['img'];
+        $data['course']['img'] = img_to_base64($img);
+        $this->send(200, $data['course']);
         
         
     }

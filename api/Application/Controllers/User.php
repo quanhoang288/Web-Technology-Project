@@ -16,7 +16,7 @@ class UserController extends Controller {
 
     public function get_all($params=null){
         if (!$params){
-            $data = parent::get_all();
+            parent::get_all();
             
         }
             
@@ -37,7 +37,7 @@ class UserController extends Controller {
             $res = array();
 
             foreach($data as $user){
-                $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
+                // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
                 array_push($res, filter($user['user'], ['username', 'password'], true));
             }
 

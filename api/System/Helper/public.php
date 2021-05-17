@@ -8,10 +8,10 @@ function cleanUrl($url) {
     return str_replace(['%20', ' '], '-', $url);
 }
 
-function performAction($controllerName, $action, $params=null){
-    $controllerName = ucfirst($controllerName).'Controller';
-    $controller = new $controllerName;
-    return call_user_func_array(array($controller, $action), $params);
+function performAction($class, $method, $params=null){
+    
+    $class = new $class;
+    return call_user_func_array(array($class, $method), $params);
     
 }
 

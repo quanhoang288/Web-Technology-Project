@@ -24,7 +24,7 @@ export default function CourseDetail() {
 
   const [pending_request, setPendingRequest] = useState([]);
   const [students, setStudents] = useState([]);
-  const [show_pending_req, setShowPen] = useState(true);
+  const [show_pending_req, setShowPen] = useState(false);
   const [show_pending_modal, setShowPenModal] = useState(false);
   const [show_student_modal, setShowStudentModal] = useState(false);
   const [show_student, setShowStudent] = useState(false);
@@ -39,13 +39,37 @@ export default function CourseDetail() {
     setTargetStudent({});
   };
 
-  const fetchData = () => {
+  const fetchData = (id) => {
     console.log("get course data from DB");
-    var response = null;
+    console.log(id);
+    
     // api call pending request
-    // setPendingRequest(response)
-    // Quan lam phan nay di Quan oi
-    // setStudents(response)
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");  
+		var requestOptions = {
+		method: "GET",
+		headers: myHeaders,
+		redirect: "follow",
+		};
+    // console.log(`${HOST_URL}/courses/${id}`);
+		fetch(`${HOST_URL}/courses/${id}`, requestOptions)
+		.then((response) => response.json())
+		.then((result) => {
+
+      const student_list = result.students
+
+      let pending_list = student_list.filter(student => student.status === '1');
+      let accepted_list = student_list.filter(student => student.status === '2');
+      pending_list = pending_list.map(student => student.student);
+      accepted_list = accepted_list.map(student => student.student);
+      // console.log(pending_list);
+      // console.log(accepted_list);
+      setPendingRequest(pending_list);
+      setStudents(accepted_list);
+      // console.log(result);
+    })
+		.catch((error) => console.log("error", error));
+
   };
   const togglePendingBar = () => {
     setShowPen(!show_pending_req);
@@ -62,16 +86,69 @@ export default function CourseDetail() {
   };
   const rejectHandler = () => {
     // api call 
-    var raw = target_row_pending
+    
+    const student_id = target_row_pending.id;
+    const update = JSON.stringify({status: 3});
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");  
+		var requestOptions = {
+		method: "PUT",
+		headers: myHeaders,
+    body: update,
+		redirect: "follow",
+		};
+    // console.log(`${HOST_URL}/courses/${id}`);
+		fetch(`${HOST_URL}/enroll?student_id=${student_id}&course_id=${id}`, requestOptions)
+		.then((response) => {
+      console.log(response);
+      alert("Rejected");
+      setShowPenModal(false);
+      var pending_list = pending_request;
+      const idx = pending_list.indexOf(target_row_pending);
+      pending_list = pending_list.splice(idx, 1);      
+      setPendingRequest(pending_request);
+      togglePendingBar();
+
+    })
+		.catch((error) => console.log("error", error));
   }
   const approveHandler = () => {
-    var raw = target_row_pending
-    alert("Aproved")
+    const student_id = target_row_pending.id;
+    const update = JSON.stringify({status: 2});
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");  
+		var requestOptions = {
+		method: "PUT",
+		headers: myHeaders,
+    body: update,
+		redirect: "follow",
+		};
+    // console.log(`${HOST_URL}/courses/${id}`);
+		fetch(`${HOST_URL}/enroll?student_id=${student_id}&course_id=${id}`, requestOptions)
+		.then((response) => {
+      console.log(response);
+      alert("Aproved");
+      setShowPenModal(false);
+      var pending_list = pending_request;
+      var accepted_list  = students;
+      const idx = pending_list.indexOf(target_row_pending);
+      pending_list = pending_list.splice(idx, 1);
+      accepted_list.push(target_row_pending);
+      setPendingRequest(pending_request);
+      setStudents(accepted_list);
+      togglePendingBar();
+      
+    })
+		.catch((error) => console.log("error", error));
+    
+    
   }
+
   useEffect(() => {
     fetchData(id);
   }, []);
-
+  // console.log(pending_request);
+  // console.log(students);
   return (
     <div className="course_detail">
       {/* <div className="course-general-info">
@@ -111,7 +188,7 @@ export default function CourseDetail() {
       </div>
       {show_pending_req ? (
         <div className="pending">
-          <StudentTable rowPerPage={6} data={MOCKDATA} rowClick={rowClickPending}></StudentTable>
+          <StudentTable rowPerPage={Math.min(6, pending_request.length)} data={pending_request} rowClick={rowClickPending}></StudentTable>
         </div>
       ) : null}
       <div className="toggle-bar" onClick={toogleStudentBar}>
@@ -127,7 +204,7 @@ export default function CourseDetail() {
       </div>
       {show_student ? (
         <div className="pending">
-          <StudentTable rowPerPage={6} data={MOCKDATA} ></StudentTable>
+          <StudentTable rowPerPage={Math.min(6, students.length)} data={students} ></StudentTable>
         </div>
       ) : null}
       <div className={show_pending_modal ? "back-drop" : null}></div>

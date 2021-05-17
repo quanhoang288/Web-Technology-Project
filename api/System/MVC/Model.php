@@ -121,8 +121,10 @@ class Model {
 		}
 
         $countSQL = 'SELECT COUNT(*) FROM '.$from.' WHERE '.$conditions;
+		
         $res = $this->_db->query($countSQL);
         $num_rows = $res->fetchColumn();
+		
 		if ($num_rows > 0 ) {
 			while ($row = $this->_result->fetch(\PDO::FETCH_NUM)) {
 				for ($i = 0;$i < $numOfFields; ++$i) {
@@ -155,8 +157,8 @@ class Model {
                         $countSQL = 'SELECT COUNT(*) FROM '.$fromChild.' WHERE '.$conditionsChild;
 						// echo $countSQL . PHP_EOL;
                         $res = $this->_db->query($countSQL);
-                        $num_rows = $res->fetchColumn();
-						if ($num_rows > 0) {
+                        $num_child_rows = $res->fetchColumn();
+						if ($num_child_rows > 0) {
 							// echo "has many!" . PHP_EOL;
 							$numOfFieldsChild = $resultChild->columnCount();
 							for ($j = 0; $j < $numOfFieldsChild; ++$j) {
@@ -220,8 +222,8 @@ class Model {
                         $countSQL = 'SELECT COUNT(*) FROM '.$fromChild.' WHERE '.$conditionsChild;
 						// echo '<!--'.$countSQL.'-->';
                         $res = $this->_db->query($countSQL);
-                        $num_rows = $res->fetchColumn();
-						if ($num_rows > 0) {
+                        $num_child_rows = $res->fetchColumn();
+						if ($num_child_rows > 0) {
 							// echo "has many and belongs to many!" . PHP_EOL;
 							$numOfFieldsChild = $resultChild->columnCount();
 							for ($j = 0; $j < $numOfFieldsChild; ++$j) {
@@ -262,11 +264,12 @@ class Model {
 				
 			}
 
-			if ($num_rows == 1 && $this->id != null) {
+			if ($num_rows == 1 && isset($this->id)) {
+	
 				$this->clear();
 				return($result[0]);
 			} else {
-	
+
 				$this->clear();
 				return $result;
 			}
