@@ -40,10 +40,6 @@ export const Modal = ({ show, closeHandler,onSubmit, info , disabled_field}) => 
               )
             })}
           </form>
-
-
-
-
         </div>
         <div className="modal-footer">
           <button onClick={closeHandler} className="btn-cancel">Close</button>

@@ -50,7 +50,7 @@ export class Dashboard extends Component {
   render() {
     const stats = [
       { title: "Revenue", content: "$1234" },
-      { title: "Visitor", content: "123" },
+      { title: "Teacher", content: "123" },
       { title: "Student", content: "69" },
       { title: "Course", content: "96" },
     ];

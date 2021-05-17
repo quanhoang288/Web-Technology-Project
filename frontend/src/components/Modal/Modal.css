@@ -10,6 +10,7 @@
   }
   
   .modal-wrapper {
+    z-index: 10000000;
     background: #fff;
     width: 80%;
     position: relative;

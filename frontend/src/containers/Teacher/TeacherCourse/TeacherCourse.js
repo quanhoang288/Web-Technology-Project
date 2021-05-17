@@ -52,7 +52,65 @@ export class TeacherCourse extends Component {
         </div>
         <div className="courses-section">
           <div className="open-course">
-            <h1>Courses</h1>
+            <h1>New</h1>
+            <Carousel
+              show={5}
+              children={[
+                <div>
+                  <Card id={5}></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+              ]}
+            ></Carousel>
+          </div>
+          <div className="open-course">
+            <h1>On-going</h1>
+            <Carousel
+              show={5}
+              children={[
+                <div>
+                  <Card id={5}></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+                <div>
+                  <Card></Card>
+                </div>,
+              ]}
+            ></Carousel>
+          </div>
+          <div className="open-course">
+            <h1>Ended</h1>
             <Carousel
               show={5}
               children={[

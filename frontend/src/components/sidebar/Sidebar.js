@@ -32,6 +32,7 @@ export class Sidebar extends Component {
                 items = [
                     <li><Link to="/teacher/info"><i className="fas fa-qrcode"></i>General Info</Link></li>,
                     <li><Link to="/teacher/courses"><i className="fas fa-qrcode"></i>Courses</Link></li>,
+                    <li><Link to="/teacher/schedule"><i className="fas fa-qrcode"></i>Schedule</Link></li>,
                     
                 ]
                 break

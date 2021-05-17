@@ -4,6 +4,9 @@ import Table from "../../../components/Table/Table";
 import MOCK_DATA from "../../../components/Table/MOCK.json";
 import InputField from "../../../components/InputField/InputField";
 import { Link } from "react-router-dom";
+import Button from "../../../components/Button/Button";
+import ExamAssesmentModal from '../../../components/ExamAssesmentModal/ExamAssesmentModal'
+import Backdrop from '../../../components/Backdrop/Backdrop'
 export class TeacherCourseDetail extends Component {
   state = {
     id: this.props.match.params.id,
@@ -13,7 +16,18 @@ export class TeacherCourseDetail extends Component {
     class_material: "",
     class_material_list: [],
     student_list: [],
+    input_modal_show:false,
+    target_exam:null,
   };
+
+  examAssesHandler = (target_row)=> {
+    this.setState({input_modal_show:true})
+    this.setState({target_exam:target_row})
+  }
+  examAssesCancelHandler = ()=> {
+    this.setState({input_modal_show:false})
+    this.setState({target_exam:null})
+  }
   toggleTab = (index) => {
     this.setState({ toogleState: index });
   };
@@ -116,7 +130,45 @@ export class TeacherCourseDetail extends Component {
             className={
               toggleState === 4 ? "contents  active-content" : "contents"
             }
-          ></div>
+          >
+            <div className="assesment-container">
+              <div className="assesment-table">
+                <Table data={MOCK_DATA} rowPerPage={5}
+                  
+                  rowClick={(target_row)=> {this.examAssesHandler(target_row)}}
+                ></Table>
+                <ExamAssesmentModal show={this.state.input_modal_show}
+                  closeHandler={this.examAssesCancelHandler}
+                  updateHandler = {() => {console.log("Update")}}
+
+                
+                >
+                  <div>
+                  <Table data={
+                    [{'Name':"NguyenDucThang","Mark":"9.5"},{'Name':"QuanHoang","Mark":"6.9"}]
+                  } rowPerPage={5}
+                  editable={true}
+                  rowClick={(target_row)=> {this.examAssesHandler(target_row)}}
+                ></Table>
+                  </div>
+                </ExamAssesmentModal>
+                <div>
+                  {this.state.input_modal_show ? <Backdrop toggleBackdrop={this.examAssesCancelHandler}> </Backdrop> :null}
+                </div>
+              </div>
+              <div className="create-exam">
+                <div className="exam-content">
+                  <h1>Exam Content</h1>
+                  <textarea style={{"width":"100%"}}></textarea>
+                </div>
+                <div style={{"margin":"20px auto","width":"100%"}}>
+                  <InputField type="text" label="Taskname"></InputField>
+                </div>
+
+                <Button> Submit </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
