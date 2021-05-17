@@ -26,7 +26,7 @@ class ScheduleModel extends Model{
         else {
             $query = 'SELECT course.name, schedule.weekday_id, schedule.time_id FROM course, user, course_student, schedule
             WHERE course.id = course_student.course_id 
-            AND user.id = course_student.student_id AND schedule.course_id = course.id AND user.id = ?';
+            AND user.id = course_student.student_id AND schedule.course_id = course.id AND user.id = ?  ORDER BY weekday_id, time_id';
             $stmt = $this->_db->prepare($query);
             if ($stmt->execute([$user_id])){
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){

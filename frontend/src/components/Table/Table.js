@@ -16,6 +16,7 @@ export class Table extends Component {
     componentDidMount() {
         //init query field 
         const columns = this.props.data[0] && Object.keys(this.props.data[0])
+        // console.log(columns);
         const query_field = columns ? columns : []
         this.setState({ query_field: query_field })
     }
@@ -27,7 +28,7 @@ export class Table extends Component {
     }
     filterData = (data) => {
         const matchingIndex = []
-
+        
         data.forEach((row, idx) => {
             let flag = true
             this.state.query_field.forEach((field) => {
