@@ -40,41 +40,37 @@ class Controller {
                 }
             }
             $data = $this->_model->search();
-            return $data;
+            // return $data;
+            $this->send(200, $data);
             // if (count($data))
             //     $this->send(200, $data);
             // else 
             //     $this->send(404, ['response'=> 'No resource found']);
         }
         catch(PDOException $e){
-            return false;
-            // $this->send(400, ['response'=> $e->getMessage()]);
+            // return false;
+            $this->send(400, ['response'=> $e->getMessage()]);
         } 
     }
 
     public function get($params){
-        if (!$params){
-            $this->send(400, ['error'=>'Bad request']);
-        }
-        else {
-            $id = $params['id'];
-            try{
-                if (count($params) > 1){
-                    foreach($params as $key=>$value){
-                        $this->_model->where($key, $value);
-                    }
+        
+
+        $id = $params['id'];
+        try{
+            if (count($params) > 1){
+                foreach($params as $key=>$value){
+                    $this->_model->where($key, $value);
                 }
-                $this->_model->id = $id;
-                $data = $this->_model->search();
-                if (count($data))
-                    $this->send(200, ['response'=>'OK', 'data'=>$data]);
-                else 
-                    $this->send(404, ['response'=> 'No resource found']);
             }
-            catch(PDOException $e){
-                $this->send(400, ['response'=> $e->getMessage()]);
-            } 
+            $this->_model->id = $id;
+            $data = $this->_model->search();
+            $this->send(200, $data);
         }
+        catch(PDOException $e){
+            $this->send(400, ['response'=> $e->getMessage()]);
+        } 
+        
 
         
     }

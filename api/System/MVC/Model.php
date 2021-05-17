@@ -23,7 +23,7 @@ class Model {
     /**
      *  Construct
      */
-    public function __construct($childClass=null) {
+    public function __construct($childTable=null) {
         $this->_db = new \Database\DatabaseAdapter(
             DATABASE['Driver'],
             DATABASE['Host'],
@@ -33,13 +33,13 @@ class Model {
             DATABASE['Port']    
         );
 
-		if (!$childClass){
+		if (!$childTable){
 			$this->_table = str_replace('model','',strtolower(get_class($this))); 
 			
 		}
 		else{
 
-			$this->_table = str_replace('model','',strtolower($childClass)); 
+			$this->_table = str_replace('model','',strtolower($childTable)); 
 			 
 		}
         

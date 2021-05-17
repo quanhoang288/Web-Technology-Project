@@ -64,7 +64,11 @@ $router->put('/users/:id', 'user@update');
 $router->delete('/users/:id', 'user@delete');
 
 
-$router->post('/course_student', 'course@enroll');
+$router->get('/enroll', 'enroll@get');
+$router->post('/enroll', 'enroll@create');
+$router->put('/enroll/:id', 'enroll@update');
+$router->delete('/enroll/:id', 'enroll@delete');
+
 
 
 

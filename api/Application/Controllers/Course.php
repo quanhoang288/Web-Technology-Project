@@ -73,9 +73,28 @@ class CourseController extends Controller {
                 
             }
         }
+        else if (isset($params['status'])){
+            $status = $params['status'];
+            
+            $this->_model->where('status', $status);
+            $this->_model->showHasOne();
+            $result = $this->_model->search();
+            if ($result){
+                $res = array();
+                foreach($result as $course){
+                    $img = $course['course']['img'];
+                    $course['course']['img'] = img_to_base64($img);
+                    $course['course']['teacher_name'] = $course['teacher']['firstname'] . ' ' . $course['teacher']['lastname'];
+                    array_push($res, filter($course['course'], ['id', 'name', 'subject', 'level', 'fee', 'teacher_name', 'img']));
+                }
+                $this->send(200, $res);
+            }
+            else 
+                $this->response->sendStatus(500);
+        }
         else{
             $this->_model->showHasOne();
-            $data = parent::get_all();
+            $data = $this->_model->search();
             if ($data){
                 $res = array();
                 foreach($data as $course){
@@ -96,10 +115,51 @@ class CourseController extends Controller {
     }
 
     public function get($params=null){
+        $course_id = $params['id'];
+        // if (isset($params['']))
+        $this->_model->id = $course_id;
         $this->_model->showHasOne();
         $this->_model->showHasMany();
         $this->_model->showHMABTM();
-        parent::get($params);
+        $data = $this->_model->search()[0];
+        
+        $status = $data['course']['status'];
+        // $res = array();
+        if ($status == 'new'){
+            $data['course']['teacher_name'] = $data['teacher']['firstname'] . $data['teacher']['lastname'];
+            // foreach($data as $course){
+            //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
+            //     array_push($res, $course['course']);
+            // }
+            $this->send(200, $data['course']);
+            
+
+        }
+        else{
+            // $data['course']['material'] = $data['document'];
+            $students = array();
+            foreach($data['student'] as $student){
+                // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
+                array_push($students, filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true));
+            }
+
+            $data['student'] = $students;
+            $data['course']['teacher_name'] = $data['teacher']['firstname'] . $data['teacher']['lastname'];
+            unset($data['teacher']);
+            // $data['course']['notifications'] = $data['course_notification'];
+            // $data['course']['students'] = $students;
+            // foreach($data as $course){
+            //     $course['course']['material'] = $course['document'];
+            //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
+            //     $course['course']['notifications'] = $course['course_notification'];
+            //     $course['course']['students'] = $course['student'];
+            //     array_push($res, $course['course']);
+            // }
+            $this->send(200, $data);
+            
+        }
+        
+        
     }
     public function create()
     {
