@@ -5,13 +5,15 @@ import Carousel from "../../../components/Carousel/Carousel";
 import Card from "../../../components/Card/Card";
 import img from "../../../asset/eclass.png";
 import "./CourseManagement.css";
-import {HOST_URL} from '../../../config';
+import { HOST_URL } from "../../../config";
 export class CourseManagement extends Component {
   state = {
     courses: [],
+    q: "",
   };
-  
-<<<<<<< HEAD
+  findCourseHandler = (e) => {
+    this.setState({ q: e.target.value });
+  };
 
   fetch_data() {
     var myHeaders = new Headers();
@@ -25,18 +27,39 @@ export class CourseManagement extends Component {
 
     fetch(HOST_URL + "/courses", requestOptions)
       .then((response) => response.json())
-      .then((result) => this.setState({courses: result}))
+      .then((result) => this.setState({ courses: result }))
       .catch((error) => console.log("error", error));
-  	}
+  }
 
+  queryCourse = (query_field) => {
+    if(this.state.q.length === 0 )
+    {
+      return this.state.courses
+    }
+    var courses = { ...this.state }.courses;
+    var filterd_course = [];
+    courses.forEach((course, idx) => {
+      var keys = Object.keys(course);
+      
+      var q_keys = keys.filter((key) => query_field.includes(key))
+      
+      for (var i = 0; i < q_keys.length; i++) {
+        
+        if (course[q_keys[i]].indexOf(this.state.q) > 0 ) {
+          filterd_course.push(course);
+          break;
+        }
+      }
+    });
+    return filterd_course
+  };
   componentDidMount() {
     this.fetch_data();
   }
-=======
-  componentDidMount() {}
->>>>>>> 61b99ac... 'update-FE'
   render() {
-	console.log(this.state.courses);
+    const filterd_courses = this.queryCourse(['name'])
+    
+    
     return (
       <React.Fragment>
         <div className="billboard">
@@ -52,9 +75,8 @@ export class CourseManagement extends Component {
                 <input
                   type="text"
                   required
-                  onChange={(e) => {
-                    this.fieldOnChangeHandler("username", e);
-                  }}
+                  value={this.state.q}
+                  onChange={this.findCourseHandler}
                 />
                 <label>Search for courses</label>
               </div>
@@ -66,56 +88,67 @@ export class CourseManagement extends Component {
             <h1>Classes</h1>
             <Carousel
               show={5}
-              children={
-                this.state.courses.map((course)=>{
-					if (course.status === 'new'){
-						return <div><Card id={course.id} title={course.name} description={course.description} teacher={course.teacher_name} price={course.fee} img={course.img}/></div>
-					}
-				}
-					
-				)
+              children={filterd_courses.map((course) => {
+                if (course.status === "new") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+                        description={course.description}
+                        teacher={course.teacher_name}
+                        price={course.fee}
+                        img={course.img}
+                      />
+                    </div>
+                  );
                 }
+              })}
             />
           </div>
           <div className="open-course">
             <h1>In progress</h1>
-			<Carousel
+            <Carousel
               show={5}
-              children={
-                this.state.courses.map((course)=>{
-					if (course.status === 'ongoing'){
-						return <div><Card id={course.id} title={course.name} description={course.description} teacher={course.teacher_name} price={course.fee} img={course.img}/></div>
-					}
-				}
-					
-				)
+              children={this.state.courses.map((course) => {
+                if (course.status === "ongoing") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+                        description={course.description}
+                        teacher={course.teacher_name}
+                        price={course.fee}
+                        img={course.img}
+                      />
+                    </div>
+                  );
                 }
+              })}
             />
           </div>
-		  <div className="open-course">
+          <div className="open-course">
             <h1>Finished</h1>
-			<Carousel
+            <Carousel
               show={5}
-<<<<<<< HEAD
-              children={
-                this.state.courses.map((course)=>{
-					if (course.status === 'finished'){
-						return <div><Card id={course.id} title={course.name} description={course.description} teacher={course.teacher_name} price={course.fee} img={course.img}/></div>
-					}
-				}
-					
-				)
+              children={this.state.courses.map((course) => {
+                if (course.status === "finished") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+                        description={course.description}
+                        teacher={course.teacher_name}
+                        price={course.fee}
+                        img={course.img}
+                      />
+                    </div>
+                  );
                 }
+              })}
             />
-=======
-              children={[
-                
-                <div>
-                  <Card></Card>
-                </div>,
-              ]}
-            ></Carousel>
->>>>>>> 61b99ac... 'update-FE'
           </div>
 
           <Link to="/admin/manage/courses/new-course">

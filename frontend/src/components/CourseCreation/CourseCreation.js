@@ -71,11 +71,6 @@ export class CourseCreation extends Component {
 		course: raw_course, 
 		schedule: raw_sched
 		});
-		// var raw = {
-		//   course: raw_course,
-		//   schedule: raw_sched,
-		// };
-    
 		
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");  
@@ -217,7 +212,7 @@ export class CourseCreation extends Component {
         <Dropdown
             options={teacher_option}
             prompt="Choose a teacher"
-            value="Teacher"
+            
             field="name"
             value={
               this.state.teacher_option

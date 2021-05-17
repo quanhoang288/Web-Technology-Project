@@ -104,7 +104,6 @@ class App extends Component {
                 );
               }}
             />
-
             {/* teacher routes */}
             <Route
               path="/teacher"

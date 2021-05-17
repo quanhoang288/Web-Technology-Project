@@ -63,23 +63,7 @@ class UserController extends Controller {
 
     
     
-    // public function register()
-    // {
-    //     $data = json_decode(file_get_contents('php://input'), true);
-    //     $response ='Succesfully Registerd ';
-    //     try{
-            
-    //         $this->_model->register($data);
-    //         $this->response->setContent(['message'=>$response,'code'=>201]);
-    //         $this->response->sendStatus(201);
-    //     }
-    //     catch(PDOException $e)
-    //     {
-    //         $response = $e ->getMessage();
-    //         $this->response->setContent(['message'=>$response,'code'=>400]);
-    //         $this->response->sendStatus(200);
-    //     }
-    // }
+  
     public function validate()
     {        
         

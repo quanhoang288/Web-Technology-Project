@@ -31,23 +31,24 @@ export class StudentManagement extends Component {
       .catch((error) => console.log("error", error));
   }
 
-  onSubmit = () => {
+  onSubmit = (update_info) => {
+    
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    
     var requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: this.state.targetRow,
+      body: JSON.stringify(update_info),
     };
-    console.log(this.state.targetRow)
-    fetch(HOST_URL + "/users?role=student", requestOptions)
+    
+    fetch(HOST_URL + `/users/${this.state.targetRow['id']}`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => this.fetch_data())
       .catch((error) => console.log("error", error));
   };
   componentDidMount() {
     this.fetch_data();
-    
   }
   render() {
     return (
@@ -68,6 +69,7 @@ export class StudentManagement extends Component {
           closeHandler={this.toggleModal}
           onSubmit={this.onSubmit}
           info={this.state.targetRow}
+
         ></Modal>
       </div>
     );
