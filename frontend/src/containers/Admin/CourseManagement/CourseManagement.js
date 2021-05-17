@@ -44,8 +44,10 @@ export class CourseManagement extends Component {
       var q_keys = keys.filter((key) => query_field.includes(key))
       
       for (var i = 0; i < q_keys.length; i++) {
-        
-        if (course[q_keys[i]].indexOf(this.state.q) > 0 ) {
+        console.log("q keys ", course[q_keys[i]])
+        console.log('q ', this.state.q)
+        console.log(course[q_keys[i]].indexOf(this.state.q))
+        if (course[q_keys[i]].indexOf(this.state.q) >= 0 ) {
           filterd_course.push(course);
           break;
         }
@@ -57,7 +59,7 @@ export class CourseManagement extends Component {
     this.fetch_data();
   }
   render() {
-    const filterd_courses = this.queryCourse(['name'])
+    const filterd_courses = this.queryCourse(['name','subject','teacher_name'])
     
     
     return (

@@ -18,7 +18,7 @@ export class Notiboard extends Component {
     const indexOfLastPost = this.state.currentPage * this.props.rowPerPage;
     const indexOfFirstPost = indexOfLastPost - this.props.rowPerPage;
     const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
-    
+    console.log(currentRows)
     return (
       <div className="notiboard">
         
@@ -27,6 +27,7 @@ export class Notiboard extends Component {
           <hr></hr>
           {
             currentRows.map((item, idx) => {
+              console.log(item)
               return (<div className='plan-item' key={idx}>
                 <div className="datetime">
                   {item.created_at}

@@ -17,7 +17,7 @@ export class CourseCreation extends Component {
 		max: 0,
 		description: "",
 		category: "",
-		sched: [-1, -1, -1, -1, -1, -1, -1],
+		sched: [0, -1, -1, -1, -1, -1, -1],
 		img: "",
 		price: "",
 		category: "",

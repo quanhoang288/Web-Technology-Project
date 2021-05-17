@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import DataTables from "../../../components/Table/Table";
 import MOCK_DATA from "../../../components/Table/MOCK.json";
-import {HOST_URL} from "../../../config";
+import { HOST_URL } from "../../../config";
 import Modal from "../../../components/Modal/Modal";
 import "./TeacherManagement.css";
 export class TeacherManagement extends Component {
@@ -43,7 +43,10 @@ export class TeacherManagement extends Component {
 
     fetch(HOST_URL + `/users/${this.state.targetRow["id"]}`, requestOptions)
       .then((response) => response.json())
-      .then((result) => this.fetch_data())
+      .then((result) => {
+        this.fetch_data();
+        this.setState({ modalShow: false });
+      })
       .catch((error) => console.log("error", error));
   };
   componentDidMount() {
@@ -63,7 +66,7 @@ export class TeacherManagement extends Component {
 
         <div className={this.state.modalShow ? "back-drop" : null}></div>
         <Modal
-          disabled_field={["id", "role"]}
+          disabled_field={["id", "role",'active']}
           show={this.state.modalShow}
           closeHandler={this.toggleModal}
           onSubmit={this.onSubmit}

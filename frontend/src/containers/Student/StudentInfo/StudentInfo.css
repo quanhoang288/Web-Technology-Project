@@ -43,6 +43,7 @@
   .user-info .right .info,
   .user-info .right .projects{
     margin-bottom: 25px;
+    padding: 20px;
   }
   
   .user-info .right .info h3,
@@ -97,4 +98,21 @@
     color :#fff;
     display: block;
     font-size: 18px;
+  }
+  .user-info .edit-icons{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .user-info .edit-icons > *{
+    margin: 20px;
+  }
+  .user-info .edit-icons i:hover{
+    cursor: pointer;
+    
+  }
+  .user-info p{
+    height: 40px;
+    font-size: large;
   }

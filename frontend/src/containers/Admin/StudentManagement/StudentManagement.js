@@ -27,7 +27,10 @@ export class StudentManagement extends Component {
     };
     fetch(HOST_URL + "/users?role=student", requestOptions)
       .then((response) => response.json())
-      .then((result) => this.setState({ student_info: result }))
+      .then((result) => {
+        this.setState({ student_info: result })
+        this.setState({modalShow:false})
+      })
       .catch((error) => console.log("error", error));
   }
 
@@ -41,6 +44,8 @@ export class StudentManagement extends Component {
       headers: myHeaders,
       body: JSON.stringify(update_info),
     };
+    console.log(update_info)
+    console.log(JSON.stringify(update_info))
     
     fetch(HOST_URL + `/users/${this.state.targetRow['id']}`, requestOptions)
       .then((response) => response.json())
@@ -64,7 +69,7 @@ export class StudentManagement extends Component {
 
         <div className={this.state.modalShow ? "back-drop" : null}></div>
         <Modal
-          disabled_field={['id','role']}
+          disabled_field={['id','role','active']}
           show={this.state.modalShow}
           closeHandler={this.toggleModal}
           onSubmit={this.onSubmit}

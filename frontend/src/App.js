@@ -18,7 +18,6 @@ import StudentManagement from "./containers/Admin/StudentManagement/StudentManag
 import TeacherManagement from "./containers/Admin/TeacherManagement/TeacherManagement";
 import CourseManagement from "./containers/Admin/CourseManagement/CourseManagement";
 import CourseCreation from "./components/CourseCreation/CourseCreation";
-import { connect } from "react-redux";
 import CourseDetail from "./components/CourseDetail/CourseDetail";
 import StudentInfo from "./containers/Student/StudentInfo/StudentInfo";
 import StudentCourse from "./containers/Student/StudentCourse/StudentCourse";
@@ -28,7 +27,9 @@ import TeacherCourseDetail from "./containers/Teacher/TeacherCourseDetail/Teache
 import TeacherCourse from './containers/Teacher/TeacherCourse/TeacherCourse'
 import Test from "./components/Test/Test";
 import CoursePreview from './containers/Homepage/CoursePreview'
-
+//#region import
+import { connect } from "react-redux";
+//#endregion
 import "./App.css";
 class App extends Component {
   render() {
