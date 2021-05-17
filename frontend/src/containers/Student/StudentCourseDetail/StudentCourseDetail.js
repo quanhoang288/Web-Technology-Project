@@ -120,6 +120,12 @@ export class StudentCourseDetail extends Component {
                   >
                     Material
                   </button>
+                  <button
+                    className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+                    onClick={() => this.toggleTab(3)}
+                  >
+                    Mark
+                  </button>
                   
                 </div>
         
@@ -167,6 +173,16 @@ export class StudentCourseDetail extends Component {
                         </div>
                         <div className="datetime">Deadline 2020-05</div>
                       </div>
+                    </div>
+                  </div>
+                  <div //tab mark
+                    className={
+                      toggleState === 3 ? "contents  active-content" : "contents"
+                    }
+                  >
+                    <div className="mark">
+                      
+                      <p>Mark</p>
                     </div>
                   </div>
         

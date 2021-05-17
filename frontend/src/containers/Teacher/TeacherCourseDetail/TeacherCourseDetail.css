@@ -67,3 +67,17 @@
   .active-content {
     display: block;
   }
+  .assesment-container{
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    
+  }
+  
+  .assesment-container .create-exam {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    
+    padding: 20px;
+  }

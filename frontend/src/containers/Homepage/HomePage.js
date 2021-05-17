@@ -52,7 +52,7 @@ export class HomePage extends Component {
         <Notiboard data={this.state.notifications} rowPerPage={3}></Notiboard>
         <div className="featuring-courses">
           <div className="open-course">
-            <h1>Best seller</h1>
+            <h1>New course</h1>
             <Carousel
               show={5}
               children={

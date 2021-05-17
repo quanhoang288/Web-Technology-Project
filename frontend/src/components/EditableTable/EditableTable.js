@@ -2,8 +2,8 @@
 import './Table.css'
 import React, { Component } from 'react'
 import Pagination, { } from '../Pagination/Pagination'
-import InputField from '../../components/InputField/InputField'
-export class Table extends Component {
+
+export class EditableTable extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -16,7 +16,6 @@ export class Table extends Component {
     componentDidMount() {
         //init query field 
         const columns = this.props.data[0] && Object.keys(this.props.data[0])
-        // console.log(columns);
         const query_field = columns ? columns : []
         this.setState({ query_field: query_field })
     }
@@ -28,7 +27,7 @@ export class Table extends Component {
     }
     filterData = (data) => {
         const matchingIndex = []
-        
+
         data.forEach((row, idx) => {
             let flag = true
             this.state.query_field.forEach((field) => {
@@ -130,12 +129,9 @@ export class Table extends Component {
                                                     <td key={td_idx}>{row_val}</td>
                                                 )
                                                 return(
-                                                    <td key={td_idx}>
-                                                        <InputField 
+                                                    <input 
                                                         value={row_val}
-                                                    ></InputField>
-                                                    </td>
-                                                    
+                                                    ></input>
                                                 )
                                             })
                                         }
@@ -160,4 +156,4 @@ export class Table extends Component {
     }
 }
 
-export default Table
+export default EditableTable

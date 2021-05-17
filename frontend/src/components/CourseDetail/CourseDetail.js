@@ -169,7 +169,8 @@ export default function CourseDetail() {
 
         <Button> Update </Button>
       </div> */}
-
+      <div>Dropdown set class state 0-1-2-3</div>
+      <div>Kick</div>
       <div className="toggle-bar" onClick={togglePendingBar}>
         <div className="toggle-arrow">
           {show_pending_req ? (
