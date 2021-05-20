@@ -15,8 +15,8 @@ export class Table extends Component {
     paginate = pageNumber => this.setState({ currentPage: pageNumber })
     componentDidMount() {
         //init query field 
-        const columns = this.props.data[0] && Object.keys(this.props.data[0])
-        // console.log(columns);
+        // console.log(this.props.data);
+        const columns = this.props.data[0] && Object.keys(this.props.data[0]);
         const query_field = columns ? columns : []
         this.setState({ query_field: query_field })
     }

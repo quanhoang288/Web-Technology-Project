@@ -12,17 +12,13 @@ class System_notificationController extends Controller {
 
     public function get_all($params = null)
     {
-        $data = parent::get_all();
-        
-        if ($data){
-            $res = array();
-            foreach($data as $noti){
-                array_push($res, $noti['system_notification']);
-            }
-            $this->send(200, $res);
+        $this->_model->orderBy('created_at', 'DESC');
+        $data = $this->_model->search();
+        $res = array();
+        foreach($data as $noti){
+            array_push($res, $noti['system_notification']);
         }
-        else 
-            $this->response->setHeader(400);
+        $this->send(200, $res);
     }
 
     

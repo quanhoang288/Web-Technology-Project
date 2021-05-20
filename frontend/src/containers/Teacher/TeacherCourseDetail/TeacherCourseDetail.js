@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import ExamAssesmentModal from '../../../components/ExamAssesmentModal/ExamAssesmentModal'
 import Backdrop from '../../../components/Backdrop/Backdrop'
+import { HOST_URL } from "../../../config";
 export class TeacherCourseDetail extends Component {
   state = {
     id: this.props.match.params.id,
@@ -15,6 +16,7 @@ export class TeacherCourseDetail extends Component {
     class_notification_list: [],
     class_material: "",
     class_material_list: [],
+    class_exam_list: [],
     student_list: [],
     input_modal_show:false,
     target_exam:null,
@@ -31,9 +33,47 @@ export class TeacherCourseDetail extends Component {
   toggleTab = (index) => {
     this.setState({ toogleState: index });
   };
-  fetch_data = () => {};
+  fetch_data = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+ 
+    fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+          // console.log(result);
+          
+          const class_notification_list =  result.notifications;
+          const class_material_list = result.material;
+          const class_exam_list = result.exams;
+          const student_list = result.students;
+          // console.log(class_notification_list);
+          // console.log(class_material_list);
+          // console.log(class_exam_list);
+          // console.log(student_list);
+          this.setState({class_notification_list: class_notification_list});
+          this.setState({class_material_list: class_material_list});
+          this.setState({student_list: student_list});
+          this.setState({class_exam_list: class_exam_list});
+        })
+      .catch((error) => console.log("error", error));
+  };
+  componentDidMount(){
+    this.fetch_data();
+  }
   render() {
     let toggleState = this.state.toogleState;
+    const class_notification_list =  this.state.class_notification_list;
+    const class_material_list = this.state.class_material_list;
+    const class_exam_list = this.state.class_exam_list;
+    const student_list = this.state.student_list;
+    // console.log(class_notification_list);
+    // console.log(class_material_list);
+    // console.log(class_exam_list);
+    // console.log(student_list);
 
     return (
       <div>
@@ -78,7 +118,18 @@ export class TeacherCourseDetail extends Component {
               }
             ></InputField>
 
-            <div className="plan-item">
+            {
+              class_notification_list.map(noti => 
+                <div className="plan-item">
+                <div className="datetime">{noti.create_at}</div>
+                <div className="content">
+                    <p>{noti.content}</p>
+                </div>
+              </div>
+              )
+            }
+
+            {/* <div className="plan-item">
               <div className="datetime">2020-05</div>
               <div className="content">
                 <Link to="#">
@@ -95,7 +146,7 @@ export class TeacherCourseDetail extends Component {
                 </Link>
               </div>
               <i class="fas fa-edit"></i>
-            </div>
+            </div> */}
           </div>
 
           <div //tab material
@@ -123,7 +174,10 @@ export class TeacherCourseDetail extends Component {
               toggleState === 3 ? "contents  active-content" : "contents"
             }
           >
-            <Table rowPerPage={5} data={this.state.student_list}></Table>
+            {student_list.length > 0 ? <Table 
+            rowPerPage={Math.min(5, student_list.length)} 
+            data={student_list}></Table> : ''
+            }
           </div>
 
           <div //assesment

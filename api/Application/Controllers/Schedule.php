@@ -22,7 +22,19 @@ class ScheduleController extends Controller{
             else if (isset($params['course_id'])){
                 $course_id = $params['course_id'];
                 $this->_model->where('course_id', $course_id);
+                $this->_model->showHasOne();
                 $result = $this->_model->search();
+
+                $result = array_map(function($schedule_item){
+                    $res = array();
+                    $course_name = $schedule_item['course']['name'];
+                    $res['name'] = $course_name;
+                    $res['weekday_id'] = $schedule_item['schedule']['weekday_id'];
+                    $res['time_id'] = $schedule_item['schedule']['time_id'];
+
+                    return $res;
+                }, $result);
+               
             }
             else if (isset($params['user_id']) && isset($params['role'])){
                 $result = $this->_model->get_all($params['user_id'], $params['role']);

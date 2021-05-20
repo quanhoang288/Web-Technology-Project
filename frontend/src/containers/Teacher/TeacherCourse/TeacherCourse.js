@@ -3,29 +3,34 @@ import Card from '../../../components/Card/Card'
 import Carousel from '../../../components/Carousel/Carousel'
 import img from '../../../asset/eclass.png'
 import {Link } from 'react-router-dom'
+import {HOST_URL} from '../../../config'
+import { connect } from 'react-redux';
 export class TeacherCourse extends Component {
   state = {
     courses: [],
   };
-  //   fetch_data() {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append("Content-Type", "application/json");
+    fetch_data() {
+      const id = this.props.user.id;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
 
-  //     var requestOptions = {
-  //       method: "POST",
-  //       headers: myHeaders,
-  //       body: raw,
-  //       redirect: "follow",
-  //     };
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
 
-  //     fetch("http://localhost/webproject/api/users?role=student", requestOptions)
-  //       .then((response) => response.text())
-  //       .then((result) => console.log(result))
-  //       .catch((error) => console.log("error", error));
-  //   }
+      fetch(`${HOST_URL}/courses?user_id=${id}&role=teacher`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => this.setState({courses: result}))
+        .catch((error) => console.log("error", error));
+    }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.fetch_data();
+  }
   render() {
+    const courses = this.state.courses;
     return (
       <React.Fragment>
         <div className="billboard">
@@ -52,91 +57,62 @@ export class TeacherCourse extends Component {
         </div>
         <div className="courses-section">
           <div className="open-course">
-            <h1>New</h1>
+            <h1>New Assigned</h1>
             <Carousel
               show={5}
-              children={[
-                <div>
-                  <Card id={5}></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-              ]}
-            ></Carousel>
+              children={courses.map((course) => {
+                if (course.status === "new") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+                        img={course.img}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            />
           </div>
           <div className="open-course">
-            <h1>On-going</h1>
+            <h1>In progress</h1>
             <Carousel
               show={5}
-              children={[
-                <div>
-                  <Card id={5}></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-              ]}
-            ></Carousel>
+              children={courses.map((course) => {
+                if (course.status === "ongoing") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+
+                        img={course.img}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            />
           </div>
           <div className="open-course">
-            <h1>Ended</h1>
+            <h1>Finished</h1>
             <Carousel
               show={5}
-              children={[
-                <div>
-                  <Card id={5}></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-                <div>
-                  <Card></Card>
-                </div>,
-              ]}
-            ></Carousel>
+              children={courses.map((course) => {
+                if (course.status === "finished") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+                        img={course.img}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            />
           </div>
           
 
@@ -147,4 +123,12 @@ export class TeacherCourse extends Component {
   }
 }
 
-export default TeacherCourse;
+const mapState = (state) => {
+  return (
+      {
+          user: state.authReducer.user
+      }
+  )
+}
+export default connect(mapState, null)(TeacherCourse);
+

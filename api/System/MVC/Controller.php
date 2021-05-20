@@ -1,10 +1,6 @@
 <?php
 
-/**
- *
- * This file is part of mvc-rest-api for PHP.
- *
- */
+
 namespace MVC;
 use \Exception as Exception;
 use PDOException;
@@ -40,8 +36,8 @@ class Controller {
                 }
             }
             $data = $this->_model->search();
-            return $data;
-            // $this->send(200, $data);
+            // return $data;
+            $this->send(200, $data);
             // if (count($data))
             //     $this->send(200, $data);
             // else 

@@ -432,12 +432,7 @@ class Model {
 		$this->_order = null;
 	}
 
-    // public function all(){
-    //     $stmt = $this->db->prepare('select * from '.$this->_table);
-    //     $stmt->execute();
-    //     return json_encode($stmt->fetchAll(\PDO::FETCH_NAMED));
 
-    // }
    
 
 

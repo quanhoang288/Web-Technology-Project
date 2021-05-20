@@ -1,10 +1,6 @@
 <?php
 
-/**
- *
- * This file is part of mvc-rest-api for PHP.
- *
- */
+
 namespace Router;
 
 

@@ -70,16 +70,20 @@ export class Schedule extends Component {
     render() {
       
         const schedule = this.state.schedule;
-        console.log(schedule);
-        return (
-            <div>
-                <Table
-                    rowPerPage={schedule.length}
-                    data={schedule}
-                  
-                ></Table>
-            </div>
-        )
+        // console.log(schedule);
+        if (schedule.length > 0){
+          return (
+              <div>
+                  <Table
+                      rowPerPage={schedule.length}
+                      data={schedule}
+                    
+                  ></Table>
+              </div>
+
+          )
+        }
+        return null;
     }
 }
 

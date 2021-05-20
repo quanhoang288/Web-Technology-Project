@@ -14,6 +14,7 @@ class EnrollModel extends Model{
 
 
     public function create($student_id, $course_id){
+
         $query = 'INSERT INTO ' . $this->_table . ' (student_id, course_id) VALUES (?, ?)';
         $stmt = $this->_db->prepare($query);
         return $stmt->execute([$student_id, $course_id]);

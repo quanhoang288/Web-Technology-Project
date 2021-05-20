@@ -22,8 +22,12 @@ class CourseController extends Controller {
                 if ($role == 'teacher'){
                     $this->_model->where('teacher_id', $user_id);
                     $data = $this->_model->search();
-                    foreach($data as $course)
-                        array_push($res, $course['course']);
+                    foreach($data as $course_info){
+                        $img = $course_info['course']['img'];
+                        $course_info['course']['img'] = img_to_base64($img);
+                        array_push($res, $course_info['course']);
+                    }
+                        
                 }
                 else {
                     $this->_model->showHMABTM();
@@ -44,17 +48,15 @@ class CourseController extends Controller {
                         if (is_int($idx)){
                             // echo "found" . PHP_EOL;
                             $status = $course_info['student'][$idx]['course_student']['status'];
-                            if ($status == '2' && $course_info['course']['status'] == 'new'){
-                                unset($course_info['student']);
-                                array_push($res, $course_info['course']);
-                            }
+                            unset($course_info['student']);
+                            array_push($res, $course_info['course']);
+                            // if ($status == '2' && $course_info['course']['status'] == 'ongoing'){
+                            //     unset($course_info['student']);
+                            //     array_push($res, $course_info['course']);
+                            // }
                         }
 
-                        // if (in_array($user_id, $students)){
-                        //     unset($course_info['student']);
-                        //     array_push($res, $course_info);
-                        // }
-                            
+
                         
                     }
                     
@@ -120,54 +122,59 @@ class CourseController extends Controller {
         $this->_model->showHasMany();
         $this->_model->showHMABTM();
         $data = $this->_model->search();
-      
-
-        $status = $data['course']['status'];
-        // $res = array();
-
-        if ($status == 'new'){
-            $data['course']['teacher_name'] = $data['teacher']['name'];
-            // foreach($data as $course){
-            //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
-            //     array_push($res, $course['course']);
+        
+        if (count($data)){
+            $status = $data['course']['status'];
+            // $res = array();
+    
+            // if ($status == 'new'){
+            //     $data['course']['teacher_name'] = $data['teacher']['name'];
+            //     // foreach($data as $course){
+            //     //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
+            //     //     array_push($res, $course['course']);
+            //     // }
+            //     $students = array();
+            //     foreach($data['student'] as $student){
+            //         // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
+            //         array_push($students, ['student'=> filter($student, ['username', 'password', 'subject', 'role', 'active', 'course_student'], true), 'status' => $student['course_student']['status']]);
+            //     }
+            //     $data['course']['students'] = $students; 
+                
+    
             // }
-            $students = array();
-            foreach($data['student'] as $student){
-                // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
-                array_push($students, ['student'=> filter($student, ['username', 'password', 'subject', 'role', 'active', 'course_student'], true), 'status' => $student['course_student']['status']]);
-            }
-            $data['course']['students'] = $students; 
-            
-
+            // else{
+                // $data['course']['material'] = $data['document'];
+                $students = array();
+                foreach($data['student'] as $student){
+                    // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
+                    array_push($students, filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true));
+                }
+    
+                $data['student'] = $students;
+                $data['course']['teacher_name'] = $data['teacher']['name'];
+                // unset($data['teacher']);
+                $data['course']['notifications'] = $data['course_notification'];
+                $data['course']['material'] = $data['document'];
+                $data['course']['exams'] = $data['exam'];
+                $data['course']['students'] = $students;
+                // foreach($data as $course){
+                //     $course['course']['material'] = $course['document'];
+                //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
+                //     $course['course']['notifications'] = $course['course_notification'];
+                //     $course['course']['students'] = $course['student'];
+                //     array_push($res, $course['course']);
+                // }
+                // $this->send(200, $data);
+                
+            // }
+            $img = $data['course']['img'];
+            $data['course']['img'] = img_to_base64($img);
+            $this->send(200, $data['course']);
         }
         else{
-            // $data['course']['material'] = $data['document'];
-            $students = array();
-            foreach($data['student'] as $student){
-                // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
-                array_push($students, filter($student, ['username', 'password', 'subject', 'role'], true));
-            }
-
-            $data['student'] = $students;
-            $data['course']['teacher_name'] = $data['teacher']['name'];
-            // unset($data['teacher']);
-            $data['course']['notifications'] = $data['course_notification'];
-            $data['course']['material'] = $data['document'];
-            $data['course']['exam'] = $data['exam'];
-            $data['course']['students'] = $students;
-            // foreach($data as $course){
-            //     $course['course']['material'] = $course['document'];
-            //     $course['course']['teacher_name'] = $course['teacher']['firstname'] + $course['teacher']['lastname'];
-            //     $course['course']['notifications'] = $course['course_notification'];
-            //     $course['course']['students'] = $course['student'];
-            //     array_push($res, $course['course']);
-            // }
-            // $this->send(200, $data);
-            
+            $this->send(404, ['error'=> 'Not found']);
         }
-        $img = $data['course']['img'];
-        $data['course']['img'] = img_to_base64($img);
-        $this->send(200, $data['course']);
+       
         
         
     }

@@ -23,7 +23,7 @@ export class HomePage extends Component {
       .then((response) => response.json())
       .then((result) => this.setState({notifications:result}))
       .catch((error) => console.log("error", error));
-    
+
     fetch(`${HOST_URL}/courses?status=new`, requestOptions)
       .then((response) => response.json())
       .then((result) => this.setState({courses:result}))

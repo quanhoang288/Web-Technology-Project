@@ -14,7 +14,12 @@ export class Dashboard extends Component {
     var slug = 'system_notifications'
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({ content: this.ref.current.value,created_at:(new Date()).toISOString().split('T')[0] });
+    const time_created = (new Date()).toISOString();
+    const date = time_created.split('T')[0];
+    // console.log(time_created);
+    const time = time_created.split('T')[1].split('.')[0]
+    // const time = time_created.split['T'][1].split('.')[0];
+    var raw = JSON.stringify({ content: this.ref.current.value,created_at: date + ' ' + time});
     console.log(raw)
     var requestOptions = {
       method: "POST",

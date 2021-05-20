@@ -15,10 +15,11 @@ class Course_notificationController extends Controller {
         if ($params && isset($params['course_id'])){
         
             $course_id = $params['course_id'];
-
+            $this->_model->orderBy('create_at');
             $this->_model->where('course_id', $course_id);
             $this->_model->showHasOne();
             $result = $this->_model->search();
+
             if (!count($result)){
                 $this->send(404, ['response'=>'No course found']);
             }

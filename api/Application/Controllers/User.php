@@ -24,24 +24,25 @@ class UserController extends Controller {
                     
                 }
                 $data = $this->_model->search();
+                if ($data){
+                    $res = array();
+                    
+                    foreach($data as $user){
+                        // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
+                        array_push($res, filter($user['user'], ['username', 'password'], true));
+                    }
+        
+                    $this->send(200, $res);
+                }
+                else 
+                    $this->send(400, ['error'=>'Bad request']);
             }
             catch(PDOException $e){
                 $this->send(400, ['error'=>'Bad request']);
             }
 
         }
-        if ($data){
-            $res = array();
 
-            foreach($data as $user){
-                // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
-                array_push($res, filter($user['user'], ['username', 'password'], true));
-            }
-
-            $this->send(200, $res);
-        }
-        else 
-            $this->send(400, ['error'=>'Bad request']);
     }
 
     

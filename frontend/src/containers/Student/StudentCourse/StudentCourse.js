@@ -35,37 +35,76 @@ export class StudentCourse extends Component {
             <Button>Enrol a new course</Button>
           </Link>
         </div>
-        <div className="courses">
+        
+        {/* <div className="courses">
           {
             courses.map((course) => 
               <Card id={course.id} title={course.name} teacher={course.teacher_name} img={course.img}></Card>
             )
           }
-          {/* <div>
-            <Card id={1}></Card>
+        </div> */}
+        <div className="courses-section">
+          <div className="open-course">
+            <h1>Registering</h1>
+            <Carousel
+              show={5}
+              children={courses.map((course) => {
+                if (course.status === "new") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+                        img={course.img}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            />
           </div>
-          <div>
-            <Card></Card>
-          </div>
+          <div className="open-course">
+            <h1>In progress</h1>
+            <Carousel
+              show={5}
+              children={courses.map((course) => {
+                if (course.status === "ongoing") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
 
-          <div>
-            <Card></Card>
+                        img={course.img}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            />
           </div>
-          <div>
-            <Card></Card>
+          <div className="open-course">
+            <h1>Finished</h1>
+            <Carousel
+              show={5}
+              children={courses.map((course) => {
+                if (course.status === "finished") {
+                  return (
+                    <div>
+                      <Card
+                        id={course.id}
+                        title={course.name}
+                        img={course.img}
+                      />
+                    </div>
+                  );
+                }
+              })}
+            />
           </div>
-          <div>
-            <Card></Card>
-          </div>
-          <div>
-            <Card></Card>
-          </div>
-          <div>
-            <Card></Card>
-          </div>
-          <div>
-            <Card></Card>
-          </div> */}
+          
+
+          
         </div>
       </div>
     );

@@ -14,6 +14,7 @@ export class StudentCourseDetail extends Component {
 	  enrolled : 0,  // 0 - not ; 1 - pending ; 2 -enrolled
     class_info : null,
     toogleState: 1,
+    schedule: [],
     class_notification_list: [],
     class_material_list: [],
 	class_student_list: []
@@ -21,6 +22,41 @@ export class StudentCourseDetail extends Component {
   toggleTab = (index) => {
     this.setState({ toogleState: index });
   };
+  int_to_time = (schedule_item) => {
+    const weekday = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ];
+      const shift_option = [
+        {
+          id: 0,
+          duration: "6h-9h",
+        },
+        {
+          id: 1,
+          duration: "9h-12h",
+        },
+        {
+          id: 2,
+          duration: "12h-15h",
+        },
+        {
+          id: 3,
+          duration: "15h-18h",
+        },
+      ];
+    
+    var res = {};
+    res['weekday'] = weekday[schedule_item.weekday_id - 2];
+    res['time'] = shift_option[schedule_item.time_id].duration;
+    return res;
+
+  }
   fetch_data = () => {
     // api call
 	// console.log(this.props.user.id);
@@ -33,11 +69,19 @@ export class StudentCourseDetail extends Component {
       headers: myHeaders,
     };
     fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-        this.setState({class_info: result});
-    })
-    .catch((error) => console.log("error", error)); 
+      .then((response) => response.json())
+      .then((result) => {
+          this.setState({class_info: result});
+      })
+      .catch((error) => console.log("error", error)); 
+    
+    fetch(`${HOST_URL}/schedule?course_id=${this.state.id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+          
+          this.setState({schedule: result});
+      })
+      .catch((error) => console.log("error", error)); 
 
     fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
       .then((response) => response.json())
@@ -45,7 +89,7 @@ export class StudentCourseDetail extends Component {
         if (result.length > 0){
           	this.setState({enrolled:  parseInt(result[0]['status'])});
         }
-		})
+		  })
       .catch((error) => console.log("error", error)); 
 
 
@@ -59,34 +103,63 @@ export class StudentCourseDetail extends Component {
 		let enrolled = this.state.enrolled;
 		const course_id = this.state.class_info['id'];
 		const user_id = this.props.user['id'];
+    const course_schedule = this.state.schedule.map(item => (JSON.stringify({weekday_id: item.weekday_id, time_id: item.time_id})));
+    var conflict = false;
 		var myHeaders = new Headers();
-
 		myHeaders.append("Content-Type", "application/json");
-		if (enrolled === 0){
-			const raw = JSON.stringify({
-				student_id: user_id, course_id: course_id
-			});
-			console.log(raw);
-			var requestOptions = {
-				method: "POST",
-				headers: myHeaders,
-				body: raw,
-				redirect: 'follow',
-			  };
-			  fetch(`${HOST_URL}/enroll`, requestOptions)
-			  .then((response) => this.setState({enrolled:  1}))
-			  .catch((error) => console.log("error", error));   
-		}
-		else {
-			var requestOptions = {
-				method: "DELETE",
-				headers: myHeaders,
-				redirect: 'follow',
-			  };
-			  fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
-			  .then((response) => this.setState({enrolled:  0}))
-			  .catch((error) => console.log("error", error)); 
-		}
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: 'follow',
+      };
+      fetch(`${HOST_URL}/schedule?user_id=${user_id}&role=student`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        const mapped_result = result.map(item => (JSON.stringify({weekday_id: item.weekday_id, time_id: item.time_id})));
+        // console.log(mapped_result);
+        // console.log(course_schedule);
+        // console.log(mapped_result[2])
+        // console.log(course_schedule[1])
+        // console.log(JSON.stringify(mapped_result[2]) == JSON.stringify(course_schedule[1]))
+        const intersect = mapped_result.filter(schedule_item => course_schedule.includes(schedule_item));
+        // console.log(intersect);
+        if (intersect.length === 0){
+          if (enrolled === 0){
+            const raw = JSON.stringify({
+              student_id: user_id, course_id: course_id
+            });
+            // console.log(raw);
+            var requestOptions = {
+              method: "POST",
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow',
+              };
+              fetch(`${HOST_URL}/enroll`, requestOptions)
+              .then((response) => this.setState({enrolled:  1}))
+              .catch((error) => console.log("error", error));   
+          }
+          else {
+            var requestOptions = {
+              method: "DELETE",
+              headers: myHeaders,
+              redirect: 'follow',
+              };
+              fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
+              .then((response) => this.setState({enrolled:  0}))
+              .catch((error) => console.log("error", error)); 
+          }
+        }
+        else{
+          alert("Schedule conflict!");
+        }
+      })
+      .catch((error) => console.log("error", error));  
+
+      
+    
+
+		
 
 		
   	}
@@ -97,16 +170,21 @@ export class StudentCourseDetail extends Component {
   render() {
     const toggleState = this.state.toogleState;
     const enrolled = this.state.enrolled;
-	
+    const schedule = this.state.schedule.map((schedule_item) => this.int_to_time(schedule_item));
+
     if(this.state.class_info)
     {
-      const class_info = this.state.class_info
-      if(enrolled === 2 )
+      const class_info = this.state.class_info;
+      const exams =  class_info.exam;
+      const notifications = class_info.notifications;
+      const material = class_info.material;
+      // console.log(class_info);
+      if(enrolled === 2 && class_info.status === 'ongoing')
       {
           return (
-          
+              
               <div>
-                  
+                
                 <div className="bloc-tabs">
                   <button
                     className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
@@ -135,26 +213,21 @@ export class StudentCourseDetail extends Component {
                       toggleState === 1 ? "contents  active-content" : "contents"
                     }
                   >
+                    {
+                      notifications.map((noti) => 
+                        <div className="plan-item">
+                          <div className="datetime">{noti.create_at}</div>
+                            <div className="content">
+                                <p>{noti.content}</p>
+                              
+                            </div>
+                        
+                        </div>
+                      )
+                    }
                     
         
-                    <div className="plan-item">
-                      <div className="datetime">2020-05</div>
-                      <div className="content">
-                        <Link to="#">
-                          <p>HJjhdgasjhdjhgsajhgdjh</p>
-                        </Link>
-                      </div>
-                      
-                    </div>
-                    <div className="plan-item">
-                      <div className="datetime">2020-05</div>
-                      <div className="content">
-                        <Link to="#">
-                          <p>De bai 1 : mieu ta 1 con cho</p>
-                        </Link>
-                      </div>
-                      <i class="fas fa-edit"></i>
-                    </div>
+    
                   </div>
         
                   <div //tab material
@@ -198,14 +271,19 @@ export class StudentCourseDetail extends Component {
           <>
            <div className="scd_overview"> 
             <h1> {class_info.name} </h1>
-            <p style={{"width":"50%","fontSize":"2em"}}>{class_info.description}</p>
-            
-                  <h2>{class_info.teacher_name}</h2>
-                 </div>
+            <p style={{"width":"50%","fontSize":"2em"}}>{class_info.description}</p> 
+            <h2>Teacher: {class_info.teacher_name}</h2>
+            <h2>Schedule</h2>
+            <ul>
+              {schedule.length > 0 ? schedule.map((item)=><p>{item.weekday} - {item.time}</p>) : ''}
+            </ul>
+            </div>
           <div className='scd_enrol'> 
             <img src={class_info.img}></img>
             <h1>{class_info.fee}</h1>
-            {enrolled === 0 ? <Button onClick={this.handleEnrollRequest}>Enrol</Button> : <Button onClick={this.handleEnrollRequest}>Pending</Button>}
+            {enrolled === 0 ? <Button onClick={this.handleEnrollRequest}>Enrol</Button> :
+             enrolled === 3 ? <Button>Unavailable</Button> :
+             <Button onClick={this.handleEnrollRequest}>Pending</Button>}
           </div>
           </> : ''
         }
