@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Student-information>
+  <name type ="string">Nguyen Van A </name>
+  <birthday type = "date-time"> 01/10/2000 </birthday>
+  <age type = "int">20 </age>
+  <school type = "college">
+    <school_name type="string">Ha Noi University of Science and Technology </school_name>
+    <location>
+      <city type="string">Ha Noi</city>
+      <street type="string">Dai Co Viet</street>
+      <number type = "int">1</number>
+    </location>
+  </school>
+</Student-information>
