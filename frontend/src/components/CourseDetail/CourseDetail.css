@@ -112,3 +112,7 @@
 .course_detail:hover{
   cursor: pointer;
 }
+.course_state{
+  display: flex;
+  align-items: center;
+}

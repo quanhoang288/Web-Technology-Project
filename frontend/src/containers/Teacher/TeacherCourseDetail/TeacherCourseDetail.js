@@ -20,6 +20,7 @@ export class TeacherCourseDetail extends Component {
     student_list: [],
     input_modal_show:false,
     target_exam:null,
+    mark_input_data : null
   };
 
   examAssesHandler = (target_row)=> {
@@ -29,6 +30,7 @@ export class TeacherCourseDetail extends Component {
   examAssesCancelHandler = ()=> {
     this.setState({input_modal_show:false})
     this.setState({target_exam:null})
+    this.setState({mark_input_data:null})
   }
   toggleTab = (index) => {
     this.setState({ toogleState: index });
@@ -198,12 +200,20 @@ export class TeacherCourseDetail extends Component {
                 
                 >
                   <div>
-                  <Table data={
-                    [{'Name':"NguyenDucThang","Mark":"9.5"},{'Name':"QuanHoang","Mark":"6.9"}]
-                  } rowPerPage={5}
-                  editable={true}
-                  rowClick={(target_row)=> {this.examAssesHandler(target_row)}}
-                ></Table>
+                    {
+                      this.state.input_modal_show ? 
+                      <Table data={
+                        [{id:"1",'Name':"NguyenDucThang","Mark":"9.5"},{id:"2",'Name':"QuanHoang","Mark":"6.9"}]
+
+                      } rowPerPage={5}
+                      editable={true}
+                      enabledEditField ={"Mark"}
+                      onEdit = {(updatedMarkData) => {this.setState({mark_input_data:updatedMarkData})}} // danh sach diem update
+                      rowClick={(target_row)=> {this.examAssesHandler(target_row)}}
+                    ></Table>
+                    : null
+                    }
+                  
                   </div>
                 </ExamAssesmentModal>
                 <div>

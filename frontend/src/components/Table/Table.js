@@ -10,15 +10,18 @@ export class Table extends Component {
             query: '',
             query_field: [],
             currentPage: 1,
+            edit_row : null
         }
     }
     paginate = pageNumber => this.setState({ currentPage: pageNumber })
+   
     componentDidMount() {
         //init query field 
         // console.log(this.props.data);
         const columns = this.props.data[0] && Object.keys(this.props.data[0]);
         const query_field = columns ? columns : []
         this.setState({ query_field: query_field })
+        
     }
 
 
@@ -43,7 +46,20 @@ export class Table extends Component {
         return this.props.data.filter((_, idx) => {
             return matchingIndex.indexOf(idx) !== -1
         })
-
+    }
+    
+    enabledEditField = (field) =>
+    {
+        
+        if(!this.props.enabledEditField)
+        {
+            return true
+        }
+        if(this.props.enabledEditField.includes(field))
+        {
+            return false
+        }
+        return true
     }
     render() {
         const columns = this.props.data[0] && Object.keys(this.props.data[0])
@@ -120,20 +136,39 @@ export class Table extends Component {
                     <tbody>
                         {currentRows[0] ?
                             currentRows.map((row, idx) => {
+                                
                                 let row_values = Object.values(row)
                                 return (
                                     <tr key={idx} onClick={() => { this.props.rowClick ? this.props.rowClick(row) :console.log("Row click not implemented") }}>
                                         {
                                             row_values.map((row_val, td_idx) => {
+                                                
                                                 if(!this.props.editable)
-                                                return (
-                                                    <td key={td_idx}>{row_val}</td>
-                                                )
+                                                {
+                                                    return (
+                                                        <td key={td_idx}>{row_val}</td>
+                                                    )
+                                                }
+                                                
                                                 return(
                                                     <td key={td_idx}>
-                                                        <InputField 
+                                                        <InputField
+                                                        disabled = {
+                                                            this.enabledEditField(columns[td_idx])
+                                                        }
                                                         value={row_val}
-                                                    ></InputField>
+                                                        onChange = {(_,value) => {
+                                                            
+                                                            // const newRow = {...row}
+                                                        
+                                                            row[Object.keys(row)[td_idx]] = value
+                                                            this.props.onEdit(currentRows)
+                                                            
+                                                            
+                                                            
+
+                                                        }}
+                                                        ></InputField>
                                                     </td>
                                                     
                                                 )

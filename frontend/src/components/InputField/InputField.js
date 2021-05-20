@@ -21,6 +21,7 @@ export class InputField extends Component {
         <input
           type={this.props.type}
           required
+          disabled={this.props.disabled}
           
           value={this.state.input}
           onChange={(e) => {

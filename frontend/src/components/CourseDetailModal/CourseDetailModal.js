@@ -19,8 +19,8 @@ export const CourseDetailModal = (props) => {
           {props.children}
     </div>
         <div className="modal-footer">
-          <button onClick={props.rejectHandler} className="btn-cancel">Reject</button>
-          <button onClick={props.approveHandler} className="btn-cancel">Approve</button>
+          <button onClick={props.leftButtonHandler} className="btn-cancel">{props.leftlabel}</button>
+          <button onClick={props.rightButtonHandler} className="btn-cancel">{props.rightlabel}</button>
         </div>
       </div>
     </div>
