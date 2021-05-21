@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import StudentTable from "../../components/Table/Table";
-import MOCKDATA from "../../components/Table/MOCK.json";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/Button/Button";
 import CourseDetailModal from "../../components/CourseDetailModal/CourseDetailModal";
@@ -10,13 +9,8 @@ import { HOST_URL } from "../../config";
 import "./CourseDetail.css";
 export default function CourseDetail() {
   let { id } = useParams(); // id cua lop hoc lay o day nay`
-  // const [teacher, setTeacher] = useState(null);
-  // const [detail, setDetail] = useState({
-  //   id: 1,
-  //   title: "title",
-  //   description: "Course Description",
-  // });
 
+  const [courseState, setCourseState] = useState(0)
   const [pending_request, setPendingRequest] = useState([]);
   const [students, setStudents] = useState([]);
   const [show_pending_req, setShowPen] = useState(false);
@@ -33,11 +27,13 @@ export default function CourseDetail() {
     setShowStudentModal(!show_student_modal);
     setTargetStudent({});
   };
+  const updateCourseState = () => {
+    const newEnrolState = courseState['id']
+    // api call PUT method
+
+  }
 
   const fetchData = (id) => {
-    console.log("get course data from DB");
-    console.log(id);
-    
     // api call pending request
     var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");  
@@ -46,7 +42,7 @@ export default function CourseDetail() {
 		headers: myHeaders,
 		redirect: "follow",
 		};
-    // console.log(`${HOST_URL}/courses/${id}`);
+    
 		fetch(`${HOST_URL}/courses/${id}`, requestOptions)
 		.then((response) => response.json())
 		.then((result) => {
@@ -54,14 +50,14 @@ export default function CourseDetail() {
       const student_list = result.students
 
       let pending_list = student_list.filter(student => student.status === '1');
+      console.log(pending_list)
       let accepted_list = student_list.filter(student => student.status === '2');
       pending_list = pending_list.map(student => student.student);
       accepted_list = accepted_list.map(student => student.student);
-      // console.log(pending_list);
-      // console.log(accepted_list);
+   
       setPendingRequest(pending_list);
       setStudents(accepted_list);
-      // console.log(result);
+      
     })
 		.catch((error) => console.log("error", error));
 
@@ -79,6 +75,19 @@ export default function CourseDetail() {
     
     
   };
+  const rowClickKick = (target_row) => {
+    toggleStudentModal();
+    setTargetStudent(target_row);
+  }
+
+  const kickStudentHandler = () => {
+    const sid = target_row_student['id'] //id of student
+    const cid = id // id of course
+    // api put kick
+    console.log(`kick ${sid} in ${cid}`)
+  }
+
+
   const rejectHandler = () => {
     // api call 
     
@@ -142,8 +151,7 @@ export default function CourseDetail() {
   useEffect(() => {
     fetchData(id);
   }, []);
-  // console.log(pending_request);
-  // console.log(students);
+
   return (
     <div className="course_detail">
       {/* <div className="course-general-info">
@@ -169,8 +177,27 @@ export default function CourseDetail() {
 
         <Button> Update </Button>
       </div> */}
-      <div>Dropdown set class state 0-1-2-3</div>
-      <div>Kick</div>
+      <div className="course_state">
+        <h1>Set course state</h1>
+        <Dropdown
+          prompt="Set course state"
+          options={[
+            { id: 1, state: "On-going" },
+            { id: 2, state: "Closed" },
+          ]}
+          field="state"
+          value={courseState ? courseState["state"] : null}
+          onChange={(option) => {
+            if (option) {
+              setCourseState(option);
+            } else {
+              setCourseState(null);
+            }
+          }}
+        ></Dropdown>
+        <Button onClick={updateCourseState}> Update </Button>
+      </div>
+      
       <div className="toggle-bar" onClick={togglePendingBar}>
         <div className="toggle-arrow">
           {show_pending_req ? (
@@ -184,7 +211,11 @@ export default function CourseDetail() {
       </div>
       {show_pending_req ? (
         <div className="pending">
-          <StudentTable rowPerPage={Math.min(6, pending_request.length)} data={pending_request} rowClick={rowClickPending}></StudentTable>
+          <StudentTable
+            rowPerPage={Math.min(6, pending_request.length)}
+            data={pending_request}
+            rowClick={rowClickPending}
+          ></StudentTable>
         </div>
       ) : null}
       <div className="toggle-bar" onClick={toogleStudentBar}>
@@ -200,36 +231,79 @@ export default function CourseDetail() {
       </div>
       {show_student ? (
         <div className="pending">
-          <StudentTable rowPerPage={Math.min(6, students.length)} data={students} ></StudentTable>
+          <StudentTable
+            rowPerPage={Math.min(6, students.length)}
+            data={students}
+            rowClick={rowClickKick}
+          ></StudentTable>
         </div>
       ) : null}
-      <div className={show_pending_modal ? "back-drop" : null}></div>
-
-
+      <div
+        className={
+          show_pending_modal || show_student_modal ? "back-drop" : null
+        }
+      ></div>
 
       <CourseDetailModal
         show={show_pending_modal}
         closeHandler={togglePendingModal}
-        rejectHandler = {rejectHandler}
-        approveHandler = {approveHandler}
-        
+        leftButtonHandler={rejectHandler}
+        leftlabel = 'Reject'
+        rightButtonHandler={approveHandler}
+        rightlabel = 'Approve'
       >
-        {show_pending_modal ? 
-          <div style={{"padding":'20px',"display":"flex","flexDirection":"column","justifyContent":"space-around","height":"100%"}}>
-            {Object.keys(target_row_pending).map((field,idx) => {
-              return(
-                
+        {show_pending_modal ? (
+          <div
+            style={{
+              padding: "20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+              height: "100%",
+            }}
+          >
+            {Object.keys(target_row_pending).map((field, idx) => {
+              return (
                 <div className="field" key={idx}>
-                <input value={target_row_pending[field]}
-                  disabled
-                  
-                ></input>
-                <label>{field}</label>
-              </div>
-              )
+                  <input value={target_row_pending[field]} disabled></input>
+                  <label>{field}</label>
+                </div>
+              );
             })}
-          </div>  : null
-      }
+          </div>
+        ) : null}
+      </CourseDetailModal>
+
+      <CourseDetailModal
+        show={show_student_modal}
+        closeHandler={toggleStudentModal}
+        leftlabel="Kick"
+        leftButtonHandler={kickStudentHandler}
+        rightlabel='Cancel'
+        rightButtonHandler={toggleStudentModal}
+
+
+      >
+        {show_student_modal ? (
+          <div
+            style={{
+              padding: "20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+              height: "100%",
+            }}
+          >
+            {Object.keys(target_row_student).map((field, idx) => {
+              return (
+                <div className="field" key={idx}>
+                  <input value={target_row_student[field]} disabled></input>
+                  <label>{field}</label>
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
       </CourseDetailModal>
     </div>
   );

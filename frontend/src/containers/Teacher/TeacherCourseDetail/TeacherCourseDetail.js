@@ -20,6 +20,8 @@ export class TeacherCourseDetail extends Component {
     student_list: [],
     input_modal_show:false,
     target_exam:null,
+    mark_input_data : null,
+    new_exam_content : {content : "", taskname: ""}
   };
 
   examAssesHandler = (target_row)=> {
@@ -29,6 +31,18 @@ export class TeacherCourseDetail extends Component {
   examAssesCancelHandler = ()=> {
     this.setState({input_modal_show:false})
     this.setState({target_exam:null})
+    this.setState({mark_input_data:null})
+  }
+  newExamContentChangeHandler = (value, field) => {
+    let newExam = this.state.new_exam_content
+    newExam[field] = value
+    this.setState({new_exam_content:newExam})
+  }
+  newExamOnSubmit = ()=> {
+    var exam = this.state.new_exam_content 
+    var course_id = this.state.id
+    console.log(exam)
+    //api call
   }
   toggleTab = (index) => {
     this.setState({ toogleState: index });
@@ -44,16 +58,13 @@ export class TeacherCourseDetail extends Component {
     fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-          // console.log(result);
+     
           
           const class_notification_list =  result.notifications;
           const class_material_list = result.material;
           // const class_exam_list = result.exams;
           const student_list = result.students;
-          // console.log(class_notification_list);
-          // console.log(class_material_list);
-          // console.log(class_exam_list);
-          // console.log(student_list);
+         
           this.setState({class_notification_list: class_notification_list});
           this.setState({class_material_list: class_material_list});
           this.setState({student_list: student_list});
@@ -81,9 +92,14 @@ export class TeacherCourseDetail extends Component {
     const class_material_list = this.state.class_material_list;
     const class_exam_list = this.state.class_exam_list;
     const student_list = this.state.student_list;
-    // console.log(class_notification_list);
-    // console.log(class_material_list);
-    console.log(class_exam_list);
+    // if (class_exam_list.length > 0){
+    //   console.log(class_exam_list[0].scores);
+    // }
+
+    var scores = [];
+    if (this.state.target_exam){
+      scores = class_exam_list.filter(exam_info => exam_info.exam.id == this.state.target_exam.id).map(exam=>exam.scores);
+    }
     // console.log(this.state.target_exam.id)
 
     return (
@@ -140,24 +156,7 @@ export class TeacherCourseDetail extends Component {
               )
             }
 
-            {/* <div className="plan-item">
-              <div className="datetime">2020-05</div>
-              <div className="content">
-                <Link to="#">
-                  <p>HJjhdgasjhdjhgsajhgdjh</p>
-                </Link>
-              </div>
-              <i class="fas fa-edit"></i>
-            </div>
-            <div className="plan-item">
-              <div className="datetime">2020-05</div>
-              <div className="content">
-                <Link to="#">
-                  <p>De bai 1 : mieu ta 1 con cho</p>
-                </Link>
-              </div>
-              <i class="fas fa-edit"></i>
-            </div> */}
+         
           </div>
 
           <div //tab material
@@ -211,12 +210,19 @@ export class TeacherCourseDetail extends Component {
                 
                 >
                   <div>
-                  <Table data={
-                    class_exam_list.map(exam_info => exam_info.scores)
-                  } rowPerPage={5}
-                  editable={true}
-                  rowClick={(target_row)=> {this.examAssesHandler(target_row)}}
-                ></Table>
+                    {
+                      this.state.input_modal_show ? 
+                      <Table data={
+                       scores
+                      } rowPerPage={5}
+                      editable={true}
+                      enabledEditField ={"Mark"}
+                      onEdit = {(updatedMarkData) => {this.setState({mark_input_data:updatedMarkData})}} // danh sach diem update
+                      
+                    ></Table>
+                    : null
+                    }
+                  
                   </div>
                 </ExamAssesmentModal>
                 <div>
@@ -228,19 +234,13 @@ export class TeacherCourseDetail extends Component {
               <div className="create-exam">
                 <div className="exam-content">
                   <h1>Exam Content</h1>
-                  <textarea style={{"width":"100%"}}></textarea>
+                  <textarea style={{"width":"100%"}} onChange = {(e) => this.newExamContentChangeHandler(e.target.value, 'content')}></textarea>
                 </div>
                 <div style={{"margin":"20px auto","width":"100%"}}>
-                  <InputField type="text" label="Taskname"
-                  onChange={(_, value) =>
-                    this.setState({ class_notification: value })
-                  }
-                  >
-
-                  </InputField>
+                  <InputField type="text" label="Taskname" onChange = {(_,value) => {this.newExamContentChangeHandler(value, 'taskname')}} ></InputField>
                 </div>
 
-                <Button onClick={this.handleCreateExam}> Submit </Button>
+                <Button onClick = {this.newExamOnSubmit}> Submit </Button>
               </div>
             </div>
           </div>
