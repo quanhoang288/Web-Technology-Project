@@ -50,6 +50,7 @@ export default function CourseDetail() {
       const student_list = result.students
 
       let pending_list = student_list.filter(student => student.status === '1');
+      console.log(pending_list)
       let accepted_list = student_list.filter(student => student.status === '2');
       pending_list = pending_list.map(student => student.student);
       accepted_list = accepted_list.map(student => student.student);

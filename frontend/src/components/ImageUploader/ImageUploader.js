@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Container, BoxUpload, ImagePreview } from "./style";
 import FolderIcon from "./assets/folder_icon_transparent.png";
 import CloseIcon from "./assets/CloseIcon.svg";
+import "./FileUploader.css";
 
-function ImageUploader(props) {
+function FileUploader(props) {
   const [image, setImage] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
   const [typeFile, setTypeFile] = useState("");
+  const [nameFile, setNameFile] = useState("")
 
   function handleImageChange(e) {
     if (e.target.files && e.target.files[0]) {
+      var files = e.target.files[0]
+      // for getting only extension 
+      var fileExtension = files.type.split("/").pop();
+      var fileName = files.name
       setTypeFile(e.target.files[0].type);
+      setNameFile(fileName)
+      
+      
       let reader = new FileReader();
 
       reader.onload = function (e) {
@@ -22,16 +30,45 @@ function ImageUploader(props) {
     }
   }
   useEffect(() => {
-    props.onChange(image)
-    
-  },[image]);
+    props.onChange(image);
+  }, [image]);
+  
+  
+  
+    var img_preview = (
+      <div className="image-preview">
+        <img
+          className="close-icon"
+          src={CloseIcon}
+          alt="CloseIcon"
+          onClick={() => {
+            setIsUploaded(false);
+            setImage(null);
+          }}
+        />
+        {typeFile.includes("officedocument") ? (
+          <div
+            id="uploaded-image"
+            
+          >{nameFile}</div>
+        ) : (
+          <img
+            id="uploaded-image"
+            src={image}
+            draggable={false}
+            alt="uploaded-img"
+          />
+        )}
+      </div>
+    );
+  
 
   return (
-    <Layout>
-      <Container>
-        <h2>Upload your image</h2>
+    <div className="uploader-layout">
+      <div className="uploader-container">
+        <h2>{props.title ? props.title : "Upload your image"}</h2>
 
-        <BoxUpload>
+        <div className="box-upload">
           <div className="image-upload">
             {!isUploaded ? (
               <>
@@ -48,47 +85,20 @@ function ImageUploader(props) {
                 <input
                   id="upload-input"
                   type="file"
-                  accept=".jpg,.jpeg,.gif,.png,.mov,.mp4"
+                  accept=".jpg,.jpeg,.gif,.png,.mov,.mp4, .docx,.txt"
                   onChange={handleImageChange}
                 />
               </>
             ) : (
-              <ImagePreview>
-                <img
-                  className="close-icon"
-                  src={CloseIcon}
-                  alt="CloseIcon"
-                  onClick={() => {
-                    setIsUploaded(false);
-                    setImage(null);
-                  }}
-                />
-                {typeFile.includes("video") ? (
-                  <video
-                    id="uploaded-image"
-                    src={image}
-                    draggable={false}
-                    controls
-                    autoPlay
-                    alt="uploaded-img"
-                  />
-                ) : (
-                  <img
-                    id="uploaded-image"
-                    src={image}
-                    draggable={false}
-                    alt="uploaded-img"
-                  />
-                )}
-              </ImagePreview>
+              img_preview
             )}
           </div>
-        </BoxUpload>
+        </div>
 
-        {isUploaded ? <h2>Type is {typeFile}</h2> : null}
-      </Container>
-    </Layout>
+        
+      </div>
+    </div>
   );
 }
 
-export default ImageUploader;
+export default FileUploader;
