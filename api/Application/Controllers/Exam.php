@@ -8,51 +8,44 @@ class ExamController extends Controller{
     }
 
     public function get_all($params=null){
-        if ($params && isset($params['course_id'])){
-        
+        if (isset($params['course_id'])){
             $course_id = $params['course_id'];
-
             $this->_model->where('course_id', $course_id);
             $this->_model->showHasOne();
-            if (isset($params['student_id'])){
-                $student_id = $params['student_id'];
-                $this->_model->childID = $student_id;
-                
-            }
             $this->_model->showHMABTM();
             $result = $this->_model->search();
-            if (!count($result)){
-                $this->send(404, ['response'=>'No course found']);
+            $res = array();
+            if (isset($params['student_id'])){
+                foreach($result as $exam_info){
+                    $exam = filter($exam_info['exam'], ['course_id'], true);
+                    $students = $exam_info['student'];
+                    $student_id = $params['student_id'];
+                    foreach($students as $student){
+                        if ($student_id == $student['id']){
+                            array_push($res, ['exam'=>$exam, 'score'=>$student['exam_student']['score']]);
+                            break;
+                        }
+                    }
+
+                }
             }
             else {
-                $filteredResult = array();
-                if (isset($student_id)){
-                    foreach($result as $exam){
-                        foreach($exam['student'] as $student){
-                            
-                            if ($student['id'] == $student_id){
-                                $student = filter($student, ['username', 'password'], true);
-                                $exam['student'] = $student;
-                                break;
-                            }
-                        }
-                    array_push($filteredResult, $exam);
+                foreach($result as $exam_info){
+                    $exam = filter($exam_info['exam'], ['course_id'], true);
+                    $students = $exam_info['student'];
+                    $scores = array();
+                    foreach ($students as $student){
+                        $score = array();
+                        $score['student_id'] = $student['id'];
+                        $score['student_name'] = $student['name'];
+                        $score['score'] = $student['exam_student']['score'];
+                        array_push($scores, $score);
                     }
+                    array_push($res, ['exam'=>$exam, 'scores'=>$scores]);
                 }
-                else{
-                    foreach($result as $exam){
-                        foreach($exam['student'] as $student){
-                            $student = filter($student, ['username', 'password'], true);
-                        }
-                    }
-                    array_push($filteredResult, $exam);
-                }
-
-                $this->send(200, ['response'=> $filteredResult]);
-                // $this->send(200, ['response'=>$result]);
             }
-                
-            
+
+            $this->send(200, $res);
         }
         else{
             $this->_model->showHasOne();

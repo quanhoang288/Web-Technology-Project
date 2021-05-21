@@ -48,7 +48,7 @@ export class TeacherCourseDetail extends Component {
           
           const class_notification_list =  result.notifications;
           const class_material_list = result.material;
-          const class_exam_list = result.exams;
+          // const class_exam_list = result.exams;
           const student_list = result.students;
           // console.log(class_notification_list);
           // console.log(class_material_list);
@@ -57,12 +57,23 @@ export class TeacherCourseDetail extends Component {
           this.setState({class_notification_list: class_notification_list});
           this.setState({class_material_list: class_material_list});
           this.setState({student_list: student_list});
-          this.setState({class_exam_list: class_exam_list});
+          // this.setState({class_exam_list: class_exam_list});
+        })
+      .catch((error) => console.log("error", error));
+      
+      fetch(`${HOST_URL}/exams?course_id=${this.state.id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+          this.setState({class_exam_list: result});
         })
       .catch((error) => console.log("error", error));
   };
   componentDidMount(){
     this.fetch_data();
+  }
+
+  handleCreateExam = () => {
+
   }
   render() {
     let toggleState = this.state.toogleState;
@@ -72,8 +83,8 @@ export class TeacherCourseDetail extends Component {
     const student_list = this.state.student_list;
     // console.log(class_notification_list);
     // console.log(class_material_list);
-    // console.log(class_exam_list);
-    // console.log(student_list);
+    console.log(class_exam_list);
+    // console.log(this.state.target_exam.id)
 
     return (
       <div>
@@ -187,8 +198,10 @@ export class TeacherCourseDetail extends Component {
           >
             <div className="assesment-container">
               <div className="assesment-table">
-                <Table data={MOCK_DATA} rowPerPage={5}
-                  
+                { class_exam_list.length > 0 ?
+                <>
+                <Table 
+                data={class_exam_list.map(exam_info => exam_info.exam)} rowPerPage={5}
                   rowClick={(target_row)=> {this.examAssesHandler(target_row)}}
                 ></Table>
                 <ExamAssesmentModal show={this.state.input_modal_show}
@@ -199,7 +212,7 @@ export class TeacherCourseDetail extends Component {
                 >
                   <div>
                   <Table data={
-                    [{'Name':"NguyenDucThang","Mark":"9.5"},{'Name':"QuanHoang","Mark":"6.9"}]
+                    class_exam_list.map(exam_info => exam_info.scores)
                   } rowPerPage={5}
                   editable={true}
                   rowClick={(target_row)=> {this.examAssesHandler(target_row)}}
@@ -209,6 +222,8 @@ export class TeacherCourseDetail extends Component {
                 <div>
                   {this.state.input_modal_show ? <Backdrop toggleBackdrop={this.examAssesCancelHandler}> </Backdrop> :null}
                 </div>
+              </> : ''
+              }
               </div>
               <div className="create-exam">
                 <div className="exam-content">
@@ -216,10 +231,16 @@ export class TeacherCourseDetail extends Component {
                   <textarea style={{"width":"100%"}}></textarea>
                 </div>
                 <div style={{"margin":"20px auto","width":"100%"}}>
-                  <InputField type="text" label="Taskname"></InputField>
+                  <InputField type="text" label="Taskname"
+                  onChange={(_, value) =>
+                    this.setState({ class_notification: value })
+                  }
+                  >
+
+                  </InputField>
                 </div>
 
-                <Button> Submit </Button>
+                <Button onClick={this.handleCreateExam}> Submit </Button>
               </div>
             </div>
           </div>
