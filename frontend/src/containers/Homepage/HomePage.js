@@ -9,7 +9,33 @@ import Carousel from "../../components/Carousel/Carousel";
 export class HomePage extends Component {
   state = {
     notifications: [],
-    courses: []
+    courses: [],
+    q:""
+  };
+  findCourseHandler = (e) => {
+    this.setState({ q: e.target.value });
+  };
+  queryCourse = (query_field) => {
+    if(this.state.q.length === 0 )
+    {
+      return this.state.courses
+    }
+    var courses = { ...this.state }.courses;
+    var filterd_course = [];
+    courses.forEach((course, idx) => {
+      var keys = Object.keys(course);
+      
+      var q_keys = keys.filter((key) => query_field.includes(key))
+      
+      for (var i = 0; i < q_keys.length; i++) {
+        
+        if (course[q_keys[i]].toLowerCase().indexOf(this.state.q.toLowerCase()) >= 0 ) {
+          filterd_course.push(course);
+          break;
+        }
+      }
+    });
+    return filterd_course
   };
   componentDidMount() {
 
@@ -30,6 +56,9 @@ export class HomePage extends Component {
       .catch((error) => console.log("error", error));
   }
   render() {
+    const filterd_courses = this.queryCourse(['name','subject','teacher_name'])
+    console.log(filterd_courses)
+
     return (
       <div className="homepage">
         <div className="billboard">
@@ -42,7 +71,7 @@ export class HomePage extends Component {
             </p>
             <form action="#">
               <div className="field">
-                <input type="text" required />
+                <input type="text" required value={this.state.q} onChange={this.findCourseHandler}/>
                 <label>Search for courses</label>
               </div>
             </form>
@@ -56,7 +85,7 @@ export class HomePage extends Component {
             <Carousel
               show={5}
               children={
-                this.state.courses.map((course) => 
+                filterd_courses.map((course) => 
                 <Card id={course.id} title={course.name} price={course.fee} teacher={course.teacher_name} img={course.img} />
                 )
                 }

@@ -43,7 +43,7 @@ export class TeacherCourseDetail extends Component {
   async uploadFile(file) {
     const formData = new FormData();
 
-    formData.append("avatar", file);
+    formData.append("material", file);
 
     return await axios.post("http://localhost/imguploader/test.php", formData, {
       headers: {
@@ -141,7 +141,9 @@ export class TeacherCourseDetail extends Component {
     if (this.state.target_exam){
       scores = class_exam_list.filter(exam_info => exam_info.exam.id == this.state.target_exam.id).map(exam=>exam.scores);
     }
-    // console.log(this.state.target_exam.id)
+    scores = scores[0] // fixed
+
+    
 
     return (
       <div>
@@ -219,12 +221,12 @@ export class TeacherCourseDetail extends Component {
                 ></FileUploader> */}
 
                 <form onSubmit={this.onSubmit}>
-                  <h1> React File Upload Example</h1>
-                  <input type="file" name='avatar' onChange={this.onChange} />
-                  <button type="submit">Upload File</button>
+                  
+                  <input type="file" name='material' onChange={this.onChange} />
+                  <Button type="submit">Upload File</Button>
                 </form>
 
-                <Button onClick={this.materialUploadHandler}></Button>
+                
               </div>
             </div>
           </div>
@@ -271,7 +273,8 @@ export class TeacherCourseDetail extends Component {
                        scores
                       } rowPerPage={5}
                       editable={true}
-                      enabledEditField ={"Mark"}
+                      
+                      enabledEditField ={"score"}
                       onEdit = {(updatedMarkData) => {this.setState({mark_input_data:updatedMarkData})}} // danh sach diem update
                       
                     ></Table>

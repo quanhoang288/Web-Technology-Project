@@ -16,7 +16,7 @@ export class StudentCourseDetail extends Component {
     toogleState: 1,
     schedule: [],
     class_notification_list: [],
-    class_material_list: [],
+    class_material_list: [{"created_at":"20201","content":"Hello"}],
 	class_student_list: []
   };
   toggleTab = (index) => {
@@ -91,10 +91,40 @@ export class StudentCourseDetail extends Component {
         }
 		  })
       .catch((error) => console.log("error", error)); 
+    // fetch material list
 
 
 
   };
+  downloadMaterialRequest = (filename) => {
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      
+      redirect: "follow",
+    };
+
+    fetch(
+      `http://localhost/imguploader/testdownload.php?file=${filename}`,
+      requestOptions
+    )
+      .then((response) => response.blob())
+      .then((blob) => {
+        var objectURL = window.URL.createObjectURL(blob); 
+        this.setState({obj:objectURL}) 
+        const link = document.createElement('a');
+        link.href = objectURL;
+        link.setAttribute('download',filename); 
+        document.body.appendChild(link);
+        link.click();
+                
+                
+    })
+      .catch((error) => console.log("error", error));
+  }
 
   
 
@@ -238,13 +268,13 @@ export class StudentCourseDetail extends Component {
                     <div className="material">
                       
                       <div className="plan-item">
-                        <div className="datetime">2020-05</div>
+                        <div className="datetime">{this.state.class_material_list[0].create_at}</div>
                         <div className="content">
                           <Link to="#">
-                            <p>De bai 1 : mieu ta 1 con cho</p>
+                            <div onClick={() => this.downloadMaterialRequest("591548-Đề-35---khóa-99-đề---thầy-vna---Đề-phát-triển-minh-họa-07.pdf")}>{this.state.class_material_list[0].content}</div>
                           </Link>
                         </div>
-                        <div className="datetime">Deadline 2020-05</div>
+                        
                       </div>
                     </div>
                   </div>
