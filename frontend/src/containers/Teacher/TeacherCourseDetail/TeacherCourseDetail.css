@@ -71,20 +71,29 @@
     display: flex;
     justify-content: space-around;
     padding: 20px;
+    overflow: hidden;
     
   }
   
   .assesment-container .create-exam {
     display: flex;
     flex-direction: column;
-    width: 45%;
+    width: 30%;
     
     padding: 20px;
   }
-  .material {
+  .assesment-container .assesment-table
+  {
+    width: 60%;
+  }
+  .material{
     display: flex;
-    flex-direction: row;
   }
   .material .material-board{
     width: 75%;
   }
+  .noti_creator{
+    display: flex;
+    align-items: center;
+  }
+  
