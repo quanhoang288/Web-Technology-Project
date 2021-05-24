@@ -153,6 +153,7 @@ export class Table extends Component {
                                                 return(
                                                     <td key={td_idx}>
                                                         <InputField
+                                                        type = 'text'
                                                         disabled = {
                                                             this.enabledEditField(columns[td_idx])
                                                         }

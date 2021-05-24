@@ -6,7 +6,6 @@ import Dropdown from "../Dropdown/Dropdown";
 import Button from "../Button/Button";
 import { HOST_URL } from "../../config";
 export class CourseCreation extends Component {
-
 	state = {
 		title: "",
 		teachers: [],
@@ -38,11 +37,9 @@ export class CourseCreation extends Component {
 		  .then((result) => this.setState({teachers: result}))
 		  .catch((error) => console.log(error));
 	}
-
 	componentDidMount(){
 		this.fetch_data();
 	}
-
 	process_sched(sched) {
 		var process_sched = [];
 		sched.forEach((item, index) => {
@@ -113,9 +110,8 @@ export class CourseCreation extends Component {
         duration: "15h-18h",
       },
     ];
-	// console.log(this.fetch_data());
+	
 	const teacher_option = this.state.teachers;
-
 	const subject_option = [
 		{name: "English"},
 		{name: "Math"},
@@ -197,18 +193,7 @@ export class CourseCreation extends Component {
                 this.setState({ level_option: null });
               }
             }}
-        ></Dropdown>
-          {/* <InputField
-            type="text"
-            field="category"
-            label="Catergory"
-            onChange={(field, input) => {
-              this.setState({ [`${field}`]: input });
-            }}
-          ></InputField> */}
-
-
-         
+        ></Dropdown> 
         <Dropdown
             options={teacher_option}
             prompt="Choose a teacher"
@@ -227,7 +212,6 @@ export class CourseCreation extends Component {
               }
             }}
         ></Dropdown>
-
 		 <label>Description</label>
           <textarea
             ref={this.textarea_ref}
@@ -295,6 +279,7 @@ export class CourseCreation extends Component {
         </div>
         <div className="img-uploader">
           <ImageUploader
+          
             onChange={(img) => {
               var prevState = { ...this.state };
               prevState.img = img;
@@ -307,5 +292,4 @@ export class CourseCreation extends Component {
     );
   }
 }
-
 export default CourseCreation;

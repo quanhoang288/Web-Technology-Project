@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 export class TeacherCourse extends Component {
   state = {
     courses: [],
+    q:"",
   };
     fetch_data() {
       const id = this.props.user.id;
@@ -25,12 +26,38 @@ export class TeacherCourse extends Component {
         .then((result) => this.setState({courses: result}))
         .catch((error) => console.log("error", error));
     }
+    findCourseHandler = (e) => {
+      this.setState({ q: e.target.value });
+    };
+    queryCourse = (query_field) => {
+      if(this.state.q.length === 0 )
+      {
+        return this.state.courses
+      }
+      var courses = { ...this.state }.courses;
+      var filterd_course = [];
+      courses.forEach((course, idx) => {
+        var keys = Object.keys(course);
+        
+        var q_keys = keys.filter((key) => query_field.includes(key))
+        
+        for (var i = 0; i < q_keys.length; i++) {
+       
+          
+          if (course[q_keys[i]].toLowerCase().indexOf(this.state.q.toLowerCase()) >= 0 ) {
+            filterd_course.push(course);
+            break;
+          }
+        }
+      });
+      return filterd_course
+    };
 
   componentDidMount() {
     this.fetch_data();
   }
   render() {
-    const courses = this.state.courses;
+    const courses = this.queryCourse(['name','subject','teacher_name'])
     return (
       <React.Fragment>
         <div className="billboard">
@@ -46,9 +73,8 @@ export class TeacherCourse extends Component {
                 <input
                   type="text"
                   required
-                  onChange={(e) => {
-                    this.fieldOnChangeHandler("username", e);
-                  }}
+                  value={this.state.q}
+                  onChange={this.findCourseHandler}
                 />
                 <label>Search for courses</label>
               </div>

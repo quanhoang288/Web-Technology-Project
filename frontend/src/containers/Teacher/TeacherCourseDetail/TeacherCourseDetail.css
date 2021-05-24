@@ -81,3 +81,10 @@
     
     padding: 20px;
   }
+  .material {
+    display: flex;
+    flex-direction: row;
+  }
+  .material .material-board{
+    width: 75%;
+  }

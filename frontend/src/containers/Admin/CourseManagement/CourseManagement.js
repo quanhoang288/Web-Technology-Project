@@ -44,10 +44,9 @@ export class CourseManagement extends Component {
       var q_keys = keys.filter((key) => query_field.includes(key))
       
       for (var i = 0; i < q_keys.length; i++) {
-        console.log("q keys ", course[q_keys[i]])
-        console.log('q ', this.state.q)
-        console.log(course[q_keys[i]].indexOf(this.state.q))
-        if (course[q_keys[i]].indexOf(this.state.q) >= 0 ) {
+
+        
+        if (course[q_keys[i]].toLowerCase().indexOf(this.state.q.toLowerCase()) >= 0 ) {
           filterd_course.push(course);
           break;
         }

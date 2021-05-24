@@ -19,6 +19,7 @@ function FileUploader(props) {
       setNameFile(fileName)
       
       
+      
       let reader = new FileReader();
 
       reader.onload = function (e) {
