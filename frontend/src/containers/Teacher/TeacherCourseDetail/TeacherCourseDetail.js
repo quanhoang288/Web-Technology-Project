@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import "./TeacherCourseDetail.css";
 import Table from "../../../components/Table/Table";
-import MOCK_DATA from "../../../components/Table/MOCK.json";
 import axios from "axios";
 import InputField from "../../../components/InputField/InputField";
-import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import ExamAssesmentModal from "../../../components/ExamAssesmentModal/ExamAssesmentModal";
 import Backdrop from "../../../components/Backdrop/Backdrop";
-import FileUploader from "../../../components/ImageUploader/ImageUploader";
 import { HOST_URL } from "../../../config";
+
 export class TeacherCourseDetail extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +40,7 @@ export class TeacherCourseDetail extends Component {
 	// console.log(file);
     formData.append("material", file);
 
+
     formData.append("course_id", this.state.id);
 
     var tzoffset = (new Date()).getTimezoneOffset() * 60000;
@@ -73,6 +72,7 @@ export class TeacherCourseDetail extends Component {
 			}
 		})
       .catch(error => console.log('error', error));
+
 
   }
 
@@ -132,25 +132,6 @@ export class TeacherCourseDetail extends Component {
       .catch((error) => console.log("error", error));
   }
 
-//   materialUploadHandler = () => {
-//     let formData = new FormData();
-//     formData.append("file", this.state.material_file);
-// 	formData.append("course_id", this.state.id);
-// 	const time_created = (new Date()).toISOString();
-//     const date = time_created.split('T')[0];
-//     const time = time_created.split('T')[1].split('.')[0];
-// 	formData.append("time_created", date + ' ' + time);
-//     fetch(`${HOST_URL}/documents`, {
-//       body: formData,
-//       method: "POST",
-//     })
-//       .then((response) => response.text())
-//       .then((result) => {
-// 		  console.log(result);
-// 		  alert('Successfull uploaded file');
-// 		})
-//       .catch((error) => console.log("error", error));
-//   };
 
   examAssesHandler = (target_row) => {
     this.setState({ input_modal_show: true });
