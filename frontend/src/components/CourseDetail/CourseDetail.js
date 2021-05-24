@@ -47,13 +47,14 @@ export default function CourseDetail() {
 		.then((response) => response.json())
 		.then((result) => {
 
-      const student_list = result.students
-
+      const student_list = result.students;
+      console.log(result.students);
       let pending_list = student_list.filter(student => student.status === '1');
       console.log(pending_list)
       let accepted_list = student_list.filter(student => student.status === '2');
-      pending_list = pending_list.map(student => student.student);
-      accepted_list = accepted_list.map(student => student.student);
+      console.log(accepted_list);
+      pending_list = pending_list.map(student => ({id: student.id, name: student.name, phone: student.phone, school: student.school}));
+      accepted_list = accepted_list.map(student => ({id: student.id, name: student.name, phone: student.phone, school: student.school}));
    
       setPendingRequest(pending_list);
       setStudents(accepted_list);

@@ -146,8 +146,10 @@ class CourseController extends Controller {
                 // $data['course']['material'] = $data['document'];
                 $students = array();
                 foreach($data['student'] as $student){
-                    // $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
-                    array_push($students, filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true));
+                    $enroll_status = $student['course_student']['status'];
+                    $student= filter($student, ['username', 'password', 'subject', 'role', 'course_student'], true);
+                    $student['status'] = $enroll_status;
+                    array_push($students, $student);
                 }
     
                 $data['student'] = $students;

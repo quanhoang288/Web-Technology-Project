@@ -37,6 +37,7 @@ export class TeacherCourseDetail extends Component {
   }
   async onSubmit(e) {
     e.preventDefault();
+	console.log(this.state.material_file);
     let res = await this.uploadFile(this.state.material_file);
     console.log(res.data);
   }
@@ -44,7 +45,7 @@ export class TeacherCourseDetail extends Component {
     const formData = new FormData();
 
     formData.append("material", file);
-
+	console.log(formData);
     return await axios.post("http://localhost/imguploader/test.php", formData, {
       headers: {
         "content-type": "multipart/form-data",
@@ -109,14 +110,14 @@ export class TeacherCourseDetail extends Component {
   materialUploadHandler = () => {
     let formData = new FormData();
     formData.append("file", this.state.material_file);
-
-    fetch("http://localhost/imguploader/test.php", {
-      body: formData,
-      method: "POST",
-    })
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+	console.log(formData);
+    // fetch("http://localhost/imguploader/test.php", {
+    //   body: formData,
+    //   method: "POST",
+    // })
+    //   .then((response) => response.text())
+    //   .then((result) => console.log(result))
+    //   .catch((error) => console.log("error", error));
   };
 
   examAssesHandler = (target_row) => {
@@ -133,6 +134,41 @@ export class TeacherCourseDetail extends Component {
     newExam[field] = value;
     this.setState({ new_exam_content: newExam });
   };
+
+  handleCreateNotification = () => {
+		const notification = this.state.class_notification;
+		const time_created = (new Date()).toISOString();
+		const date = time_created.split('T')[0];
+		const time = time_created.split('T')[1].split('.')[0]
+		const raw = JSON.stringify({
+			content: notification, 
+			course_id: this.state.id,
+			create_at: date + ' ' + time
+		});
+
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var requestOptions = {
+		method: "POST",
+		headers: myHeaders,
+		body: raw
+		};
+	
+		fetch(`${HOST_URL}/course_notifications`, requestOptions)
+		.then((response) => {
+			response.json();
+			console.log(response);
+			this.setState({class_notification: ""});
+			// this.setState({class_notification: ""});
+			// this.fetch_data();
+		})
+		.then((result) => {
+			console.log(result);
+			
+		})
+		.catch((error) => console.log("error", error));
+
+  }
 
   toggleTab = (index) => {
     this.setState({ toogleState: index });
@@ -185,7 +221,7 @@ export class TeacherCourseDetail extends Component {
 
     var scores = [];
     if (this.state.target_exam){
-      scores = class_exam_list.filter(exam_info => exam_info.exam.id == this.state.target_exam.id).map(exam=>exam.scores);
+      scores = class_exam_list.filter(exam_info => exam_info.exam.id === this.state.target_exam.id).map(exam=>exam.scores);
     }
     scores = scores[0];
     // console.log(this.state.target_exam.id)
@@ -232,7 +268,7 @@ export class TeacherCourseDetail extends Component {
                 this.setState({ class_notification: value })
               }
             ></InputField>
-
+            <Button onClick={this.handleCreateNotification}> Send </Button>
             {class_notification_list.map((noti) => (
               <div className="plan-item">
                 <div className="datetime">{noti.create_at}</div>
