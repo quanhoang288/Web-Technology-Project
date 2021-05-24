@@ -39,10 +39,58 @@ export class TeacherCourseDetail extends Component {
     this.setState({new_exam_content:newExam})
   }
   newExamOnSubmit = ()=> {
-    var exam = this.state.new_exam_content 
-    var course_id = this.state.id
-    console.log(exam)
+    var exam = this.state.new_exam_content; 
+    console.log(exam);
+    var course_id = this.state.id;
+    const time_created = (new Date()).toISOString();
+    const date = time_created.split('T')[0];
+    const time = time_created.split('T')[1].split('.')[0]
+    const raw = JSON.stringify({
+      exam: {
+        course_id: course_id,
+        taskname: exam.taskname,
+        content: exam.content,
+        created_at: date + ' ' + time
+      },
+      students: this.state.student_list
+    });
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw
+    };
+ 
+    fetch(`${HOST_URL}/exams`, requestOptions)
+      .then((response) => {
+        console.log(response);
+        alert('Created successfully');
+        this.setState({new_exam_content : {content : "", taskname: ""}});
+        // this.fetch_data();
+      })
+      .catch((error) => console.log("error", error));
     //api call
+  }
+  examScoreUpdate = () => {
+    const scores = this.state.mark_input_data; 
+    // const student_id = this.state.mark_input_data.student_id;
+    const exam_id = this.state.target_exam.id;
+    var raw = JSON.stringify(scores.map(score_info => ({student_id: score_info.student_id, score: score_info.score})));
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw
+    };
+ 
+    fetch(`${HOST_URL}/exams/${exam_id}`, requestOptions)
+      .then((response) => {
+        alert('Updated successfully');
+        this.setState({input_modal_show: false});
+      })
+      .catch((error) => console.log("error", error));
   }
   toggleTab = (index) => {
     this.setState({ toogleState: index });
@@ -83,23 +131,21 @@ export class TeacherCourseDetail extends Component {
     this.fetch_data();
   }
 
-  handleCreateExam = () => {
 
-  }
+
   render() {
     let toggleState = this.state.toogleState;
     const class_notification_list =  this.state.class_notification_list;
     const class_material_list = this.state.class_material_list;
     const class_exam_list = this.state.class_exam_list;
     const student_list = this.state.student_list;
-    // if (class_exam_list.length > 0){
-    //   console.log(class_exam_list[0].scores);
-    // }
+
 
     var scores = [];
     if (this.state.target_exam){
       scores = class_exam_list.filter(exam_info => exam_info.exam.id == this.state.target_exam.id).map(exam=>exam.scores);
     }
+    scores = scores[0];
     // console.log(this.state.target_exam.id)
 
     return (
@@ -205,9 +251,7 @@ export class TeacherCourseDetail extends Component {
                 ></Table>
                 <ExamAssesmentModal show={this.state.input_modal_show}
                   closeHandler={this.examAssesCancelHandler}
-                  updateHandler = {() => {console.log("Update")}}
-
-                
+                  updateHandler = {this.examScoreUpdate}
                 >
                   <div>
                     {
@@ -216,7 +260,7 @@ export class TeacherCourseDetail extends Component {
                        scores
                       } rowPerPage={5}
                       editable={true}
-                      enabledEditField ={"Mark"}
+                      enabledEditField ={"score"}
                       onEdit = {(updatedMarkData) => {this.setState({mark_input_data:updatedMarkData})}} // danh sach diem update
                       
                     ></Table>
@@ -234,7 +278,7 @@ export class TeacherCourseDetail extends Component {
               <div className="create-exam">
                 <div className="exam-content">
                   <h1>Exam Content</h1>
-                  <textarea style={{"width":"100%"}} onChange = {(e) => this.newExamContentChangeHandler(e.target.value, 'content')}></textarea>
+                  <textarea style={{"width":"100%"}} onChange = {(e) => this.newExamContentChangeHandler(e.target.value, 'content')} value={this.state.new_exam_content.content}></textarea>
                 </div>
                 <div style={{"margin":"20px auto","width":"100%"}}>
                   <InputField type="text" label="Taskname" onChange = {(_,value) => {this.newExamContentChangeHandler(value, 'taskname')}} ></InputField>

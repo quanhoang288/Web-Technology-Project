@@ -53,4 +53,28 @@ class ExamController extends Controller{
             parent::get_all($params);
         }
     }
+
+    public function create(){
+        $data = json_decode(file_get_contents("php://input"), true);
+        $exam_info = $data['exam'];
+        $students = $data['students'];
+        $result = $this->_model->create($exam_info, $students);
+        if ($result){
+            $this->response->sendStatus(201);
+        }
+        else{
+            $this->response->sendStatus(400);
+        }
+    }
+
+    public function update($id){
+        $data = json_decode(file_get_contents("php://input"), true);
+        $result = $this->_model->update($id, $data);
+        if ($result){
+            $this->response->sendStatus(200);
+        }
+        else{
+            $this->response->sendStatus(400);
+        }
+    }
 }

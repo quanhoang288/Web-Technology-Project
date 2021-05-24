@@ -95,8 +95,8 @@ $router->delete('/course_notifications/:id', 'course_notification@delete');
 
 #router for exam 
 $router->get('/exams', 'exam@get_all');
-
-
+$router->post('/exams', 'exam@create');
+$router->put('/exams/:id', 'exam@update');
 
 // #router for student's payment
 // $router->get('/payments', 'payment@get_all');
