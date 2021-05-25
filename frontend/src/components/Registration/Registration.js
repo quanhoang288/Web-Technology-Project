@@ -3,7 +3,8 @@ import "./Registration.css";
 import axios from "axios";
 import { HOST_URL } from "../../config";
 import { Redirect } from "react-router";
-import Dropdown from "../Dropdown/Dropdown";
+import Backdrop from "../Backdrop/Backdrop";
+import PopUp from "../PopUp/PopUp";
 class Registration extends Component {
   state = {
     user_info: {
@@ -16,6 +17,7 @@ class Registration extends Component {
       phone: "",
     },
     success: false,
+    response_status: null,
   };
   fieldOnChangeHandler = (field, e) => {
     const user = { ...this.state.user_info };
@@ -36,28 +38,24 @@ class Registration extends Component {
       phone: phone,
       role: role,
     });
-
-    var config = {
-      method: "post",
-      url: `${HOST_URL}/users`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: data,
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: data,
+      redirect: "follow",
     };
 
-    axios(config)
-      .then((res) => {
-        
-        
-        if (res.status === 201) {
-            this.setState({ success: true });
-            alert("Succesfully Registerd")
-        }
+    fetch(`${HOST_URL}/users`, requestOptions)
+      .then((response) => 
+      {
+        this.setState({ response_status: response.status });
       })
-      .catch((err) => {
-        alert(err);
-      });
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
+    
   };
   render() {
     const genCustomInput = (key, description, type, field, required) => {
@@ -83,7 +81,7 @@ class Registration extends Component {
       },
       {
         description: "Password",
-        type: "text",
+        type: "password",
         field: "password",
         required: true,
       },
@@ -112,6 +110,24 @@ class Registration extends Component {
       <React.Fragment>
         {!this.state.success ? (
           <div className="container">
+            {this.state.response_status ? (
+              <React.Fragment>
+                <PopUp
+                  show={this.state.response_status ? true : false}
+                  closeHandler={() => this.setState({ response_status: null })}
+                  msg={this.state.response_status}
+                  redirect={() => {
+                    window.location.href = "/login";
+                  }}
+                ></PopUp>
+                <Backdrop
+                  toggleBackdrop={() =>
+                    this.setState({ response_status: null })
+                  }
+                ></Backdrop>
+              </React.Fragment>
+            ) : null}
+
             <div className="wrapper-register">
               <div className="title">Sign up!</div>
               <form onSubmit={this.onSubmit}>
@@ -138,23 +154,6 @@ class Registration extends Component {
                     elm.required
                   );
                 })}
-                <div style={{"margin":"30px auto"}}>
-                  <Dropdown
-                    options={[{ role: "teacher" }, { role: "student" }]}
-                    field="role"
-                    value={this.state.user_info.role}
-                    onChange={(option) => {
-                      var newState = { ...this.state };
-
-                      if (option) {
-                        newState.user_info.role = option["role"];
-                      } else {
-                        newState.user_info.role = null;
-                      }
-                      this.setState(newState);
-                    }}
-                  ></Dropdown>
-                </div>
 
                 <div className="field">
                   <input type="submit" value="Register" />

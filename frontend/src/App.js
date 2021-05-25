@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 
 import AdminDashboard from "./containers/Admin/AdminDashboard/AdminDashboard";
+import CreateAdminAccount from './containers/Admin/CreateAdminAccount/CreateAdminAccount'
 import StudentManagement from "./containers/Admin/StudentManagement/StudentManagement";
 import TeacherManagement from "./containers/Admin/TeacherManagement/TeacherManagement";
 import CourseManagement from "./containers/Admin/CourseManagement/CourseManagement";
@@ -26,6 +27,7 @@ import Assignment from "./containers/Student/Assignment/Assignment";
 import TeacherCourseDetail from "./containers/Teacher/TeacherCourseDetail/TeacherCourseDetail";
 import TeacherCourse from './containers/Teacher/TeacherCourse/TeacherCourse'
 import TeacherSchedule from './containers/Teacher/TeacherSchedule/TeacherSchedule'
+
 import TeacherInfo from './containers/Teacher/TeacherInfo/TeacherInfo'
 import Test from "./components/Test/Test";
 import CoursePreview from './containers/Homepage/CoursePreview'
@@ -107,6 +109,12 @@ class App extends Component {
                         permission={permission}
                         path={`${url}/dashboard`}
                         component={AdminDashboard}
+                      />
+                      <PrivateRoute
+                        exact
+                        permission={permission}
+                        path={`${url}/accounts`}
+                        component={CreateAdminAccount}
                       />
 
                       <Redirect to={`/`}></Redirect>

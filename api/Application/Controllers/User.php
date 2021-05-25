@@ -10,13 +10,11 @@ class UserController extends Controller {
         Controller::__construct();
     }
 
-
     public function get_all($params=null){
         if (!$params){
             parent::get_all();
             
         }
-            
         else{
             if (isset($params['stats'])){
                 $result = $this->_model->get_stats();
@@ -67,17 +65,44 @@ class UserController extends Controller {
     
     public function create(){
         $data = json_decode(file_get_contents('php://input'), true);
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-
-        $response ='Succesfully Registerd ';
-        try{
-            $this->_model->setAtrributes($data);
-            $this->_model->save();
-            $this->send(201, ['response'=>$response]);
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT); // incoming post data
+        if($data['role'] == 'admin' || $data['role'] =='teacher' )
+        {
+            $token  = getBearerToken();
+            if(JWT::verify($token,SECRET_KEY))
+            {
+                $decoded_JWT = JWT::decode($token);
+                $request_sender_role = json_decode($decoded_JWT, true)['role'];
+                if($request_sender_role == 'admin')
+                {
+                    $response ='Succesfully Registerd ';
+                    try{
+                        
+                        $this->_model->setAtrributes($data);
+                        $this->_model->save();
+                        $this->send(201, ['response'=>$response]);
+                    }
+                    catch(PDOException $e){
+                        $this->send(400, ['response'=> $e->getMessage()]);
+                    }             
+                }
+                else{
+                    $this->send(400, "Permission Denied");
+                }
+            }
+        }   
+        else{
+            $response ='Succesfully Registerd ';
+            try{
+                $this->_model->setAtrributes($data);
+                $this->_model->save();
+                $this->send(201, ['response'=>$response]);
+            }
+            catch(PDOException $e){
+                $this->send(400, ['response'=> $e->getMessage()]);
+            } 
         }
-        catch(PDOException $e){
-            $this->send(400, ['response'=> $e->getMessage()]);
-        } 
+        
     }
 
     

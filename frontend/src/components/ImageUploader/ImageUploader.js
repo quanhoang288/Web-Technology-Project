@@ -4,7 +4,7 @@ import CloseIcon from "./assets/CloseIcon.svg";
 import "./FileUploader.css";
 
 function FileUploader(props) {
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(props.preview ?  props.preview : null);
   const [isUploaded, setIsUploaded] = useState(false);
   const [typeFile, setTypeFile] = useState("");
   const [nameFile, setNameFile] = useState("")
@@ -13,16 +13,18 @@ function FileUploader(props) {
     if (e.target.files && e.target.files[0]) {
       var files = e.target.files[0]
       // for getting only extension 
-      var fileExtension = files.type.split("/").pop();
+      
       var fileName = files.name
       setTypeFile(e.target.files[0].type);
       setNameFile(fileName)
       
       
       
+      
       let reader = new FileReader();
 
       reader.onload = function (e) {
+        
         setImage(e.target.result);
         setIsUploaded(true);
       };
