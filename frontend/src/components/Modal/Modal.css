@@ -1,14 +1,4 @@
-.btn-openModal {
-    background: #2c2c2c;
-    color: #eee;
-    font-size: 1rem;
-    margin: 2rem;
-    padding: .5rem 1.8rem;
-    border: none;
-    outline: none;
-    cursor: pointer;
-  }
-  
+
   .modal-wrapper {
     z-index: 10000000;
     background: #fff;

@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 
 import AdminDashboard from "./containers/Admin/AdminDashboard/AdminDashboard";
+import CreateAdminAccount from './containers/Admin/CreateAdminAccount/CreateAdminAccount'
 import StudentManagement from "./containers/Admin/StudentManagement/StudentManagement";
 import TeacherManagement from "./containers/Admin/TeacherManagement/TeacherManagement";
 import CourseManagement from "./containers/Admin/CourseManagement/CourseManagement";
@@ -26,6 +27,8 @@ import StudentCourseDetail from "./containers/Student/StudentCourseDetail/Studen
 import TeacherCourseDetail from "./containers/Teacher/TeacherCourseDetail/TeacherCourseDetail";
 import TeacherCourse from './containers/Teacher/TeacherCourse/TeacherCourse'
 import TeacherSchedule from './containers/Teacher/TeacherSchedule/TeacherSchedule'
+
+import TeacherInfo from './containers/Teacher/TeacherInfo/TeacherInfo'
 import Test from "./components/Test/Test";
 import CoursePreview from './containers/Homepage/CoursePreview'
 //#region import
@@ -107,6 +110,12 @@ class App extends Component {
                         path={`${url}/dashboard`}
                         component={AdminDashboard}
                       />
+                      <PrivateRoute
+                        exact
+                        permission={permission}
+                        path={`${url}/accounts`}
+                        component={CreateAdminAccount}
+                      />
 
                       <Redirect to={`/`}></Redirect>
                     </Switch>
@@ -126,6 +135,12 @@ class App extends Component {
                       exact
                       path={`${url}/courses`}
                       component={TeacherCourse}
+                    />
+                    <PrivateRoute
+                      permission={permission}
+                      exact
+                      path={`${url}/info`}
+                      component={TeacherInfo}
                     />
                     <PrivateRoute
                       permission={permission}

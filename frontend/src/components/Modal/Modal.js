@@ -1,7 +1,6 @@
 import { React, useState,useEffect } from 'react';
 import './Modal.css';
-import axios from 'axios'
-import { HOST_URL } from '../../config'
+
 export const Modal = ({ show, closeHandler,onSubmit, info , disabled_field}) => {
   const [update_info, setInfo] = useState(info)
   const fieldOnChangeHandler = (field, e) => {

@@ -5,11 +5,11 @@ import ImageUploader from "../ImageUploader/ImageUploader";
 import Dropdown from "../Dropdown/Dropdown";
 import Button from "../Button/Button";
 import { HOST_URL } from "../../config";
-import { useParams } from "react-router";
+
 export class CourseEdit extends Component {
    
 	state = {
-        id: this.props.match.params.id,
+    id: this.props.match.params.id,
 		title: "",
 		teachers: [],
 		teacher_option: null,
@@ -39,12 +39,13 @@ export class CourseEdit extends Component {
         fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-            console.log(result);
+            console.log(result)
             this.setState({
                 title: result.name,
                 teacher_option: {id: result.teacher_id, name: result.teacher_name},
                 subject_option: {name: result.subject},
                 level_option: {name: result.level},
+                img:result.img,
                 min: result.min,
                 max: result.max,
                 description: result.description,
@@ -159,176 +160,181 @@ export class CourseEdit extends Component {
     console.log(this.state.title);
 	const level_options = [{name:"Beginner"}, {name:"Intermidiate"}, {name:"Upper-Intermidiate"}, {name:"Advanced"}];
     return (
+    <React.Fragment>
+      {this.state.title ?
       <div className="course-create">
-        <div className="course-create-form">
-          <InputField
-            type="text"
-            field="title"
-            label="Course title"
-            value = {this.state.title}
-            onChange={(field, input) => {
-              this.setState({ [`${field}`]: input });
-            }}
-          ></InputField>
-		<InputField
-            type="number"
-            field="price"
-            label="Price - in $"
-            value = {this.state.price}
-            onChange={(field, input) => {
-              this.setState({ [`${field}`]: input });
-            }}
-          ></InputField>
-				<InputField
-            type="number"
-            field="min"
-            label="Min number of students"
-            value = {this.state.min}
-            onChange={(field, input) => {
-              this.setState({ [`${field}`]: input });
-            }}
-          ></InputField>
-		<InputField
-            type="number"
-            field="max"
-            label="Max number of students"
-            value = {this.state.max}
-            onChange={(field, input) => {
-              this.setState({ [`${field}`]: input });
-            }}
-          ></InputField>
-		<Dropdown
-            options={subject_option}
-            prompt="Choose a subject"
-         
-            field="name"
-            value={
-              this.state.subject_option
-                ? this.state.subject_option['name']
-                : null
-            }
-            onChange={(option) => {
-              if (option) {
-                this.setState({ subject_option: option });
-              } else {
-                this.setState({ subject_option: null });
-              }
-            }}
-          ></Dropdown>
-		<Dropdown
-            options={level_options}
-            prompt="Choose a level"
-            value="level"
-            field="name"
-            value={
-              this.state.level_option
-                ? this.state.level_option['name']
-                : null
-            }
-            onChange={(option) => {
-              if (option) {
-                this.setState({ level_option: option });
-              } else {
-                this.setState({ level_option: null });
-              }
-            }}
-        ></Dropdown> 
-        <Dropdown
-            options={teacher_option}
-            prompt="Choose a teacher"
+      <div className="course-create-form">
+        <InputField
+          type="text"
+          field="title"
+          label="Course title"
+          value = {this.state.title}
+          onChange={(field, input) => {
+            this.setState({ [`${field}`]: input });
+          }}
+        ></InputField>
+  <InputField
+          type="text"
+          field="price"
+          label="Price - in $"
+          value = {this.state.price}
+          onChange={(field, input) => {
+            this.setState({ [`${field}`]: input });
+          }}
+        ></InputField>
+      <InputField
+          type="text"
+          field="min"
+          label="Min number of students"
+          value = {this.state.min}
+          onChange={(field, input) => {
             
-            field="name"
-            value={
-              this.state.teacher_option
-                ? this.state.teacher_option["name"]
-                : null
+            this.setState({ [`${field}`]: input });
+          }}
+        ></InputField>
+  <InputField
+          type="number"
+          field="max"
+          label="Max number of students"
+          value = {this.state.max}
+          onChange={(field, input) => {
+            this.setState({ [`${field}`]: input });
+          }}
+        ></InputField>
+  <Dropdown
+          options={subject_option}
+          prompt="Choose a subject"
+       
+          field="name"
+          value={
+            this.state.subject_option
+              ? this.state.subject_option['name']
+              : null
+          }
+          onChange={(option) => {
+            if (option) {
+              this.setState({ subject_option: option });
+            } else {
+              this.setState({ subject_option: null });
             }
-            onChange={(option) => {
-              if (option) {
-                this.setState({ teacher_option: option });
-              } else {
-                this.setState({ teacher_option: null });
-              }
-            }}
+          }}
         ></Dropdown>
-		 <label>Description</label>
-          <textarea
-            ref={this.textarea_ref}
-            value={this.state.description}
-            onChange={() =>
-              this.setState({ description: this.textarea_ref.current.value })
+  <Dropdown
+          options={level_options}
+          prompt="Choose a level"
+          value="level"
+          field="name"
+          value={
+            this.state.level_option
+              ? this.state.level_option['name']
+              : null
+          }
+          onChange={(option) => {
+            if (option) {
+              this.setState({ level_option: option });
+            } else {
+              this.setState({ level_option: null });
             }
-          ></textarea>
+          }}
+      ></Dropdown> 
+      <Dropdown
+          options={teacher_option}
+          prompt="Choose a teacher"
+          
+          field="name"
+          value={
+            this.state.teacher_option
+              ? this.state.teacher_option["name"]
+              : null
+          }
+          onChange={(option) => {
+            if (option) {
+              this.setState({ teacher_option: option });
+            } else {
+              this.setState({ teacher_option: null });
+            }
+          }}
+      ></Dropdown>
+   <label>Description</label>
+        <textarea
+          ref={this.textarea_ref}
+          value={this.state.description}
+          onChange={() =>
+            this.setState({ description: this.textarea_ref.current.value })
+          }
+        ></textarea>
 
-          <div className="schedule">
-            <div className="checkboxes">
-              {weekday.map((day, idx) => {
+        <div className="schedule">
+          <div className="checkboxes">
+            {weekday.map((day, idx) => {
+              return (
+                <div>
+                  <input
+                    id={idx}
+                    key={idx}
+                    type="checkbox"
+                    checked={this.state.sched[idx] !== -1 ? true : false}
+                    onChange={(e) => {
+                      let newState = { ...this.state };
+                      if (this.state.sched[idx] !== -1) {
+                        newState.sched[idx] = -1;
+                      } else {
+                        newState.sched[idx] = 0;
+                      }
+                      this.setState(newState);
+                    }}
+                  />
+                  <label htmlFor={idx}>{day}</label>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="time-picker">
+            {this.state.sched.map((shift, idx) => {
+              if (shift !== -1) {
                 return (
-                  <div>
-                    <input
-                      id={idx}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <label> {`Select Shift for ${weekday[idx]}`} </label>
+                    <Dropdown
                       key={idx}
-                      type="checkbox"
-                      checked={this.state.sched[idx] !== -1 ? true : false}
-                      onChange={(e) => {
-                        let newState = { ...this.state };
-                        if (this.state.sched[idx] !== -1) {
-                          newState.sched[idx] = -1;
-                        } else {
-                          newState.sched[idx] = 0;
-                        }
-                        this.setState(newState);
+                      options={shift_option}
+                      prompt={`Select Shift for ${weekday[idx]}`}
+                      value={shift_option[shift]["duration"]}
+                      field="duration"
+                      onChange={(option) => {
+                        var newSched = { ...this.state }.sched;
+                        newSched[idx] = option["id"];
+                        this.setState({ sched: newSched });
                       }}
-                    />
-                    <label htmlFor={idx}>{day}</label>
+                    ></Dropdown>
                   </div>
                 );
-              })}
-            </div>
-
-            <div className="time-picker">
-              {this.state.sched.map((shift, idx) => {
-                if (shift !== -1) {
-                  return (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
-                    >
-                      <label> {`Select Shift for ${weekday[idx]}`} </label>
-                      <Dropdown
-                        key={idx}
-                        options={shift_option}
-                        prompt={`Select Shift for ${weekday[idx]}`}
-                        value={shift_option[shift]["duration"]}
-                        field="duration"
-                        onChange={(option) => {
-                          var newSched = { ...this.state }.sched;
-                          newSched[idx] = option["id"];
-                          this.setState({ sched: newSched });
-                        }}
-                      ></Dropdown>
-                    </div>
-                  );
-                }
-              })}
-            </div>
+              }
+            })}
           </div>
         </div>
-        <div className="img-uploader">
-          <ImageUploader
-          
-            onChange={(img) => {
-              var prevState = { ...this.state };
-              prevState.img = img;
-              this.setState(prevState);
-            }}
-          ></ImageUploader>
-          <Button onClick={this.onSubmit}>Update</Button>
-        </div>
       </div>
+      <div className="img-uploader">
+        <ImageUploader
+          preview = {this.state.img}
+          onChange={(img) => {
+            var prevState = { ...this.state };
+            prevState.img = img;
+            this.setState(prevState);
+          }}
+        ></ImageUploader>
+        <Button onClick={this.onSubmit}>Update</Button>
+      </div>
+    </div> : null }
+    </React.Fragment>  
+      
     );
   }
 }

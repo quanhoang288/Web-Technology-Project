@@ -21,7 +21,7 @@ class JWT {
     }
     public static function decode($token)
     {
-        return json_decode(base64url_decode(str_replace('_', '/', str_replace('-','+',explode('.', $token)[1]))));
+        return base64url_decode(str_replace('_', '/', str_replace('-','+',explode('.', $token)[1])));
     }
     public static function verify(string $token, string $key): bool
     {

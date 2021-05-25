@@ -59,12 +59,8 @@ export class StudentInfo extends Component {
         {this.state.info ? (
           <React.Fragment>
             <div class="left">
-              <img
-                src="https://i.imgur.com/cMy8V5j.png"
-                alt="user"
-                width="100"
-              />
-              <h4 style={{ textTransform: "capitalize" }}>
+              
+              <h4 style={{ textTransform: "capitalize",marginTop:"100px" }}>
                 {this.state.info.role}
               </h4>
 

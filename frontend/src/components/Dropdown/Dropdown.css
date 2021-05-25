@@ -2,7 +2,8 @@
   position: relative;
   color: #333;
   cursor: default;
-  width: 100%;
+  width: 90%;
+  margin: 20px 0;
 }
 
 .dropdown .arrow {

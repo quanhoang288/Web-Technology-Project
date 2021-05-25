@@ -20,11 +20,13 @@ export class Sidebar extends Component {
             case 'admin':
 
                 items = [
+
                     <li><Link to="/admin/dashboard"><i className="fas fa-qrcode"></i>Dashboard</Link></li>,
                     <li><Link to="/"><i className="fas fa-qrcode"></i>Home</Link></li>,
                     <li><Link to="/admin/manage/students"><i className="fas fa-qrcode"></i>Students</Link></li>,
                     <li><Link to="/admin/manage/teachers"><i className="fas fa-qrcode"></i>Teachers</Link></li>,
                     <li><Link to="/admin/manage/courses"><i className="fas fa-qrcode"></i>Courses</Link></li>,
+                    <li><Link to="/admin/accounts"><i className="fas fa-qrcode"></i>Accounts</Link></li>,
 
                 ]
                 break
