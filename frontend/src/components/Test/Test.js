@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Test.css";
 import FileUploader from '../ImageUploader/ImageUploader'
-
+import InputField from '../InputField/InputField'
 export class Test extends Component {
   state = {
     downloaded: true,
@@ -189,6 +189,15 @@ export class Test extends Component {
             <td>France</td>
           </tr>
         </table>
+
+
+        <InputField
+            type="text"
+            field="min"
+            label="Min number of students"
+            value = "34"
+            onChange={() => console.log("OK")}
+          ></InputField>
       </React.Fragment>
     );
   }

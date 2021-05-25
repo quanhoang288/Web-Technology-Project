@@ -8,7 +8,6 @@ import Backdrop from '../Backdrop/Backdrop'
 import PopUp from '../PopUp/PopUp'
 import { HOST_URL } from "../../config";
 export class CourseCreation extends Component {
-<<<<<<< HEAD
 	state = {
 		title: "",
 		teachers: [],
@@ -93,104 +92,6 @@ export class CourseCreation extends Component {
 		.then((result) => console.log(result))
 		.catch((error) => console.log("error", error));
 	};
-=======
-  state = {
-    title: "",
-    teachers: [],
-    teacher_option: null,
-    subject_option: null,
-    level_option: null,
-    min: 0,
-    max: 0,
-    description: "",
-    category: "",
-    sched: [0, -1, -1, -1, -1, -1, -1],
-    img: "",
-    price: "",
-    category: "",
-    statusPopUp : null
-  };
-  textarea_ref = React.createRef("");
-  fetch_data = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-    fetch(HOST_URL + "/users?role=teacher", requestOptions)
-      .then((response) => response.json())
-      .then((result) => this.setState({ teachers: result }))
-      .catch((error) => console.log(error));
-  };
-  componentDidMount() {
-    this.fetch_data();
-  }
-  process_sched(sched) {
-    var process_sched = [];
-    sched.forEach((item, index) => {
-      if (item !== -1) {
-        process_sched.push({ weekday_id: index + 2, time_id: item });
-      }
-    });
-    return process_sched;
-  }
-  onSubmit = (e) => {
-    var {
-      title,
-      teacher_option,
-      subject_option,
-      level_option,
-      min,
-      max,
-      description,
-      sched,
-      img,
-      price,
-    } = this.state;
-    var raw_course = {
-      name: title,
-      fee: price,
-      min: min,
-      max: max,
-      teacher_id: teacher_option["id"],
-      subject: subject_option["name"],
-      level: level_option["name"],
-      description: description,
-      img: img,
-    };
-    var raw_sched = this.process_sched(sched);
-    var raw = JSON.stringify({
-      course: raw_course,
-      schedule: raw_sched,
-    });
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-    fetch(`${HOST_URL}/courses`, requestOptions)
-      .then((response) => {
-        this.setState({statusPopUp:response.status})
-        return response.json()
-      })
-      .then((result) => 
-        {
-          
-        }
-        )
-      .catch((error) => 
-        console.log(error));
-
-    
-    
-  };
->>>>>>> d4d3aa1... 'chaydeadline'
   render() {
     const weekday = [
       "Monday",

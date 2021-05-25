@@ -12,7 +12,6 @@ function FileUploader(props) {
   function handleImageChange(e) {
     if (e.target.files && e.target.files[0]) {
       var files = e.target.files[0]
-      // for getting only extension 
       
       var fileName = files.name
       setTypeFile(e.target.files[0].type);
@@ -35,7 +34,12 @@ function FileUploader(props) {
   useEffect(() => {
     props.onChange(image);
   }, [image]);
-  
+  useEffect(() => {
+    if(props.preview)
+    {
+      setIsUploaded(true)
+    }
+  },[])
   
   
     var img_preview = (
