@@ -6,6 +6,21 @@ class UserModel extends Model{
         Model::__construct();
         
     }
+
+
+    public function get_stats(){
+        
+        $stat_query = 'SELECT role, COUNT(id) AS num FROM user WHERE NOT role="admin" GROUP BY role';
+        $stat_result = $this->_db->query($stat_query);
+        if ($stat_result){
+            $res = array();
+            foreach($stat_result as $row){
+                $res[$row['role']] = $row['num'];
+            }
+            return $res;
+        }
+        return false;
+    }
     public function find_username($username)
     {
         $stmt = $this->_db->prepare('

@@ -90,7 +90,7 @@ class Registration extends Component {
       {
         description: "Name",
         type: "text",
-        field: "firstname",
+        field: "name",
         required: true,
       },
 
@@ -102,7 +102,7 @@ class Registration extends Component {
       },
       {
         description: "Phone number",
-        type: "tel",
+        type: "number",
         field: "phone",
         required: true,
       },

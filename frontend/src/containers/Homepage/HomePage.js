@@ -57,7 +57,7 @@ export class HomePage extends Component {
   }
   render() {
     const filterd_courses = this.queryCourse(['name','subject','teacher_name'])
-    console.log(filterd_courses)
+    // console.log(filterd_courses)
 
     return (
       <div className="homepage">

@@ -13,9 +13,7 @@ import { HOST_URL } from "../../../config";
 export class TeacherCourseDetail extends Component {
   constructor(props) {
     super(props);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.uploadFile = this.uploadFile.bind(this);
+
   }
   state = {
     id: this.props.match.params.id,
@@ -32,31 +30,58 @@ export class TeacherCourseDetail extends Component {
     new_exam_content: { content: "", taskname: "" },
     material_file: null,
   };
-  onChange(e) {
+  onChange = (e) => {
     this.setState({ material_file: e.target.files[0] });
   }
-  async onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
-	console.log(this.state.material_file);
-    let res = await this.uploadFile(this.state.material_file);
-    console.log(res.data);
-  }
-  async uploadFile(file) {
-    const formData = new FormData();
 
+    const file = this.state.material_file;
+
+    const formData = new FormData();
+	// console.log(file);
     formData.append("material", file);
-	console.log(formData);
-    return await axios.post("http://localhost/imguploader/test.php", formData, {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    });
+
+    formData.append("course_id", this.state.id);
+
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    const time_created = new Date(Date.now() - tzoffset).toISOString();
+    const date = time_created.split('T')[0];
+    const time = time_created.split('T')[1].split('.')[0]
+
+    formData.append("time_created", date + ' ' + time);
+
+    var requestOptions = {
+      method: 'POST',
+      body: formData,
+    //   headers: {
+    //     "Content-Type": "multipart/form-data"
+        
+    //   },
+      redirect: 'follow'
+    };
+    
+    fetch(`${HOST_URL}/documents`, requestOptions)
+      .then(response => {
+		  	console.log(response.status);
+			console.log(response.statusText);
+		  	if (response.status === 201){
+				  alert("Successfully uploaded material");
+			}
+			else {
+				alert("Error uploading material");
+			}
+		})
+      .catch(error => console.log('error', error));
+
   }
+
   newExamOnSubmit = ()=> {
     var exam = this.state.new_exam_content; 
     console.log(exam);
     var course_id = this.state.id;
-    const time_created = (new Date()).toISOString();
+    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    const time_created = new Date(Date.now() - tzoffset).toISOString();
     const date = time_created.split('T')[0];
     const time = time_created.split('T')[1].split('.')[0]
     const raw = JSON.stringify({
@@ -107,18 +132,25 @@ export class TeacherCourseDetail extends Component {
       .catch((error) => console.log("error", error));
   }
 
-  materialUploadHandler = () => {
-    let formData = new FormData();
-    formData.append("file", this.state.material_file);
-	console.log(formData);
-    // fetch("http://localhost/imguploader/test.php", {
-    //   body: formData,
-    //   method: "POST",
-    // })
-    //   .then((response) => response.text())
-    //   .then((result) => console.log(result))
-    //   .catch((error) => console.log("error", error));
-  };
+//   materialUploadHandler = () => {
+//     let formData = new FormData();
+//     formData.append("file", this.state.material_file);
+// 	formData.append("course_id", this.state.id);
+// 	const time_created = (new Date()).toISOString();
+//     const date = time_created.split('T')[0];
+//     const time = time_created.split('T')[1].split('.')[0];
+// 	formData.append("time_created", date + ' ' + time);
+//     fetch(`${HOST_URL}/documents`, {
+//       body: formData,
+//       method: "POST",
+//     })
+//       .then((response) => response.text())
+//       .then((result) => {
+// 		  console.log(result);
+// 		  alert('Successfull uploaded file');
+// 		})
+//       .catch((error) => console.log("error", error));
+//   };
 
   examAssesHandler = (target_row) => {
     this.setState({ input_modal_show: true });
@@ -137,9 +169,10 @@ export class TeacherCourseDetail extends Component {
 
   handleCreateNotification = () => {
 		const notification = this.state.class_notification;
-		const time_created = (new Date()).toISOString();
-		const date = time_created.split('T')[0];
-		const time = time_created.split('T')[1].split('.')[0]
+    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    const time_created = new Date(Date.now() - tzoffset).toISOString();
+    const date = time_created.split('T')[0];
+    const time = time_created.split('T')[1].split('.')[0]
 		const raw = JSON.stringify({
 			content: notification, 
 			course_id: this.state.id,

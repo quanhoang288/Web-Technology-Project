@@ -17,7 +17,8 @@ class EnrollModel extends Model{
 
         $query = 'INSERT INTO ' . $this->_table . ' (student_id, course_id) VALUES (?, ?)';
         $stmt = $this->_db->prepare($query);
-        return $stmt->execute([$student_id, $course_id]);
+        $result =  $stmt->execute([$student_id, $course_id]);
+        return $result;
     }
 
     public function update($student_id, $course_id, $data){
@@ -26,13 +27,45 @@ class EnrollModel extends Model{
         $status = $data['status'];
         $query = 'UPDATE ' . $this->_table . ' SET status = ? WHERE student_id = ? AND course_id = ?';
         $stmt = $this->_db->prepare($query);
-        return $stmt->execute([$status, $student_id, $course_id]);
+        $result =  $stmt->execute([$status, $student_id, $course_id]);
+        if ($result){
+            $amount_query = 'SELECT cur_amount FROM course WHERE id = ?';
+            $stmt = $this->_db->prepare($amount_query);
+            $stmt->execute([$course_id]);
+            $amount = $stmt->fetch(PDO::FETCH_ASSOC)['cur_amount'];
+            if ($status == 2){
+                $amount += 1;    
+                
+            }
+            else if ($status == 3)
+                $amount -= 1;
+            $update_query = 'UPDATE course SET cur_amount = ? WHERE id = ?';
+            $stmt = $this->_db->prepare($update_query);
+            return $stmt->execute([$amount, $course_id]);
+
+        }
+        else 
+            return false;
     }
 
     public function remove($student_id, $course_id){
         $query = 'DELETE FROM ' . $this->_table . ' WHERE student_id = ? AND course_id = ?';
         $stmt = $this->_db->prepare($query);
-        return $stmt->execute([$student_id, $course_id]);
+        $result =  $stmt->execute([$student_id, $course_id]);
+        if ($result){
+            $amount_query = 'SELECT cur_amount FROM course WHERE id = ?';
+            $stmt = $this->_db->prepare($amount_query);
+            $stmt->execute([$course_id]);
+            $amount = $stmt->fetch(PDO::FETCH_ASSOC)['cur_amount'];
+            $amount -= 1;
+
+            $update_query = 'UPDATE course SET cur_amount = ? WHERE id = ?';
+            $stmt = $this->_db->prepare($update_query);
+            return $stmt->execute([$amount, $course_id]);
+
+        }
+        else 
+            return false;
     }
 
 

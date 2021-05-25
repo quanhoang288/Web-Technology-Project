@@ -1,12 +1,15 @@
 import React, { Component } from "react";
-import "./CourseCreation.css";
+
 import InputField from "../InputField/InputField";
 import ImageUploader from "../ImageUploader/ImageUploader";
 import Dropdown from "../Dropdown/Dropdown";
 import Button from "../Button/Button";
 import { HOST_URL } from "../../config";
-export class CourseCreation extends Component {
+import { useParams } from "react-router";
+export class CourseEdit extends Component {
+   
 	state = {
+        id: this.props.match.params.id,
 		title: "",
 		teachers: [],
 		teacher_option: null,
@@ -19,10 +22,11 @@ export class CourseCreation extends Component {
 		sched: [0, -1, -1, -1, -1, -1, -1],
 		img: "",
 		price: "",
-		category: "",
+
 	};
 	textarea_ref = React.createRef("");
 	fetch_data = () => {
+
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 	
@@ -31,6 +35,25 @@ export class CourseCreation extends Component {
 		  headers: myHeaders,
 		  redirect: "follow",
 		};
+        
+        fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            this.setState({
+                title: result.name,
+                teacher_option: {id: result.teacher_id, name: result.teacher_name},
+                subject_option: {name: result.subject},
+                level_option: {name: result.level},
+                min: result.min,
+                max: result.max,
+                description: result.description,
+                category: result.subject, 
+                price: result.fee
+
+            })
+        })
+        .catch((error) => console.log(error));
 	
 		fetch(HOST_URL + "/users?role=teacher", requestOptions)
 		  .then((response) => response.json())
@@ -39,6 +62,7 @@ export class CourseCreation extends Component {
 	}
 	componentDidMount(){
 		this.fetch_data();
+        
 	}
 	process_sched(sched) {
 		var process_sched = [];
@@ -91,6 +115,7 @@ export class CourseCreation extends Component {
 		.catch((error) => console.log("error", error));
 	};
   render() {
+    console.log(this.props.match.params);
     const weekday = [
       "Monday",
       "Tuesday",
@@ -130,6 +155,8 @@ export class CourseCreation extends Component {
 		{name: "History"},
 		{name: "Geography"},
 	];
+
+    console.log(this.state.title);
 	const level_options = [{name:"Beginner"}, {name:"Intermidiate"}, {name:"Upper-Intermidiate"}, {name:"Advanced"}];
     return (
       <div className="course-create">
@@ -138,6 +165,7 @@ export class CourseCreation extends Component {
             type="text"
             field="title"
             label="Course title"
+            value = {this.state.title}
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
             }}
@@ -146,6 +174,7 @@ export class CourseCreation extends Component {
             type="number"
             field="price"
             label="Price - in $"
+            value = {this.state.price}
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
             }}
@@ -154,6 +183,7 @@ export class CourseCreation extends Component {
             type="number"
             field="min"
             label="Min number of students"
+            value = {this.state.min}
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
             }}
@@ -162,6 +192,7 @@ export class CourseCreation extends Component {
             type="number"
             field="max"
             label="Max number of students"
+            value = {this.state.max}
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
             }}
@@ -169,7 +200,7 @@ export class CourseCreation extends Component {
 		<Dropdown
             options={subject_option}
             prompt="Choose a subject"
-            value="subject"
+         
             field="name"
             value={
               this.state.subject_option
@@ -223,6 +254,7 @@ export class CourseCreation extends Component {
 		 <label>Description</label>
           <textarea
             ref={this.textarea_ref}
+            value={this.state.description}
             onChange={() =>
               this.setState({ description: this.textarea_ref.current.value })
             }
@@ -294,10 +326,10 @@ export class CourseCreation extends Component {
               this.setState(prevState);
             }}
           ></ImageUploader>
-          <Button onClick={this.onSubmit}>Submit</Button>
+          <Button onClick={this.onSubmit}>Update</Button>
         </div>
       </div>
     );
   }
 }
-export default CourseCreation;
+export default CourseEdit;

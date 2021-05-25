@@ -18,28 +18,46 @@ class UserController extends Controller {
         }
             
         else{
-            try{
-                foreach($params as $key=>$value){
-                    $this->_model->where($key, $value);
-                    
-                }
-                $data = $this->_model->search();
-                if ($data){
-                    $res = array();
-                    
-                    foreach($data as $user){
-                        // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
-                        array_push($res, filter($user['user'], ['username', 'password'], true));
-                    }
-        
-                    $this->send(200, $res);
-                }
+            if (isset($params['stats'])){
+                $result = $this->_model->get_stats();
+                if ($result) 
+                    $this->send(200, $result);
                 else 
+                    $this->send(400, "Error getting user stats");
+            }
+            else{
+                try{
+                    foreach($params as $key=>$value){
+                        $this->_model->where($key, $value);
+                        
+                    }
+                    $data = $this->_model->search();
+                    if ($data){
+                        $res = array();
+                        $role = $params['role'];
+                        if ($role == 'teacher'){
+                            foreach($data as $user){
+                                // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
+                                array_push($res, filter($user['user'], ['username', 'password', 'role', 'active'], true));
+                            }
+                        }
+                        else{
+                            foreach($data as $user){
+                                // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
+                                array_push($res, filter($user['user'], ['username', 'password', 'subject', 'role', 'active'], true));
+                            }
+                        }
+            
+                        $this->send(200, $res);
+                    }
+                    else 
+                        $this->send(400, ['error'=>'Bad request']);
+                }
+                catch(PDOException $e){
                     $this->send(400, ['error'=>'Bad request']);
+                }
             }
-            catch(PDOException $e){
-                $this->send(400, ['error'=>'Bad request']);
-            }
+            
 
         }
 

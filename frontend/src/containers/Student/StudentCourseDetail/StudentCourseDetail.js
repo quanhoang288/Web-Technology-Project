@@ -16,8 +16,9 @@ export class StudentCourseDetail extends Component {
     toogleState: 1,
     schedule: [],
     class_notification_list: [],
-    class_material_list: [{"created_at":"20201","content":"Hello"}],
-	class_student_list: []
+    class_material_list: [],
+    class_exam_list: [],
+	  class_student_list: []
   };
   toggleTab = (index) => {
     this.setState({ toogleState: index });
@@ -59,7 +60,7 @@ export class StudentCourseDetail extends Component {
   }
   fetch_data = () => {
     // api call
-	// console.log(this.props.user.id);
+
 	const user_id = this.props.user['id'];
 	
     var myHeaders = new Headers();
@@ -71,10 +72,14 @@ export class StudentCourseDetail extends Component {
     fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-          this.setState({class_info: result});
+          this.setState({
+            class_info: result
+          });
       })
       .catch((error) => console.log("error", error)); 
     
+ 
+
     fetch(`${HOST_URL}/schedule?course_id=${this.state.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -87,16 +92,35 @@ export class StudentCourseDetail extends Component {
       .then((response) => response.json())
       .then((result) => {
         if (result.length > 0){
-          	this.setState({enrolled:  parseInt(result[0]['status'])});
+            const enrolled = parseInt(result[0]['status']);
+          	this.setState({enrolled:  enrolled});
         }
 		  })
       .catch((error) => console.log("error", error)); 
     // fetch material list
+    fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        this.setState({
+          class_material_list: result
+        });
+    })
+    .catch((error) => console.log("error", error));  
 
+    // fetch exam list
+    fetch(`${HOST_URL}/exams?course_id=${this.state.id}&student_id=${user_id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        console.log(result);
+        this.setState({
+          class_exam_list: result.map(exam_info => ({created_at: exam_info.exam.created_at, taskname: exam_info.exam.taskname, score: exam_info.score}))
+        });
+    })
+    .catch((error) => console.log("error", error));  
 
 
   };
-  downloadMaterialRequest = (filename) => {
+  downloadMaterialRequest = (id, filename) => {
     
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -108,12 +132,13 @@ export class StudentCourseDetail extends Component {
     };
 
     fetch(
-      `http://localhost/imguploader/testdownload.php?file=${filename}`,
+      `${HOST_URL}/documents/${id}`,
       requestOptions
     )
       .then((response) => response.blob())
       .then((blob) => {
         var objectURL = window.URL.createObjectURL(blob); 
+        // console.log(objectURL);
         this.setState({obj:objectURL}) 
         const link = document.createElement('a');
         link.href = objectURL;
@@ -201,13 +226,15 @@ export class StudentCourseDetail extends Component {
     const toggleState = this.state.toogleState;
     const enrolled = this.state.enrolled;
     const schedule = this.state.schedule.map((schedule_item) => this.int_to_time(schedule_item));
-
+    const material_list = this.state.class_material_list;
+    const exams =  this.state.class_exam_list;
+    // console.log(exams);
     if(this.state.class_info)
     {
       const class_info = this.state.class_info;
-      const exams =  class_info.exam;
+      
       const notifications = class_info.notifications;
-      const material = class_info.material;
+      
       // console.log(class_info);
       if(enrolled === 2 && class_info.status === 'ongoing')
       {
@@ -265,18 +292,23 @@ export class StudentCourseDetail extends Component {
                       toggleState === 2 ? "contents  active-content" : "contents"
                     }
                   >
-                    <div className="material">
-                      
+                    {/* <div className="material"> */}
+                    {material_list.map((material) => 
                       <div className="plan-item">
-                        <div className="datetime">{this.state.class_material_list[0].create_at}</div>
+                        <div className="datetime">{material.time_created}</div>
                         <div className="content">
-                          <Link to="#">
+                            <Link to="#">
+                            <div onClick={() => this.downloadMaterialRequest(material.id, material.filename)}>{material.filename}</div>
+                            </Link>
+                          
+                          {/* <Link to="#">
                             <div onClick={() => this.downloadMaterialRequest("591548-Đề-35---khóa-99-đề---thầy-vna---Đề-phát-triển-minh-họa-07.pdf")}>{this.state.class_material_list[0].content}</div>
-                          </Link>
+                          </Link> */}
                         </div>
                         
                       </div>
-                    </div>
+                    )}
+                    {/* </div> */}
                   </div>
                   <div //tab mark
                     className={
@@ -285,7 +317,12 @@ export class StudentCourseDetail extends Component {
                   >
                     <div className="mark">
                       
-                      <p>Mark</p>
+                    {exams.length > 0 ? (
+                      <Table
+                        rowPerPage={Math.min(5, exams.length)}
+                        data={exams}
+                      ></Table>) : ("")
+                    }
                     </div>
                   </div>
         

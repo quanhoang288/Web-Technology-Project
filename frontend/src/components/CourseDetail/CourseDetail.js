@@ -7,6 +7,7 @@ import Button from "../../components/Button/Button";
 import CourseDetailModal from "../../components/CourseDetailModal/CourseDetailModal";
 import { HOST_URL } from "../../config";
 import "./CourseDetail.css";
+import { Link } from "react-router-dom";
 export default function CourseDetail() {
   let { id } = useParams(); // id cua lop hoc lay o day nay`
 
@@ -28,8 +29,28 @@ export default function CourseDetail() {
     setTargetStudent({});
   };
   const updateCourseState = () => {
-    const newEnrolState = courseState['id']
-    // api call PUT method
+    // console.log(courseState);
+    const newEnrolState = courseState.toLowerCase();
+    const raw = JSON.stringify({
+      status: newEnrolState
+    });
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");  
+		var requestOptions = {
+		method: "PUT",
+		headers: myHeaders,
+		redirect: "follow",
+    body: raw 
+		};
+    
+		fetch(`${HOST_URL}/courses/${id}`, requestOptions)
+		.then((response) => response.json())
+		.then((result) => {
+
+      alert("Update successfully");
+      
+    })
+		.catch((error) => console.log("error", error));
 
   }
 
@@ -48,11 +69,12 @@ export default function CourseDetail() {
 		.then((result) => {
 
       const student_list = result.students;
-      console.log(result.students);
+      setCourseState(result.status[0].toUpperCase() + result.status.slice(1));
+      // console.log(result.students);
       let pending_list = student_list.filter(student => student.status === '1');
-      console.log(pending_list)
+      // console.log(pending_list)
       let accepted_list = student_list.filter(student => student.status === '2');
-      console.log(accepted_list);
+      // console.log(accepted_list);
       pending_list = pending_list.map(student => ({id: student.id, name: student.name, phone: student.phone, school: student.school}));
       accepted_list = accepted_list.map(student => ({id: student.id, name: student.name, phone: student.phone, school: student.school}));
    
@@ -82,10 +104,31 @@ export default function CourseDetail() {
   }
 
   const kickStudentHandler = () => {
-    const sid = target_row_student['id'] //id of student
-    const cid = id // id of course
-    // api put kick
-    console.log(`kick ${sid} in ${cid}`)
+    const student_id = target_row_student['id'] //id of student
+    const course_id = id // id of course
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");  
+		var requestOptions = {
+		method: "DELETE",
+		headers: myHeaders,
+		redirect: "follow",
+		};
+    // console.log(`${HOST_URL}/courses/${id}`);
+		fetch(`${HOST_URL}/enroll?student_id=${student_id}&course_id=${course_id}`, requestOptions)
+		.then((response) => {
+      console.log(response);
+      alert("Removed student from class");
+      setShowStudentModal(false);
+      var student_list = students;
+      console.log(target_row_student);
+      const idx = student_list.indexOf(target_row_student);
+      student_list.splice(idx, 1);  
+      console.log(student_list);    
+      setStudents(student_list);
+      toogleStudentBar();
+
+    })
+		.catch((error) => console.log("error", error));
   }
 
 
@@ -151,8 +194,11 @@ export default function CourseDetail() {
 
   useEffect(() => {
     fetchData(id);
+    
+  // console.log(id);
   }, []);
 
+  // console.log(courseState);
   return (
     <div className="course_detail">
       {/* <div className="course-general-info">
@@ -183,14 +229,16 @@ export default function CourseDetail() {
         <Dropdown
           prompt="Set course state"
           options={[
-            { id: 1, state: "On-going" },
-            { id: 2, state: "Closed" },
+            {state: "New"},
+            {state: "Ongoing" },
+            {state: "Finished" },
+            {state: "Canceled"}
           ]}
           field="state"
-          value={courseState ? courseState["state"] : null}
+          value={courseState ? courseState : null}
           onChange={(option) => {
             if (option) {
-              setCourseState(option);
+              setCourseState(option.state);
             } else {
               setCourseState(null);
             }
@@ -306,6 +354,9 @@ export default function CourseDetail() {
           </div>
         ) : null}
       </CourseDetailModal>
+      <Link to={`/admin/manage/courses/edit-course/${id}`}>
+            <i class="fas fa-edit fa-2x"></i>
+      </Link>
     </div>
   );
 }

@@ -21,6 +21,7 @@ class CourseController extends Controller {
                 $res = array();
                 if ($role == 'teacher'){
                     $this->_model->where('teacher_id', $user_id);
+                    $this->_model->orderBy('time_created', 'DESC');
                     $data = $this->_model->search();
                     foreach($data as $course_info){
                         $img = $course_info['course']['img'];
@@ -32,6 +33,7 @@ class CourseController extends Controller {
                 else {
                     $this->_model->showHMABTM();
                     $this->_model->showHasOne();
+                    $this->_model->orderBy('time_created', 'DESC');
                     $data = $this->_model->search();
                     
                     foreach($data as $course_info){
@@ -78,6 +80,7 @@ class CourseController extends Controller {
             
             $this->_model->where('status', $status);
             $this->_model->showHasOne();
+            $this->_model->orderBy('time_created', 'DESC');
             $result = $this->_model->search();
             if ($result){
                 $res = array();
@@ -92,8 +95,20 @@ class CourseController extends Controller {
             else 
                 $this->response->sendStatus(500);
         }
+        else if (isset($params['stats'])){
+            $type = $params['stats'];
+        
+            $result = $this->_model->get_stats($type);
+            if ($result){
+                $this->send(200, $result);
+            }
+            else{
+                $this->send(400, 'Error getting course stats');
+            }
+        }
         else{
             $this->_model->showHasOne();
+            $this->_model->orderBy('time_created', 'DESC');
             $data = $this->_model->search();
             if ($data){
                 $res = array();
@@ -185,9 +200,9 @@ class CourseController extends Controller {
         $data = json_decode(file_get_contents('php://input'), true);
         $result = $this->_model->create($data);
         if ($result) 
-            $this->response->sendStatus(201);
+            $this->send(201, 'Created');
         else 
-            $this->response->sendStatus(400);
+            $this->send(400, 'Error');
     }
     // public function get($params=null){
     //     // if (!$params || !isset($params['user_id']))

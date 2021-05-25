@@ -33,6 +33,7 @@ import { connect } from "react-redux";
 //#endregion
 import "./App.css";
 import Schedule from "./containers/Student/Schedule/Schedule";
+import { CourseEdit } from "./components/CourseEdit/CourseEdit";
 class App extends Component {
   render() {
     return (
@@ -86,6 +87,12 @@ class App extends Component {
                         permission={permission}
                         path={`${url}/manage/courses/new-course`}
                         component={CourseCreation}
+                      />
+                      <PrivateRoute
+                        exact
+                        permission={permission}
+                        path={`${url}/manage/courses/edit-course/:id`}
+                        component={CourseEdit}
                       />
                       <PrivateRoute
                         exact
