@@ -85,6 +85,21 @@ class CourseModel extends Model{
         return true;
 
     }
+    public function update($course_id, $data){
+        $course_data = $data['course'];
+        $course_name = $course_data['name'];
+        $img = $course_data['img'];
+        $img_exploded = explode(';', $img);
+        $img_format = explode('/',$img_exploded[0])[1];
+        $course_data['img'] = rand(1000, 1000000) . "-" . $course_name . '.' . $img_format;
+        // echo $course_data['img'] . PHP_EOL;
+        base64_to_jpeg($img, UPLOAD . 'courses/'. $course_data['img']);
+        $this->setAtrributes($course_data);
+        $this->id = $course_id;
+        return $this->save();
+        
+
+    }
     
 
     

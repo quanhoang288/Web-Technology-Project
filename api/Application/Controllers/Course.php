@@ -204,6 +204,16 @@ class CourseController extends Controller {
         else 
             $this->send(400, 'Error');
     }
+
+    public function update($params){
+        $course_id = $params['id'];
+        $data = json_decode(file_get_contents('php://input'), true);
+        $result = $this->_model->update($course_id, $data);
+        if ($result)
+            $this->send(200, 'Updated');
+        else 
+            $this->send(400, 'Error');
+    }
     // public function get($params=null){
     //     // if (!$params || !isset($params['user_id']))
     // }
