@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./TeacherCourseDetail.css";
 import Table from "../../../components/Table/Table";
-
 import Button from "../../../components/Button/Button";
 import ExamAssesmentModal from "../../../components/ExamAssesmentModal/ExamAssesmentModal";
 import Backdrop from "../../../components/Backdrop/Backdrop";
