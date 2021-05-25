@@ -22,7 +22,7 @@ import CourseDetail from "./components/CourseDetail/CourseDetail";
 import StudentInfo from "./containers/Student/StudentInfo/StudentInfo";
 import StudentCourse from "./containers/Student/StudentCourse/StudentCourse";
 import StudentCourseDetail from "./containers/Student/StudentCourseDetail/StudentCourseDetail";
-import Assignment from "./containers/Student/Assignment/Assignment";
+// import Assignment from "./containers/Student/Assignment/Assignment";
 import TeacherCourseDetail from "./containers/Teacher/TeacherCourseDetail/TeacherCourseDetail";
 import TeacherCourse from './containers/Teacher/TeacherCourse/TeacherCourse'
 import TeacherSchedule from './containers/Teacher/TeacherSchedule/TeacherSchedule'
