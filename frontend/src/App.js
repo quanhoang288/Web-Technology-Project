@@ -26,6 +26,7 @@ import Assignment from "./containers/Student/Assignment/Assignment";
 import TeacherCourseDetail from "./containers/Teacher/TeacherCourseDetail/TeacherCourseDetail";
 import TeacherCourse from './containers/Teacher/TeacherCourse/TeacherCourse'
 import TeacherSchedule from './containers/Teacher/TeacherSchedule/TeacherSchedule'
+import TeacherInfo from './containers/Teacher/TeacherInfo/TeacherInfo'
 import Test from "./components/Test/Test";
 import CoursePreview from './containers/Homepage/CoursePreview'
 //#region import
@@ -126,6 +127,12 @@ class App extends Component {
                       exact
                       path={`${url}/courses`}
                       component={TeacherCourse}
+                    />
+                    <PrivateRoute
+                      permission={permission}
+                      exact
+                      path={`${url}/info`}
+                      component={TeacherInfo}
                     />
                     <PrivateRoute
                       permission={permission}

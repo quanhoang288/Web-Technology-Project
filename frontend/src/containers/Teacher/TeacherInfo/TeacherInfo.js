@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import "./StudentInfo.css";
+import "./TeacherInfo.css";
 import InputField from "../../../components/InputField/InputField";
 import { connect } from "react-redux";
 import { HOST_URL } from "../../../config";
-export class StudentInfo extends Component {
+export class TeacherInfo extends Component {
   state = {
     editing: false,
     info: null,
@@ -59,12 +59,8 @@ export class StudentInfo extends Component {
         {this.state.info ? (
           <React.Fragment>
             <div class="left">
-              <img
-                src="https://i.imgur.com/cMy8V5j.png"
-                alt="user"
-                width="100"
-              />
-              <h4 style={{ textTransform: "capitalize" }}>
+              
+              <h4 style={{ textTransform: "capitalize" ,marginTop:"100px"}}>
                 {this.state.info.role}
               </h4>
 
@@ -150,4 +146,4 @@ export class StudentInfo extends Component {
 const mapStateToProps = (state) => ({
   user: state.authReducer.user,
 });
-export default connect(mapStateToProps, null)(StudentInfo);
+export default connect(mapStateToProps, null)(TeacherInfo);

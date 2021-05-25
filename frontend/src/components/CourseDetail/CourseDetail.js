@@ -10,7 +10,6 @@ import "./CourseDetail.css";
 import { Link } from "react-router-dom";
 export default function CourseDetail() {
   let { id } = useParams(); // id cua lop hoc lay o day nay`
-
   const [courseState, setCourseState] = useState(0)
   const [pending_request, setPendingRequest] = useState([]);
   const [students, setStudents] = useState([]);
@@ -188,10 +187,7 @@ export default function CourseDetail() {
       
     })
 		.catch((error) => console.log("error", error));
-    
-    
   }
-
   useEffect(() => {
     fetchData(id);
     
@@ -201,29 +197,6 @@ export default function CourseDetail() {
   // console.log(courseState);
   return (
     <div className="course_detail">
-      {/* <div className="course-general-info">
-        <h1> General Info </h1>
-        <div className="course-field">
-          <input required></input>
-          <label>Course Title</label>
-        </div>
-        <div className="course-field">
-          <input required></input>
-          <label>Description</label>
-        </div>
-
-        <div className="teacher-selection">
-          <Dropdown
-            options={MOCKDATA}
-            prompt="select teacher"
-            value={teacher}
-            field="first_name"
-            onChange={(teacher) => setTeacher(teacher)}
-          />
-        </div>
-
-        <Button> Update </Button>
-      </div> */}
       <div className="course_state">
         <h1>Set course state</h1>
         <Dropdown

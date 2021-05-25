@@ -411,7 +411,7 @@ export class TeacherCourseDetail extends Component {
                     value={this.state.new_exam_content.content}
                   ></textarea>
                 </div>
-                <div style={{ margin: "20px auto", width: "100%" }}>
+                <div style={{ margin: "20px auto", width: "100%" , display:'flex', justifyContent:"space-around"}}>
                   {/* <InputField
                     type="text"
                     label="Taskname"

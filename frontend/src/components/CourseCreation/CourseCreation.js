@@ -4,6 +4,7 @@ import InputField from "../InputField/InputField";
 import ImageUploader from "../ImageUploader/ImageUploader";
 import Dropdown from "../Dropdown/Dropdown";
 import Button from "../Button/Button";
+import Modal from '../CourseDetailModal/CourseDetailModal'
 import { HOST_URL } from "../../config";
 export class CourseCreation extends Component {
 	state = {
@@ -118,19 +119,24 @@ export class CourseCreation extends Component {
         duration: "15h-18h",
       },
     ];
-	
-	const teacher_option = this.state.teachers;
-	const subject_option = [
-		{name: "English"},
-		{name: "Math"},
-		{name: "Literature"},
-		{name: "Physics"},
-		{name: "Chemistry"},
-		{name: "Biology"},
-		{name: "History"},
-		{name: "Geography"},
-	];
-	const level_options = [{name:"Beginner"}, {name:"Intermidiate"}, {name:"Upper-Intermidiate"}, {name:"Advanced"}];
+
+    const teacher_option = this.state.teachers;
+    const subject_option = [
+      { name: "English" },
+      { name: "Math" },
+      { name: "Literature" },
+      { name: "Physics" },
+      { name: "Chemistry" },
+      { name: "Biology" },
+      { name: "History" },
+      { name: "Geography" },
+    ];
+    const level_options = [
+      { name: "Beginner" },
+      { name: "Intermidiate" },
+      { name: "Upper-Intermidiate" },
+      { name: "Advanced" },
+    ];
     return (
       <div className="course-create">
         <div className="course-create-form">
@@ -142,7 +148,7 @@ export class CourseCreation extends Component {
               this.setState({ [`${field}`]: input });
             }}
           ></InputField>
-		<InputField
+          <InputField
             type="number"
             field="price"
             label="Price - in $"
@@ -150,7 +156,7 @@ export class CourseCreation extends Component {
               this.setState({ [`${field}`]: input });
             }}
           ></InputField>
-				<InputField
+          <InputField
             type="number"
             field="min"
             label="Min number of students"
@@ -158,7 +164,7 @@ export class CourseCreation extends Component {
               this.setState({ [`${field}`]: input });
             }}
           ></InputField>
-		<InputField
+          <InputField
             type="number"
             field="max"
             label="Max number of students"
@@ -166,14 +172,14 @@ export class CourseCreation extends Component {
               this.setState({ [`${field}`]: input });
             }}
           ></InputField>
-		<Dropdown
+          <Dropdown
             options={subject_option}
             prompt="Choose a subject"
             value="subject"
             field="name"
             value={
               this.state.subject_option
-                ? this.state.subject_option['name']
+                ? this.state.subject_option["name"]
                 : null
             }
             onChange={(option) => {
@@ -184,15 +190,13 @@ export class CourseCreation extends Component {
               }
             }}
           ></Dropdown>
-		<Dropdown
+          <Dropdown
             options={level_options}
             prompt="Choose a level"
             value="level"
             field="name"
             value={
-              this.state.level_option
-                ? this.state.level_option['name']
-                : null
+              this.state.level_option ? this.state.level_option["name"] : null
             }
             onChange={(option) => {
               if (option) {
@@ -201,11 +205,10 @@ export class CourseCreation extends Component {
                 this.setState({ level_option: null });
               }
             }}
-        ></Dropdown> 
-        <Dropdown
+          ></Dropdown>
+          <Dropdown
             options={teacher_option}
             prompt="Choose a teacher"
-            
             field="name"
             value={
               this.state.teacher_option
@@ -219,8 +222,8 @@ export class CourseCreation extends Component {
                 this.setState({ teacher_option: null });
               }
             }}
-        ></Dropdown>
-		 <label>Description</label>
+          ></Dropdown>
+          <label>Description</label>
           <textarea
             ref={this.textarea_ref}
             onChange={() =>
@@ -287,7 +290,6 @@ export class CourseCreation extends Component {
         </div>
         <div className="img-uploader">
           <ImageUploader
-          
             onChange={(img) => {
               var prevState = { ...this.state };
               prevState.img = img;
@@ -296,6 +298,19 @@ export class CourseCreation extends Component {
           ></ImageUploader>
           <Button onClick={this.onSubmit}>Submit</Button>
         </div>
+        {this.state.response ? 
+          <Modal show={true}
+          closeHandler = {(e) => {this.setState({response:null})}}  
+          leftlabel = 'Return'
+          rightlabel='OK'
+          leftButtonHandler = {(e) => {window.location.href='/admin/courses/manage'}}
+          rightButtonHandler = {(e) => {this.setState({response:null})}}
+          >
+            <div>
+              {this.state.response}
+            </div>
+          </Modal>:null
+        }
       </div>
     );
   }
