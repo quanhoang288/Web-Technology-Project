@@ -4,6 +4,8 @@ import Table from "../../../components/Table/Table";
 import Button from "../../../components/Button/Button";
 import ExamAssesmentModal from "../../../components/ExamAssesmentModal/ExamAssesmentModal";
 import Backdrop from "../../../components/Backdrop/Backdrop";
+import PopUp from "../../../components/PopUp/PopUp";
+import { Link } from "react-router-dom";
 import { HOST_URL } from "../../../config";
 export class TeacherCourseDetail extends Component {
   constructor(props) {
@@ -50,29 +52,71 @@ export class TeacherCourseDetail extends Component {
     var requestOptions = {
       method: 'POST',
       body: formData,
-
       redirect: 'follow'
     };
     
     fetch(`${HOST_URL}/documents`, requestOptions)
       .then(response => {
-		  	console.log(response.status);
-			console.log(response.statusText);
-		  	if (response.status === 201){
-				  alert("Successfully uploaded material");
-			}
-			else {
-				alert("Error uploading material");
-			}
-		})
+		  // console.log(response.status);
+			// console.log(response.statusText);
+
+      
+        if (response.status !== 201){
+          var newStatus = {...this.state.status};
+          newStatus.code = response.status;
+          this.setState({status:newStatus});
+			  }
+        else{
+          this.setState({material_file: null});
+          this.fetch_course_material();
+        }
+
+        
+        return response.json()
+      })
+      .then((result)=>{
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
+      })
       .catch(error => console.log('error', error));
 
 
   }
+  downloadMaterialRequest = (id, filename) => {
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      
+      redirect: "follow",
+    };
+
+    fetch(
+      `${HOST_URL}/documents/${id}`,
+      requestOptions
+    )
+      .then((response) => response.blob())
+      .then((blob) => {
+        var objectURL = window.URL.createObjectURL(blob); 
+        // console.log(objectURL);
+        this.setState({obj:objectURL}) 
+        const link = document.createElement('a');
+        link.href = objectURL;
+        link.setAttribute('download',filename); 
+        document.body.appendChild(link);
+        link.click();
+                
+                
+    })
+      .catch((error) => console.log("error", error));
+  }
 
   newExamOnSubmit = ()=> {
     var exam = this.state.new_exam_content; 
-    console.log(exam);
+    // console.log(exam);
     var course_id = this.state.id;
     const tzoffset = (new Date()).getTimezoneOffset() * 60000;
     const time_created = new Date(Date.now() - tzoffset).toISOString();
@@ -97,10 +141,25 @@ export class TeacherCourseDetail extends Component {
 
     fetch(`${HOST_URL}/exams`, requestOptions)
       .then((response) => {
-        console.log(response);
-        alert("Created successfully");
-        this.setState({ new_exam_content: { content: "", taskname: "" } });
-        this.fetch_data();
+
+        if (response.status !== 201){
+          var newStatus = {...this.state.status}
+          newStatus.code = response.status
+          this.setState({status:newStatus})
+        }
+        else{
+          this.setState({ new_exam_content: { content: "", taskname: "" } });
+          this.fetch_course_exams();
+        }
+
+
+  
+        return response.json();
+      })
+      .then((result)=>{
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
       })
       .catch((error) => console.log("error", error));
     //api call
@@ -124,8 +183,19 @@ export class TeacherCourseDetail extends Component {
     };
     fetch(`${HOST_URL}/exams/${exam_id}`, requestOptions)
       .then((response) => {
-        alert("Updated successfully");
+
+        var newStatus = {...this.state.status}
+        newStatus.code = response.status
+        this.setState({status:newStatus})
         this.setState({ input_modal_show: false });
+        
+        return response.json();
+        // this.setState({ input_modal_show: false });
+      })
+      .then((result) => {
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
       })
       .catch((error) => console.log("error", error));
   };
@@ -170,35 +240,48 @@ export class TeacherCourseDetail extends Component {
 	
 		fetch(`${HOST_URL}/course_notifications`, requestOptions)
 		.then((response) => {
-			response.json();
-			console.log(response);
-			this.setState({class_notification: ""});
+      if (response.status !== 201){
+        var newStatus = {...this.state.status}
+        newStatus.code = response.status
+        this.setState({status:newStatus})
+        
+      }
+      else{
+        this.setState({class_notification: ""});
+        this.fetch_course_notifications();
+      }
+      return response.json();
+			// response.json();
+			// console.log(response);
+			// this.setState({class_notification: ""});
 			// this.setState({class_notification: ""});
 			// this.fetch_data();
 		})
 		.then((result) => {
-			console.log(result);
+      var newStatus = {...this.state.status};
+      newStatus.msg = result;
+      this.setState({status:newStatus});
 			
 		})
 		.catch((error) => console.log("error", error));
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-    };
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    // var requestOptions = {
+    //   method: "POST",
+    //   headers: myHeaders,
+    //   body: raw,
+    // };
 
-    fetch(`${HOST_URL}/course_notifications`, requestOptions)
-      .then((response) => {
-        response.json();
-      })
-      .then((result) => {
-        this.setState({ class_notification: "" });
-        this.fetch_data();
-      })
-      .catch((error) => console.log("error", error));
+    // fetch(`${HOST_URL}/course_notifications`, requestOptions)
+    //   .then((response) => {
+    //     response.json();
+    //   })
+    //   .then((result) => {
+    //     this.setState({ class_notification: "" });
+    //     this.fetch_data();
+    //   })
+    //   .catch((error) => console.log("error", error));
   };
 
   toggleTab = (index) => {
@@ -215,25 +298,87 @@ export class TeacherCourseDetail extends Component {
     fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        const class_notification_list = result.notifications;
-        const class_material_list = result.material;
+        // const class_notification_list = result.notifications;
+        // const class_material_list = result.material;
         // const class_exam_list = result.exams;
         const student_list = result.students;
 
-        this.setState({ class_notification_list: class_notification_list });
-        this.setState({ class_material_list: class_material_list });
+        // this.setState({ class_notification_list: class_notification_list });
+        // this.setState({ class_material_list: class_material_list });
         this.setState({ student_list: student_list });
         // this.setState({class_exam_list: class_exam_list});
       })
       .catch((error) => console.log("error", error));
-
-    fetch(`${HOST_URL}/exams?course_id=${this.state.id}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        this.setState({ class_exam_list: result });
-      })
-      .catch((error) => console.log("error", error));
+    this.fetch_course_notifications();
+    this.fetch_course_material();
+    this.fetch_course_exams();
+    // fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
+    // .then((response) => response.json())
+    // .then((result) => {
+    //     console.log(result);
+    //     this.setState({
+    //       class_material_list: result
+    //     });
+    // })
+    // fetch(`${HOST_URL}/exams?course_id=${this.state.id}`, requestOptions)
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     this.setState({ class_exam_list: result });
+    //   })
+    //   .catch((error) => console.log("error", error));
   };
+
+  fetch_course_notifications = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(`${HOST_URL}/course_notifications?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      this.setState({ class_notification_list: result });
+    })
+    .catch((error) => console.log("error", error));
+  }
+
+  fetch_course_material = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        // console.log(result);
+        this.setState({
+          class_material_list: result
+        });
+    })
+  }
+
+  fetch_course_exams = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(`${HOST_URL}/exams?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        // console.log(result);
+        this.setState({
+          class_exam_list: result
+        });
+    })
+  }
+
+
+
   componentDidMount() {
     this.fetch_data();
   }
@@ -243,7 +388,7 @@ export class TeacherCourseDetail extends Component {
     const class_material_list = this.state.class_material_list;
     const class_exam_list = this.state.class_exam_list;
     const student_list = this.state.student_list;
-
+    // console.log(class_notification_list);
     var scores = [];
     if (this.state.target_exam) {
       scores = class_exam_list
@@ -254,6 +399,19 @@ export class TeacherCourseDetail extends Component {
 
     return (
       <div>
+        {this.state.status  && Object.keys(this.state.status).includes('code') ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => this.setState({ status: null })}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}
         <div className="bloc-tabs">
           <button
             className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
@@ -301,14 +459,14 @@ export class TeacherCourseDetail extends Component {
               <Button onClick={this.handleCreateNotification}> Send </Button>
             </div>
 
-            {class_notification_list.map((noti) => (
+            {class_notification_list.map((noti) => 
               <div className="plan-item">
                 <div className="datetime">{noti.create_at}</div>
                 <div className="content">
                   <p>{noti.content}</p>
                 </div>
               </div>
-            ))}
+            )}
           </div>
 
           <div //tab material
@@ -318,10 +476,22 @@ export class TeacherCourseDetail extends Component {
           >
             <div className="material">
               <div className="material-board">
-                <div className="plan-item">
-                  <div className="datetime">2020-01-02</div>
-                  <div>File name</div>
-                </div>
+              {class_material_list.map((material) => 
+                      <div className="plan-item">
+                        <div className="datetime">{material.time_created}</div>
+                        <div className="content">
+                            <Link to="#">
+                            <div onClick={() => this.downloadMaterialRequest(material.id, material.filename)}>{material.filename}</div>
+                            </Link>
+                          
+                          {/* <Link to="#">
+                            <div onClick={() => this.downloadMaterialRequest("591548-Đề-35---khóa-99-đề---thầy-vna---Đề-phát-triển-minh-họa-07.pdf")}>{this.state.class_material_list[0].content}</div>
+                          </Link> */}
+                        </div>
+                        
+                      </div>
+                )}
+                
               </div>
               <div className="material-uploader">
                 <form onSubmit={this.onSubmit}>
@@ -429,7 +599,7 @@ export class TeacherCourseDetail extends Component {
                         this.setState({ new_exam_content: new_exam_content });
                       }}
                     ></input>
-                    <label>Pin message</label>
+                    <label>Task name</label>
                   </div>
                 </div>
 
