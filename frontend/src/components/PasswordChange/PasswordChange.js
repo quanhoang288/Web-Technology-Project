@@ -5,6 +5,7 @@ import Backdrop from "../Backdrop/Backdrop";
 import PopUp from "../PopUp/PopUp";
 class PasswordChange extends Component {
   state = {
+
     user_info: {
       old_password:"",
       new_password:"",
@@ -40,13 +41,39 @@ class PasswordChange extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    const user_info = this.state.user_info;
     
-    var data = JSON.stringify(this.state.user_info);
     if(!this.validate())
     {
         this.setState({status:{code:400, msg:"Password not match"}})
         return
     }
+    var data = JSON.stringify({old_password: user_info.old_password, new_password: user_info.new_password});
+    console.log(data);
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");  
+		var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      redirect: "follow",
+      body: data,
+		};
+    // console.log(teacher_option);
+    
+    fetch(`${HOST_URL}/users/${this.props.location.state.id}`, requestOptions)
+		.then((response) =>{
+
+      var newStatus = {...this.state.status}
+      newStatus.code = response.status
+      this.setState({status:newStatus})
+      return response.json()
+    })
+		.then((result) => {
+      var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
+    })
+		.catch((error) => console.log("error", error));
     this.setState({status:{code:200, msg:"Changed password"}})
     
 
