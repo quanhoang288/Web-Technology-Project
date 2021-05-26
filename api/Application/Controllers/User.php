@@ -29,6 +29,7 @@ class UserController extends Controller {
                         $this->_model->where($key, $value);
                         
                     }
+                    $this->_model->orderBy('name');
                     $data = $this->_model->search();
                     if ($data){
                         $res = array();
@@ -42,7 +43,7 @@ class UserController extends Controller {
                         else{
                             foreach($data as $user){
                                 // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
-                                array_push($res, filter($user['user'], ['username', 'password', 'subject', 'role', 'active'], true));
+                                array_push($res, filter($user['user'], ['username', 'password', 'subject', 'role', 'active', 'status'], true));
                             }
                         }
             
@@ -66,7 +67,8 @@ class UserController extends Controller {
     public function create(){
         $data = json_decode(file_get_contents('php://input'), true);
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT); // incoming post data
-        if($data['role'] == 'admin' || $data['role'] =='teacher' )
+        
+        if($data['role'] == 'admin' || $data['role'] =='teacher')
         {
             $token  = getBearerToken();
             if(JWT::verify($token,SECRET_KEY))
@@ -75,12 +77,13 @@ class UserController extends Controller {
                 $request_sender_role = json_decode($decoded_JWT, true)['role'];
                 if($request_sender_role == 'admin')
                 {
-                    $response ='Succesfully Registerd ';
+                    $response ='Succesfully Registerd';
                     try{
                         
                         $this->_model->setAtrributes($data);
-                        $this->_model->save();
-                        $this->send(201,$response);
+                        if ($this->_model->save())
+                            $this->send(201, $response);
+                        $this->send(400, 'Error creating user');
                     }
                     catch(PDOException $e){
                         
@@ -90,6 +93,9 @@ class UserController extends Controller {
                 else{
                     $this->send(400, "Permission Denied");
                 }
+            }
+            else{
+                $this->send(400, "Permission Denied");
             }
         }   
         else{
@@ -107,24 +113,43 @@ class UserController extends Controller {
     }
 
     
-    // public function update($params)
-    // {
-    //     if (!$params){
-    //         $this->send(400, 'Bad request');
-    //     }
-    //     else{
-    //         $id = $params['id'];
-    //         $data = json_decode(file_get_contents('php://input'), true);
-    //         $old_password = $data['old_password']
-    //         $this->_model->where('id', $id);
-    //         $this->_model->showHasOne();
-    //         $this->_model->showHMABTM();
-    //         $result = $this->_model->search();
-    //         echo($result);
-    //         // $new_password = $data['new_password']
-    //     }
+    public function update($params)
+    {
+        if (!$params){
+            $this->send(400, 'Bad request');
+        }
+        else{
+            $id = $params['id'];
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            $old_password = $data['old_password'];
+            $new_password = $data['new_password'];
+            $this->_model->id = $id;
+            $result = $this->_model->search();
+            if (is_array($result) && count($result)){
+                $user_password = $result['user']['password'];
+                if(password_verify($old_password, $user_password))
+                {
+                    $this->_model->id = $id;
+                    $this->_model->setAtrributes(["password"=> $new_password]);
+                    $result = $this->_model->save();
+                    if ($result)    
+                        $this->send(200, 'Updated password');
+                    else 
+                        $this->send(400, "Error updating password");
+                    
+                }
+                else
+                    $this->send(401, "Invalid password");
+            }
+            else{
+                $this->send(400, "User not found");
+            }
 
-    // }
+       
+        }
+
+    }
     public function validate()
     {        
         $data = json_decode(file_get_contents('php://input'), true);
