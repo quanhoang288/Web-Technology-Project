@@ -3,6 +3,7 @@ import "./StudentInfo.css";
 import InputField from "../../../components/InputField/InputField";
 import { connect } from "react-redux";
 import { HOST_URL } from "../../../config";
+import { Link } from "react-router-dom";
 export class StudentInfo extends Component {
   state = {
     editing: false,
@@ -73,11 +74,12 @@ export class StudentInfo extends Component {
                       edit_info: { ...this.state }.info,
                     });
                   }}
-                ></i>
+                  ></i>
                 {this.state.editing ? (
                   <i class="fas fa-check fa-2x" onClick={this.onSubmit}></i>
                 ) : null}
               </div>
+              <Link to='/student/change-password' > <i class="fas fa-key fa-2x" style={{"color":"white"}}></i> </Link>
             </div>
             <div class="right">
               <div class="info">

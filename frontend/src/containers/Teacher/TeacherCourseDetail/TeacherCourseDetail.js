@@ -36,7 +36,7 @@ export class TeacherCourseDetail extends Component {
     const file = this.state.material_file;
 
     const formData = new FormData();
-	// console.log(file);
+	
     formData.append("material", file);
 
 

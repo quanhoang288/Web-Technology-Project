@@ -14,7 +14,7 @@ export class TeacherManagement extends Component {
     teacher_schedule: null,
   };
   toggleInfoModal = () => {
-    console.log("OK")
+    
     this.setState({ modalShow: !this.state.modalShow });
     this.setState({ targetRow: {} });
   };

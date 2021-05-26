@@ -1,22 +1,17 @@
 import React, { Component } from "react";
-import "./Registration.css";
-import axios from "axios";
+
 import { HOST_URL } from "../../config";
-import { Redirect } from "react-router";
 import Backdrop from "../Backdrop/Backdrop";
 import PopUp from "../PopUp/PopUp";
-class Registration extends Component {
+class PasswordChange extends Component {
   state = {
     user_info: {
-      username: "",
-      password: "",
-      name: "",
-
-      role: "student",
-      school: "",
-      phone: "",
+      old_password:"",
+      new_password:"",
+      confirm_password:"",
     },
-    success: false,
+    errors:"",
+    
     status : null,
   };
   fieldOnChangeHandler = (field, e) => {
@@ -24,44 +19,37 @@ class Registration extends Component {
     user[`${field}`] = e.target.value;
     this.setState({ user_info: user });
   };
+  validate(){
+    let input = this.state.user_info;
+    let errors = {};
+    let isValid = true;
+    if (typeof input["new_password"] !== "undefined" && typeof input["confirm_password"] !== "undefined") {
+        
+      if (input["new_password"] != input["confirm_password"]) {
+        isValid = false;
+        errors["password"] = "Passwords don't match.";
+      }
+    } 
+
+    this.setState({
+      errors: errors
+    });
+
+    return isValid;
+}
 
   onSubmit = (e) => {
     e.preventDefault();
-    const { username, password, name, role, school, phone } =
-      this.state.user_info;
-    var data = JSON.stringify({
-      username: username,
-      password: password,
-      name: name,
+    
+    var data = JSON.stringify(this.state.user_info);
+    if(!this.validate())
+    {
+        this.setState({status:{code:400, msg:"Password not match"}})
+        return
+    }
+    this.setState({status:{code:200, msg:"Changed password"}})
+    
 
-      school: school,
-      phone: phone,
-      role: role,
-    });
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: data,
-      redirect: "follow",
-    };
-
-    fetch(`${HOST_URL}/users`, requestOptions)
-      .then((response) => 
-      {
-        var newStatus = { ...this.state.status };
-        newStatus.code = response.status;
-        this.setState({ status: newStatus });
-        return response.json();
-      })
-      .then((result) => {
-        var newStatus = { ...this.state.status };
-        newStatus.msg = result;
-        this.setState({ status: newStatus });
-        
-      })
-      .catch((error) => console.log("error", error));
 
     
   };
@@ -82,41 +70,45 @@ class Registration extends Component {
     };
     const field = [
       {
-        description: "Username",
-        type: "text",
-        field: "username",
-        required: true,
-      },
-      {
-        description: "Password",
+        description: "Old password",
         type: "password",
-        field: "password",
+        field: "old_password",
         required: true,
       },
       {
-        description: "Name",
-        type: "text",
-        field: "name",
+        description: "New password",
+        type: "password",
+        field: "new_password",
+        required: true,
+      },
+      {
+        description: "Comfirm password",
+        type: "password",
+        field: "confirm_password",
         required: true,
       },
 
-      {
-        description: "Workplace",
-        type: "text",
-        field: "school",
-        required: true,
-      },
-      {
-        description: "Phone number",
-        type: "number",
-        field: "phone",
-        required: true,
-      },
+    
     ];
 
     return (
       <React.Fragment>
-        {!this.state.success ? (
+          {
+              this.state.status ? <React.Fragment>
+              <PopUp
+                show={this.state.status ? true : false}
+                closeHandler={() => this.setState({ status: null })}
+                msg={this.state.status}
+                redirect={() => {
+                  this.props.history.goBack()
+                }}
+              ></PopUp>
+              <Backdrop
+                toggleBackdrop={() => this.setState({ status: null })}
+              ></Backdrop>
+            </React.Fragment>:null
+          }
+          
           <div className="container">
             {this.state.status ? (
               <React.Fragment>
@@ -125,19 +117,23 @@ class Registration extends Component {
                   closeHandler={() => this.setState({ status: null })}
                   msg={this.state.status}
                   redirect={() => {
-                    window.location.href = "/login";
+                   this.props.history.goBack();
                   }}
                 ></PopUp>
                 <Backdrop
                   toggleBackdrop={() =>
-                    this.setState({ status: null })
+                    {
+                        this.setState({ status: null })
+                        
+                    }
+                    
                   }
                 ></Backdrop>
               </React.Fragment>
             ) : null}
 
             <div className="wrapper-register">
-              <div className="title">Sign up!</div>
+              <div className="title">Password</div>
               <form onSubmit={this.onSubmit}>
                 {field.map((elm, idx) => {
                   if (elm.type === "tel") {
@@ -164,17 +160,15 @@ class Registration extends Component {
                 })}
 
                 <div className="field">
-                  <input type="submit" value="Register" />
+                  <input type="submit" value="Submit" />
                 </div>
               </form>
             </div>
           </div>
-        ) : (
-          <Redirect to="/login"></Redirect>
-        )}
+        
       </React.Fragment>
     );
   }
 }
 
-export default Registration;
+export default PasswordChange;

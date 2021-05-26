@@ -306,15 +306,7 @@ export default function CourseDetail() {
 
       >
         {show_student_modal ? (
-          <div
-            style={{
-              padding: "20px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-              height: "100%",
-            }}
-          >
+          <form>
             {Object.keys(target_row_student).map((field, idx) => {
               return (
                 <div className="field" key={idx}>
@@ -323,7 +315,7 @@ export default function CourseDetail() {
                 </div>
               );
             })}
-          </div>
+          </form>
         ) : null}
       </CourseDetailModal>
       <Link 

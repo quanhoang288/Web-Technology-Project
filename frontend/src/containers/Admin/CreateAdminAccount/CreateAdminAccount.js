@@ -13,6 +13,7 @@ class Registration extends Component {
       role: "admin",
       phone: "",
       school: "",
+      subject:null,
     },
     status: false,
   };
@@ -37,7 +38,7 @@ class Registration extends Component {
     } 
 
     else {
-      console.log("Ojashdkjasdhakjh")
+      
       data = JSON.stringify({
         username: username,
         password: password,
@@ -81,6 +82,18 @@ class Registration extends Component {
       .catch((error) => console.log("error", error));
   };
   render() {
+    const subject_option = [
+      { name: "English" },
+      { name: "Math" },
+      { name: "Literature" },
+      { name: "Physics" },
+      { name: "Chemistry" },
+      { name: "Biology" },
+      { name: "History" },
+      { name: "Geography" },
+    ];
+
+
     const genCustomInput = (key, description, type, field, required) => {
       return (
         <div className="field" key={key}>
@@ -200,6 +213,23 @@ class Registration extends Component {
                     ></input>
                     <label>Phone</label>
                   </div>
+                  <Dropdown
+                options={subject_option}
+                field="name"
+                prompt="Subject"
+                value={this.state.user_info.subject}
+                onChange={(option) => {
+                  var newState = { ...this.state };
+
+                  if (option) {
+                    newState.user_info.subject = option["name"];
+                 
+                  } else {
+                    newState.user_info.subject = null;
+                  }
+                  this.setState(newState);
+                }}
+              ></Dropdown>
                 </React.Fragment>
               ) : null}
 

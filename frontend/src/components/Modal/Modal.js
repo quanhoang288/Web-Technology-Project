@@ -15,17 +15,19 @@ export const Modal = ({ show, closeHandler,onSubmit, info , disabled_field}) => 
   return (
     <div className="modal-wrapper"
       style={{
-        transform: show ? 'translateY(0vh)' : 'translateY(-100vh)',
+
+        transform: show ? "translateY(0vh) translate(-50%,-50%)" : 'translateY(-100vh)',
+        
         opacity: show ? '1' : '0'
       }}
     >
       <div className="modal-header">
         <p>Editing</p>
-        <span onClick={closeHandler} className="close-modal-btn">x</span>
+        <i onClick={closeHandler} class="far fa-window-close fa-3x"></i>
       </div>
       <div className="modal-content">
         <div className="modal-body">
-          <h4>Modal</h4>
+          
           <form>
             {Object.keys(update_info).map((field, idx) => {
               return (

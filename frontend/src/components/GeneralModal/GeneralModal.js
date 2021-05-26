@@ -6,7 +6,7 @@ export const GeneralModal = (props) => {
   return (
     <div className="modal-wrapper"
       style={{
-        transform: props.show ? 'translateY(0vh) translate(-50%,-50%)' : 'translateY(-100vh)',
+        transform: props.show ? 'translateY(0vh) translate(-50%,-50%)' : 'translateY(-200vh)',
         opacity: props.show ? '1' : '0'
       }}
     >

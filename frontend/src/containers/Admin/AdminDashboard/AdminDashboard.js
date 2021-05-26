@@ -3,7 +3,6 @@ import "./AdminDashboard.css";
 import Notiboard from "../../../components/Notiboard/Notiboard";
 import StatCard from "../../../components/Card/StatCard";
 import Button from "../../../components/Button/Button";
-import MOCKDATA from "../../../components/Notiboard/mock.json";
 import { HOST_URL } from "../../../config";
 export class Dashboard extends Component {
   state = {

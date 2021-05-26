@@ -395,9 +395,6 @@ export class StudentCourseDetail extends Component {
                         </div>
                       )
                     }
-                    
-        
-    
                   </div>
         
                   <div //tab material
@@ -413,10 +410,6 @@ export class StudentCourseDetail extends Component {
                             <Link to="#">
                             <div onClick={() => this.downloadMaterialRequest(material.id, material.filename)}>{material.filename}</div>
                             </Link>
-                          
-                          {/* <Link to="#">
-                            <div onClick={() => this.downloadMaterialRequest("591548-Đề-35---khóa-99-đề---thầy-vna---Đề-phát-triển-minh-họa-07.pdf")}>{this.state.class_material_list[0].content}</div>
-                          </Link> */}
                         </div>
                         
                       </div>

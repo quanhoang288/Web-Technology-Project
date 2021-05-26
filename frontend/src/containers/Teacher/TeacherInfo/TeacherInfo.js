@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./TeacherInfo.css";
 import InputField from "../../../components/InputField/InputField";
 import { connect } from "react-redux";
+import {Link} from 'react-router-dom'
 import { HOST_URL } from "../../../config";
 export class TeacherInfo extends Component {
   state = {
@@ -78,6 +79,8 @@ export class TeacherInfo extends Component {
                   <i class="fas fa-check fa-2x" onClick={this.onSubmit}></i>
                 ) : null}
               </div>
+              
+              <Link to='/teacher/change-password' > <i class="fas fa-key fa-2x" style={{"color":"white"}}></i> </Link>
             </div>
             <div class="right">
               <div class="info">

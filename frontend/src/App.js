@@ -12,7 +12,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-
+import PasswordChange  from './components/PasswordChange/PasswordChange'
 import AdminDashboard from "./containers/Admin/AdminDashboard/AdminDashboard";
 import CreateAdminAccount from './containers/Admin/CreateAdminAccount/CreateAdminAccount'
 import StudentManagement from "./containers/Admin/StudentManagement/StudentManagement";
@@ -23,7 +23,7 @@ import CourseDetail from "./components/CourseDetail/CourseDetail";
 import StudentInfo from "./containers/Student/StudentInfo/StudentInfo";
 import StudentCourse from "./containers/Student/StudentCourse/StudentCourse";
 import StudentCourseDetail from "./containers/Student/StudentCourseDetail/StudentCourseDetail";
-// import Assignment from "./containers/Student/Assignment/Assignment";
+
 import TeacherCourseDetail from "./containers/Teacher/TeacherCourseDetail/TeacherCourseDetail";
 import TeacherCourse from './containers/Teacher/TeacherCourse/TeacherCourse'
 import TeacherSchedule from './containers/Teacher/TeacherSchedule/TeacherSchedule'
@@ -139,6 +139,12 @@ class App extends Component {
                     <PrivateRoute
                       permission={permission}
                       exact
+                      path={`${url}/change-password`}
+                      component={PasswordChange}
+                    />
+                    <PrivateRoute
+                      permission={permission}
+                      exact
                       path={`${url}/info`}
                       component={TeacherInfo}
                     />
@@ -184,6 +190,12 @@ class App extends Component {
                       permission={permission}
                       path={`${url}/courses`}
                       component={StudentCourse}
+                    />
+                    <PrivateRoute
+                      permission={permission}
+                      exact
+                      path={`${url}/change-password`}
+                      component={PasswordChange}
                     />
                     <PrivateRoute
                       exact

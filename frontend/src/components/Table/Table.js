@@ -128,30 +128,20 @@ export class Table extends Component {
                     
                       key={idx}
                       onClick={(e) => {
-                        if (e.type === "click") {
+                        
                           if (this.props.rowClick) {
                             this.props.rowClick(row);
-                          } else {
-                            console.log("Row click not implemented");
-                          }
-                        }
-                        else if(e.type === 'contextmenu'){
-                            console.log("OK")
-                            if(this.props.rightClick)
-                            {
-                                console.log("OK")
-                            }
+                          
                         }
                       }}
                       onContextMenu = {(e) => {
-                        document.addEventListener("contextmenu", function (e) {
-                          e.preventDefault();
-                      }, false);
+                        
                           if(this.props.onRightClick)
                           {
 
                               this.props.onRightClick(row)
                           }
+                          
                       }}
                     >
                       {row_values.map((row_val, td_idx) => {

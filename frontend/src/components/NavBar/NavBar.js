@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './NavBar.css'
-import Dropdown from '../Dropdown/Dropdown'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../../store/actions/types'
@@ -15,13 +14,13 @@ export class NavBar extends Component {
                 
                 {
                     !this.props.user ?
-                        <button>
-                            <Link className='links' to='/login'>Log in</Link>
-                        </button>
+                        <Link to='/login'>
+                            <button className='links' >Log in</button>
+                        </Link>
                         :
-                        <button onClick={this.props.signout}>
-                            <Link className='links' to='/'>Log out</Link>
-                        </button>
+                        <Link  to='/login'>
+                            <button className='links' onClick={this.props.signout} to='/login'>Log out</button>
+                        </Link>
 
                 }
                 

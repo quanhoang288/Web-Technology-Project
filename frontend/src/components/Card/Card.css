@@ -7,11 +7,10 @@
 }
 .card img{
   
-  width: 500px;  
+  width: 300px;  
   max-width: 100%;
-  height: 500px;
+  height: 300px;
   max-height: 100%;
-  
   border-radius: 5px;
 }
 .info{
