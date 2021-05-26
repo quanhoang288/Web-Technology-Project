@@ -30,7 +30,7 @@ export class TeacherManagement extends Component {
       headers: myHeaders,
     };
 
-    fetch(`${HOST_URL}/schedule?user_id=${id}&role=teacher`, requestOptions)
+    fetch(`${HOST_URL}/schedule?user_id=${id}&role=teacher&type=ongoing`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         const schedule = result.map((item) => int_to_time(item));
@@ -46,7 +46,9 @@ export class TeacherManagement extends Component {
   showSchedule = (target_row) => {
     this.setState({ scheduleModalShow: !this.state.scheduleModalShow });
     this.setState({ targetRow: target_row });
+    this.setState({modalShow: false})
     this.fetch_schedule(target_row['id'])
+    //
   };
   fetch_data() {
     var myHeaders = new Headers();
@@ -91,7 +93,7 @@ export class TeacherManagement extends Component {
             data={this.state.teacher_info}
             rowPerPage={5}
             rowClick={this.editHander}
-            onRightClick={this.showSchedule}
+            // onRightClick={this.showSchedule}
           ></DataTables>
         ) : null}
 
@@ -102,13 +104,17 @@ export class TeacherManagement extends Component {
               : null
           }
         ></div>
+        { this.state.targetRow ?
         <Modal
+          handleShowSchedule = {() => {this.showSchedule(this.state.targetRow)}}
+      
           disabled_field={["id", "role", "active"]}
           show={this.state.modalShow}
           closeHandler={this.toggleInfoModal}
           onSubmit={this.onSubmit}
           info={this.state.targetRow}
         ></Modal>
+        : ""}
 
         {this.state.teacher_schedule ? (
           <React.Fragment>
