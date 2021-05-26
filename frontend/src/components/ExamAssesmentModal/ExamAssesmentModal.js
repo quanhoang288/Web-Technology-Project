@@ -11,7 +11,7 @@ export const ExamAssesmentModal = (props) => {
       }}
     >
       <div className="modal-header">
-        <p>{this.props.title ? this.props.title : "Assesment"}</p>
+        <p>{props.title ? props.title : "Assesment"}</p>
         <span onClick={props.closeHandler} className="close-modal-btn">x</span>
       </div>
       <div className="modal-content">
