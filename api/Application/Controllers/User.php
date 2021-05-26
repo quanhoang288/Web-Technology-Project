@@ -97,21 +97,36 @@ class UserController extends Controller {
             try{
                 $this->_model->setAtrributes($data);
                 $this->_model->save();
-                $this->send(201, ['response'=>$response]);
+                $this->send(201, $response);
             }
             catch(PDOException $e){
-                $this->send(400, ['response'=> $e->getMessage()]);
+                $this->send(400, $e->getMessage());
             } 
         }
         
     }
 
     
-    
-  
+    // public function update($params)
+    // {
+    //     if (!$params){
+    //         $this->send(400, 'Bad request');
+    //     }
+    //     else{
+    //         $id = $params['id'];
+    //         $data = json_decode(file_get_contents('php://input'), true);
+    //         $old_password = $data['old_password']
+    //         $this->_model->where('id', $id);
+    //         $this->_model->showHasOne();
+    //         $this->_model->showHMABTM();
+    //         $result = $this->_model->search();
+    //         echo($result);
+    //         // $new_password = $data['new_password']
+    //     }
+
+    // }
     public function validate()
     {        
-        
         $data = json_decode(file_get_contents('php://input'), true);
         $username = $data['username'];
         $password = $data['password'];
@@ -121,8 +136,8 @@ class UserController extends Controller {
         if(sizeof($user) == 0)
         {
             $response = 'invalid_username';
-            $this->response->sendStatus(401);
-            $this->response->setContent(['response'=> $response]);
+            $this->send(400,$response);
+            
         }
         else{
             $user = $user[0];
@@ -132,14 +147,13 @@ class UserController extends Controller {
                 $token = JWT::encode($user, SECRET_KEY);
                 
                 $response = ['user'=>$user,'token' => $token];
-                $this->response->sendStatus(200);
-                $this->response->setContent(['response'=> $response]);    
+                $this->send(200,$response);
+                
             }
             else
             {
                 $response = 'invalid_password';
-                $this->response->sendStatus(401);
-                $this->response->setContent([ 'response'=> $response]);
+                $this->send(400,$response);
             }
         }
     }
