@@ -167,7 +167,7 @@ export class StudentCourseDetail extends Component {
       headers: myHeaders,
       redirect: 'follow',
       };
-      fetch(`${HOST_URL}/schedule?user_id=${user_id}&role=student`, requestOptions)
+      fetch(`${HOST_URL}/schedule?user_id=${user_id}&role=student&type=both`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         const mapped_result = result.map(item => (JSON.stringify({weekday_id: item.weekday_id, time_id: item.time_id})));

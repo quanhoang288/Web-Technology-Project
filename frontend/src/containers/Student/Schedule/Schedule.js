@@ -18,7 +18,7 @@ export class Schedule extends Component {
           headers: myHeaders,
         };
      
-        fetch(`${HOST_URL}/schedule?user_id=${id}&role=student`, requestOptions)
+        fetch(`${HOST_URL}/schedule?user_id=${id}&role=student&type=ongoing`, requestOptions)
           .then((response) => response.json())
           .then((result) => {
               const schedule = result.map((item) => this.int_to_time(item));
