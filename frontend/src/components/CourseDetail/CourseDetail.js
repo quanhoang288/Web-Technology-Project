@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import StudentTable from "../../components/Table/Table";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/Button/Button";
 import CourseDetailModal from "../../components/CourseDetailModal/CourseDetailModal";
 import { HOST_URL } from "../../config";
 import "./CourseDetail.css";
+import Backdrop from "../../components/Backdrop/Backdrop";
+import PopUp from "../../components/PopUp/PopUp";
+
 import { Link } from "react-router-dom";
 export default function CourseDetail() {
   let { id } = useParams(); // id cua lop hoc lay o day nay`
@@ -19,6 +21,8 @@ export default function CourseDetail() {
   const [show_student, setShowStudent] = useState(false);
   const [target_row_pending, setTargetPending] = useState({});
   const [target_row_student, setTargetStudent] = useState({});
+  const [course_kpi, setCourseKPI] = useState({});
+  const [status, setStatus] = useState({});
   const togglePendingModal = () => {
     setShowPenModal(!show_pending_modal);
     setTargetPending({});
@@ -41,15 +45,40 @@ export default function CourseDetail() {
 		redirect: "follow",
     body: raw 
 		};
-    
+    var newStatus = {};
 		fetch(`${HOST_URL}/courses/${id}`, requestOptions)
-		.then((response) => response.json())
+		.then((response) => {
+     
+      newStatus.code = response.status;
+      console.log(newStatus)
+      return response.json();
+    })
 		.then((result) => {
+      newStatus.msg = result;
+      setStatus(newStatus);
 
-      alert("Update successfully");
-      
     })
 		.catch((error) => console.log("error", error));
+    if (newEnrolState === 'ongoing' || newEnrolState === 'canceled'){
+      requestOptions.method = 'DELETE';
+      requestOptions.body = null;
+      fetch(`${HOST_URL}/enroll?course_id=${id}`, requestOptions)
+      .then((response) => {
+       
+        if (response.status !== 200){
+          setStatus({code: response.status, msg: 'Error occured'});
+        }
+        else{
+          setPendingRequest([]);
+          if (newEnrolState === 'canceled'){
+            setStudents([]);
+          }
+        }
+      })
+      .catch((error) => console.log("error", error));
+    }
+
+
 
   }
 
@@ -69,6 +98,7 @@ export default function CourseDetail() {
 
       const student_list = result.students;
       setCourseState(result.status[0].toUpperCase() + result.status.slice(1));
+      setCourseKPI({min: result.min, max: result.max});
       // console.log(result.students);
       let pending_list = student_list.filter(student => student.status === '1');
       // console.log(pending_list)
@@ -116,13 +146,15 @@ export default function CourseDetail() {
 		fetch(`${HOST_URL}/enroll?student_id=${student_id}&course_id=${course_id}`, requestOptions)
 		.then((response) => {
       console.log(response);
-      alert("Removed student from class");
+      const newStatus = response.status === 200 ? {code: 200, msg: "Successfully removed student"} 
+      : {code: response.status, msg: "Error removing student"};
       setShowStudentModal(false);
+      setStatus(newStatus);
       var student_list = students;
-      console.log(target_row_student);
+      // console.log(target_row_student);
       const idx = student_list.indexOf(target_row_student);
       student_list.splice(idx, 1);  
-      console.log(student_list);    
+      // console.log(student_list);    
       setStudents(student_list);
       toogleStudentBar();
 
@@ -173,9 +205,10 @@ export default function CourseDetail() {
     // console.log(`${HOST_URL}/courses/${id}`);
 		fetch(`${HOST_URL}/enroll?student_id=${student_id}&course_id=${id}`, requestOptions)
 		.then((response) => {
-      console.log(response);
-      alert("Aproved");
+      const newStatus = response.status === 200 ? {code: 200, msg: "Success"} :
+      {code: response.status, msg: "Error accepting new student"};
       setShowPenModal(false);
+      setStatus(newStatus);
       var pending_list = pending_request;
       var accepted_list  = students;
       const idx = pending_list.indexOf(target_row_pending);
@@ -197,6 +230,19 @@ export default function CourseDetail() {
   // console.log(courseState);
   return (
     <div className="course_detail">
+      {status  && Object.keys(status).includes('code') ? (
+          <React.Fragment>
+            <PopUp
+              show={status ? true : false}
+              closeHandler={() => setStatus(null)}
+              msg={status}
+              redirect={() => setStatus(null)}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => setStatus(null)}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}
       <div className="course_state">
         <h1>Set course state</h1>
         <Dropdown
@@ -219,6 +265,14 @@ export default function CourseDetail() {
         ></Dropdown>
         <Button onClick={updateCourseState}> Update </Button>
       </div>
+
+      <div className="kpi">
+          {course_kpi ? 
+          <h2>
+            <b>Min</b>: {course_kpi.min} - <b>Max</b>: {course_kpi.max}
+          </h2> : ""}
+      </div>
+
       
       <div className="toggle-bar" onClick={togglePendingBar}>
         <div className="toggle-arrow">
@@ -229,10 +283,11 @@ export default function CourseDetail() {
           )}
         </div>
 
-        <span className="toggle-title"> Pending request </span>
+        <span className="toggle-title"> Pending request ({pending_request.length}) </span>
       </div>
       {show_pending_req ? (
         <div className="pending">
+          {/* <p>Pending requests: {pending_request.length}</p> */}
           <StudentTable
             rowPerPage={Math.min(6, pending_request.length)}
             data={pending_request}
@@ -249,10 +304,11 @@ export default function CourseDetail() {
           )}
         </div>
 
-        <span className="toggle-title"> Manage student </span>
+        <span className="toggle-title"> Manage student ({students.length}) </span>
       </div>
       {show_student ? (
         <div className="pending">
+          {/* <p>Accepted: {students.length}</p> */}
           <StudentTable
             rowPerPage={Math.min(6, students.length)}
             data={students}
@@ -327,8 +383,10 @@ export default function CourseDetail() {
           </div>
         ) : null}
       </CourseDetailModal>
-      <Link to={`/admin/manage/courses/edit-course/${id}`}>
-            <i class="fas fa-edit fa-2x"></i>
+      <Link 
+      style = {{"position":"absolute","right":"30px","bottom":"30px"}}
+      to={`/admin/manage/courses/edit-course/${id}`}>
+            <i class="fas fa-edit fa-5x"></i>
       </Link>
     </div>
   );

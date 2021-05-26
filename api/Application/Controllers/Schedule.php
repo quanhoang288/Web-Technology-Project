@@ -18,6 +18,7 @@ class ScheduleController extends Controller{
                 $this->_model->where('weekday_id', $weekday_id);
                 $this->_model->where('time_id', $time_id);
                 $result = $this->_model->search();
+                $this->send(200, $result);
             }
             else if (isset($params['course_id'])){
                 $course_id = $params['course_id'];
@@ -34,13 +35,19 @@ class ScheduleController extends Controller{
 
                     return $res;
                 }, $result);
+                $this->send(200, $result);
                
             }
-            else if (isset($params['user_id']) && isset($params['role'])){
-                $result = $this->_model->get_all($params['user_id'], $params['role']);
+            else if (isset($params['user_id']) && isset($params['role']) && isset($params['type'])){ 
+       
+                $result = $this->_model->get_all($params['user_id'], $params['role'], $params['type']);
+                if (is_array($result))
+                    $this->send(200, $result);
+                else
+                    $this->send(400, "Error getting schedule");
             }
-            
-            $this->send(200, $result);
+            else
+                $this->send(400, "Bad request");
 
         }
         else

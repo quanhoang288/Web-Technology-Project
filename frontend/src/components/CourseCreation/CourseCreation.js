@@ -22,23 +22,51 @@ export class CourseCreation extends Component {
 		img: "",
 		price: "",
 		category: "",
+    status: null,
 	};
 	textarea_ref = React.createRef("");
 	fetch_data = () => {
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 	
-		var requestOptions = {
+		// var requestOptions = {
+		//   method: "GET",
+		//   headers: myHeaders,
+		//   redirect: "follow",
+		// };
+    this.fetch_teachers();
+		// fetch(HOST_URL + "/users?role=teacher", requestOptions)
+		//   .then((response) => response.json())
+		//   .then((result) => this.setState({teachers: result}))
+		//   .catch((error) => console.log(error));
+	}
+
+  fetch_teachers = (subject=null) => {
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
 		  method: "GET",
 		  headers: myHeaders,
 		  redirect: "follow",
 		};
-	
-		fetch(HOST_URL + "/users?role=teacher", requestOptions)
+    if (subject){
+      fetch(`${HOST_URL}/users?role=teacher&subject=${subject}`, requestOptions)
 		  .then((response) => response.json())
 		  .then((result) => this.setState({teachers: result}))
 		  .catch((error) => console.log(error));
-	}
+    }
+    else{
+      fetch(`${HOST_URL}/users?role=teacher`, requestOptions)
+		  .then((response) => response.json())
+		  .then((result) => this.setState({teachers: result}))
+		  .catch((error) => console.log(error));
+    }
+
+  }
+
+  check_teacher_sched_conflict = () => {
+
+  }
 	componentDidMount(){
 		this.fetch_data();
 	}
@@ -58,6 +86,7 @@ export class CourseCreation extends Component {
     const time = time_created.split('T')[1].split('.')[0]
 		var { title, teacher_option, subject_option, level_option, min, max, description, sched, img, price } =
 		this.state;
+    // console.log(teacher_option);
 		var raw_course = {
 		name: title,
 		fee: price,
@@ -71,27 +100,94 @@ export class CourseCreation extends Component {
     time_created: date + ' ' + time
 		};
 		var raw_sched = this.process_sched(sched);
-		var raw = JSON.stringify({
-		course: raw_course, 
-		schedule: raw_sched
-		});
-		
-		var myHeaders = new Headers();
+    const raw_sched_stringify = raw_sched.map(item => (JSON.stringify(item)));
+    var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");  
 		var requestOptions = {
-		method: "POST",
-		headers: myHeaders,
-		body: raw,
-		redirect: "follow",
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
 		};
-		fetch(`${HOST_URL}/courses`, requestOptions)
+    // console.log(teacher_option);
+    
+    fetch(`${HOST_URL}/schedule?user_id=${teacher_option['id']}&role=teacher&type=both`, requestOptions)
 		.then((response) =>{
-      console.log(response.status);
-      response.text();
+      // console.log(response.status);
+      // console.log(response);
+      return response.json();
     })
-		.then((result) => console.log(result))
+		.then((result) => {
+
+      // console.log(result)
+      const mapped_result = result ? result.map(item => (JSON.stringify({weekday_id: parseInt(item.weekday_id), time_id: parseInt(item.time_id)}))) : [];
+      const intersect = mapped_result.filter(schedule_item => raw_sched_stringify.includes(schedule_item));
+      // console.log(raw_sched_stringify[0]);
+      // console.log(mapped_result[0]);
+      // console.log(raw_sched_stringify[0] === mapped_result[0]);
+      
+      if (intersect.length === 0){
+        // alert("No Conflict");
+        var raw = JSON.stringify({
+          course: raw_course, 
+          schedule: raw_sched
+        });
+        myHeaders.append("Content-Type", "application/json");  
+        myHeaders.append(
+          "Authorization",
+          `Bearer ${localStorage.getItem("token")}`
+        );
+        requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+        };
+        fetch(`${HOST_URL}/courses`, requestOptions)
+        .then((response) =>{
+          var newStatus = {...this.state.status}
+          newStatus.code = response.status
+          this.setState({status:newStatus})
+          return response.json()
+        })
+        .then((result) => {
+          // console.log(result)
+          var newStatus = {...this.state.status};
+          newStatus.msg = result;
+          this.setState({status:newStatus});
+        })
+        .catch((error) => console.log("error", error));
+      }
+      else{
+        this.setState({status: {code: 400, msg: "Conflict in teacher schedule"}})
+        // const newStatus = {code:400, msg: 'Conflict in teacher schedule'};
+        // this.setState({status:newStatus});
+      }
+    })
 		.catch((error) => console.log("error", error));
-	};
+
+		// var raw = JSON.stringify({
+		// course: raw_course, 
+		// schedule: raw_sched
+		// });
+		
+		// var myHeaders = new Headers();
+		// myHeaders.append("Content-Type", "application/json");  
+		// var requestOptions = {
+		// method: "POST",
+		// headers: myHeaders,
+		// body: raw,
+		// redirect: "follow",
+		// };
+		// fetch(`${HOST_URL}/courses`, requestOptions)
+		// .then((response) =>{
+    //   console.log(response.status);
+    //   response.text();
+    // })
+		// .then((result) => console.log(result))
+		// .catch((error) => console.log("error", error));
+	}
+
+
   render() {
     const weekday = [
       "Monday",
@@ -140,6 +236,21 @@ export class CourseCreation extends Component {
     ];
     return (
       <div className="course-create">
+         {this.state.status ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => {
+                window.location.href = "/admin/manage/courses";
+              }}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}
         <div className="course-create-form">
           <InputField
             type="text"
@@ -185,7 +296,9 @@ export class CourseCreation extends Component {
             }
             onChange={(option) => {
               if (option) {
+                this.fetch_teachers(option.name);
                 this.setState({ subject_option: option });
+                
               } else {
                 this.setState({ subject_option: null });
               }

@@ -11,7 +11,8 @@ class ExamController extends Controller{
         if (isset($params['course_id'])){
             $course_id = $params['course_id'];
             $this->_model->where('course_id', $course_id);
-            $this->_model->showHasOne();
+            $this->_model->orderBy('created_at', 'DESC');
+            // $this->_model->showHasOne();
             $this->_model->showHMABTM();
             $result = $this->_model->search();
             $res = array();
@@ -56,25 +57,31 @@ class ExamController extends Controller{
 
     public function create(){
         $data = json_decode(file_get_contents("php://input"), true);
+        // var_dump($data);
+        if (!isset($data['exam']) || !isset($data['students'])){
+            $this->send(400, 'Bad request');
+        }
         $exam_info = $data['exam'];
         $students = $data['students'];
+        
         $result = $this->_model->create($exam_info, $students);
         if ($result){
-            $this->response->sendStatus(201);
+            $this->send(201, "Created");
         }
         else{
-            $this->response->sendStatus(400);
+            $this->send(400, "Error creating new exam");
         }
     }
 
-    public function update($id){
+    public function update($params){
+        $id = $params['id'];
         $data = json_decode(file_get_contents("php://input"), true);
         $result = $this->_model->update($id, $data);
         if ($result){
-            $this->response->sendStatus(200);
+            $this->send(200, 'Updated');
         }
         else{
-            $this->response->sendStatus(400);
+            $this->send(400, 'Error updating score');
         }
     }
 }

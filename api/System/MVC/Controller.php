@@ -45,7 +45,7 @@ class Controller {
         }
         catch(PDOException $e){
             // return false;
-            $this->send(400, ['response'=> $e->getMessage()]);
+            $this->send(400, $e->getMessage());
         } 
     }
 
@@ -64,7 +64,7 @@ class Controller {
             $this->send(200, $data);
         }
         catch(PDOException $e){
-            $this->send(400, ['response'=> $e->getMessage()]);
+            $this->send(400, $e->getMessage());
         } 
         
 
@@ -77,16 +77,16 @@ class Controller {
         try{
             $this->_model->setAtrributes($data);
             $this->_model->save();
-            $this->send(201, ['response'=>'OK']);
+            $this->send(201, 'Created');
         }
         catch(PDOException $e){
-            $this->send(400, ['response'=> $e->getMessage()]);
+            $this->send(400, $e->getMessage());
         } 
 
     }
     public function update($params){
         if (!$params){
-            $this->send(400, ['error' => 'Bad Request']);
+            $this->send(400, 'Bad Request');
         }
         else {
             $id = $params['id'];
@@ -95,10 +95,10 @@ class Controller {
                 $this->_model->setAtrributes($data);
                 $this->_model->id = $id;
                 $this->_model->save();
-                $this->send(200, ['response'=>'OK']);
+                $this->send(200, 'Updated');
             }
             catch(PDOException $e){
-                $this->send(400, ['response'=> $e->getMessage()]);
+                $this->send(400, $e->getMessage());
             } 
         }
 
@@ -107,17 +107,17 @@ class Controller {
 
     public function delete($params){
         if (!$params){
-            $this->send(400, ['error' => 'Bad Request']);
+            $this->send(400, 'Bad Request');
         }
         else {
             $id = $params['id'];
             try{  
                 $this->_model->id = $id;
                 $this->_model->delete();
-                $this->send(200, ['response'=>'OK']);
+                $this->send(200, 'Deleted');
             }
             catch(PDOException $e){
-                $this->send(400, ['response'=> $e->getMessage()]);
+                $this->send(400, $e->getMessage());
             } 
         }
 

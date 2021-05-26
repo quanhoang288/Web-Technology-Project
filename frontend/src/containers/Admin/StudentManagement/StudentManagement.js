@@ -3,12 +3,15 @@ import DataTables from "../../../components/Table/Table";
 import MOCK_DATA from "../../../components/Table/MOCK.json";
 import Modal from "../../../components/Modal/Modal";
 import {HOST_URL} from "../../../config";
+import Backdrop from "../../../components/Backdrop/Backdrop";
+import PopUp from "../../../components/PopUp/PopUp";
 import "./StudentManagement.css";
 export class StudentManagement extends Component {
   state = {
     modalShow: false,
     targetRow: {},
     student_info: [],
+    status: null,
   };
   toggleModal = () => {
     this.setState({ modalShow: !this.state.modalShow });
@@ -48,8 +51,19 @@ export class StudentManagement extends Component {
     console.log(JSON.stringify(update_info))
     
     fetch(HOST_URL + `/users/${this.state.targetRow['id']}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => this.fetch_data())
+      .then((response) => {
+          var newStatus = {...this.state.status}
+          newStatus.code = response.status
+          this.setState({status:newStatus})
+          this.setState({modalShow: false});
+          return response.json();
+      })
+      .then((result) => {
+        var newStatus = {...this.state.status};
+        newStatus.msg = result;
+        this.setState({status:newStatus});
+        this.fetch_data();
+      })
       .catch((error) => console.log("error", error));
   };
   componentDidMount() {
@@ -58,6 +72,21 @@ export class StudentManagement extends Component {
   render() {
     return (
       <div>
+        {this.state.status ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => {
+                this.setState({ status: null })
+              }}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}
         <h1 className="title">Student Management</h1>
         {this.state.student_info.length > 0 ? 
           <DataTables

@@ -80,18 +80,23 @@ class EnrollController extends Controller{
 
     public function delete($params){
         if (!$params){
-            $this->response->sendStatus(400);
+            $this->send(400, "Bad request");
+        }
+        else if (isset($params['course_id'])){
+            $course_id = $params['course_id'];
+            $result = $this->_model->remove_pending($course_id);
         }
         else {
             $student_id = $params['student_id'];
             $course_id = $params['course_id'];
             $result = $this->_model->remove($student_id, $course_id);
-            if ($result){
-                $this->response->sendStatus(200);
-            }
-            else 
-                $this->response->sendStatus(400);
+
         }
+        if ($result){
+            $this->send(200, "Deleted");
+        }
+        else 
+            $this->send(400, "Error deleting enroll");
 
     }
 

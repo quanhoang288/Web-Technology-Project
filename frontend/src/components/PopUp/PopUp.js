@@ -1,6 +1,7 @@
 import { React } from "react";
 import './PopUp.css'
 export const PopUp = ({ show, msg, closeHandler , redirect}) => {
+  
   return (
     <div
       className="popup-wrapper"
@@ -16,13 +17,14 @@ export const PopUp = ({ show, msg, closeHandler , redirect}) => {
         </span>
       </div>
       <div className="popup-content">
-        <div className="popup-body">{msg === 201 ?  "Created" :"Error" }</div>
-        
+        <div className="popup-body">
+          {msg.msg}
+        </div>
         
       </div>
       <div className="popup-footer">
       {
-          msg === 201 ? <button onClick={redirect} >Ok</button> : null
+          [200,201,303].includes(msg.code) ? <button onClick={redirect} >Ok</button> : null
       }
       </div>
     </div>

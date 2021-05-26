@@ -337,16 +337,13 @@ class Model {
 			}
 			$values = substr($values,0,-1);
 			$fields = substr($fields,0,-1);
-
 			$query = 'INSERT INTO '.$this->_table.' ('.$fields.') VALUES ('.$values.')';
 		
 		}
 		// echo $query . PHP_EOL;
         $stmt = $this->_db->prepare($query);
 		$this->_result = $stmt->execute();
-
 		$this->clear();
-
 		if (!$this->_result) {
 			
 			return false;

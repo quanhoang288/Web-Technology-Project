@@ -4,6 +4,8 @@ import Notiboard from "../../../components/Notiboard/Notiboard";
 import StatCard from "../../../components/Card/StatCard";
 import Button from "../../../components/Button/Button";
 import MOCKDATA from "../../../components/Notiboard/mock.json";
+import Backdrop from "../../../components/Backdrop/Backdrop";
+import PopUp from "../../../components/PopUp/PopUp";
 import { HOST_URL } from "../../../config";
 export class Dashboard extends Component {
   state = {
@@ -12,7 +14,7 @@ export class Dashboard extends Component {
     num_students: 0, 
     num_teachers: 0, 
     num_courses: 0, 
-    status: false 
+    status: null 
   };
   ref = React.createRef();
   addNotificationHandler = () => {
@@ -33,8 +35,22 @@ export class Dashboard extends Component {
     };
 
     fetch(`${HOST_URL}/${slug}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => this.fetch_noti())
+      .then((response) => {
+        if (response.status !== 201){
+          var newStatus = {...this.state.status};
+          newStatus.code = response.status;
+          this.setState({status:newStatus});
+        }
+
+        return response.json()
+      })
+      .then((result) => {
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus});
+        this.ref.current.value = '';
+        this.fetch_noti();
+      })
       .catch((error) => console.log("error", error));
   };
   
@@ -77,6 +93,21 @@ export class Dashboard extends Component {
 
     return (
       <div className="dashboard">
+          {this.state.status ? Object.keys(this.state.status).includes('code') ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => {
+                window.location.href = "/admin/manage/courses";
+              }}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ): null : null}
         <div className="title">Dashboard</div>
         <div className="statistics">
           {stats.map((item, idx) => {

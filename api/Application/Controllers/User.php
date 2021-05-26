@@ -42,7 +42,7 @@ class UserController extends Controller {
                         else{
                             foreach($data as $user){
                                 // $user['user']['name'] = $user['user']['firstname'] . ' ' . $user['user']['lastname'];
-                                array_push($res, filter($user['user'], ['username', 'password', 'subject', 'role', 'active'], true));
+                                array_push($res, filter($user['user'], ['username', 'password', 'subject', 'role', 'active', 'status'], true));
                             }
                         }
             
@@ -76,21 +76,25 @@ class UserController extends Controller {
                 $request_sender_role = json_decode($decoded_JWT, true)['role'];
                 if($request_sender_role == 'admin')
                 {
-                    $response ='Succesfully Registerd 1';
+                    $response ='Succesfully Registerd';
                     try{
                         
                         $this->_model->setAtrributes($data);
                         if ($this->_model->save())
-                            $this->send(201, ['response'=>$response]);
-                        $this->send(400, ['response'=> 'Error']);
+                            $this->send(201, $response);
+                        $this->send(400, 'Error creating user');
                     }
                     catch(PDOException $e){
-                        $this->send(400, ['response'=> $e->getMessage()]);
+                        
+                        $this->send(400,"Error creating user");
                     }             
                 }
                 else{
                     $this->send(400, "Permission Denied");
                 }
+            }
+            else{
+                $this->send(400, "Permission Denied");
             }
         }   
         else{
@@ -98,10 +102,10 @@ class UserController extends Controller {
             try{
                 $this->_model->setAtrributes($data);
                 $this->_model->save();
-                $this->send(201, ['response'=>$response]);
+                $this->send(201, $response);
             }
             catch(PDOException $e){
-                $this->send(400, ['response'=> $e->getMessage()]);
+                $this->send(400, $e->getMessage());
             } 
         }
         
@@ -133,14 +137,16 @@ class UserController extends Controller {
                 $token = JWT::encode($user, SECRET_KEY);
                 
                 $response = ['user'=>$user,'token' => $token];
-                $this->response->sendStatus(200);
-                $this->response->setContent(['response'=> $response]);    
+                $this->send(200, ['response'=>$response]);
+                // $this->response->sendStatus(200);
+                // $this->response->setContent(['response'=> $response]);    
             }
             else
             {
                 $response = 'invalid_password';
-                $this->response->sendStatus(401);
-                $this->response->setContent([ 'response'=> $response]);
+                $this->send(401, ['response'=> $response]);
+                // $this->response->sendStatus(401);
+                // $this->response->setContent([ 'response'=> $response]);
             }
         }
     }

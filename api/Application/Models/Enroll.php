@@ -37,8 +37,13 @@ class EnrollModel extends Model{
                 $amount += 1;    
                 
             }
-            else if ($status == 3)
+            else if ($status == 3){
                 $amount -= 1;
+                if ($amount < 0)
+                    $amount = 0;
+            }
+                
+
             $update_query = 'UPDATE course SET cur_amount = ? WHERE id = ?';
             $stmt = $this->_db->prepare($update_query);
             return $stmt->execute([$amount, $course_id]);
@@ -58,7 +63,8 @@ class EnrollModel extends Model{
             $stmt->execute([$course_id]);
             $amount = $stmt->fetch(PDO::FETCH_ASSOC)['cur_amount'];
             $amount -= 1;
-
+            if ($amount < 0)
+                $amount = 0;
             $update_query = 'UPDATE course SET cur_amount = ? WHERE id = ?';
             $stmt = $this->_db->prepare($update_query);
             return $stmt->execute([$amount, $course_id]);
@@ -67,6 +73,15 @@ class EnrollModel extends Model{
         else 
             return false;
     }
+
+    public function remove_pending($course_id){
+        $update_query = 'UPDATE course_student SET status = 3 WHERE course_id = ? AND status IN (1, 2)';
+        $stmt = $this->_db->prepare($update_query);
+        return $stmt->execute([$course_id]);
+
+    }
+
+
 
 
 }

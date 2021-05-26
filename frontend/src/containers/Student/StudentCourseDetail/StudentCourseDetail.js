@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./StudentCourseDetail.css";
-import img from '../../../asset/eclass.png'
+// import img from '../../../asset/eclass.png'
 import Table from "../../../components/Table/Table";
 import MOCK_DATA from "../../../components/Table/MOCK.json";
 import InputField from "../../../components/InputField/InputField";
@@ -8,6 +8,9 @@ import Button from '../../../components/Button/Button'
 import { Link } from "react-router-dom";
 import { HOST_URL } from '../../../config';
 import { connect } from 'react-redux';
+import Backdrop from "../../../components/Backdrop/Backdrop";
+import PopUp from "../../../components/PopUp/PopUp";
+
 export class StudentCourseDetail extends Component {
   state = {
     id: this.props.match.params.id, // class id
@@ -18,7 +21,8 @@ export class StudentCourseDetail extends Component {
     class_notification_list: [],
     class_material_list: [],
     class_exam_list: [],
-	  class_student_list: []
+	  class_student_list: [],
+    status: null,
   };
   toggleTab = (index) => {
     this.setState({ toogleState: index });
@@ -61,8 +65,74 @@ export class StudentCourseDetail extends Component {
   fetch_data = () => {
     // api call
 
-	const user_id = this.props.user['id'];
-	
+    const user_id = this.props.user['id'];
+    
+
+    this.fetch_class_info();
+    this.fetch_class_schedule();
+    this.fetch_class_notifications();
+    this.fetch_class_material();
+    this.fetch_enroll_status(user_id);
+    this.fetch_class_exams(user_id);
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    // var requestOptions = {
+    //   method: "GET",
+    //   headers: myHeaders,
+    // };
+    // fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //       this.setState({
+    //         class_info: result
+    //       });
+    //   })
+    //   .catch((error) => console.log("error", error)); 
+    
+ 
+
+    // fetch(`${HOST_URL}/schedule?course_id=${this.state.id}`, requestOptions)
+    //   .then((response) => response.json())
+    //   .then((result) => {
+          
+    //       this.setState({schedule: result});
+    //   })
+    //   .catch((error) => console.log("error", error)); 
+
+    // fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     if (result.length > 0){
+    //         const enrolled = parseInt(result[0]['status']);
+    //       	this.setState({enrolled:  enrolled});
+    //     }
+		//   })
+    //   .catch((error) => console.log("error", error)); 
+    // // fetch material list
+    // fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
+    // .then((response) => response.json())
+    // .then((result) => {
+    //     this.setState({
+    //       class_material_list: result
+    //     });
+    // })
+    // .catch((error) => console.log("error", error));  
+
+    // // fetch exam list
+    // fetch(`${HOST_URL}/exams?course_id=${this.state.id}&student_id=${user_id}`, requestOptions)
+    // .then((response) => response.json())
+    // .then((result) => {
+    //     console.log(result);
+    //     this.setState({
+    //       class_exam_list: result.map(exam_info => ({created_at: exam_info.exam.created_at, taskname: exam_info.exam.taskname, score: exam_info.score}))
+    //     });
+    // })
+    // .catch((error) => console.log("error", error));  
+
+
+  }
+
+  fetch_class_info = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var requestOptions = {
@@ -77,17 +147,46 @@ export class StudentCourseDetail extends Component {
           });
       })
       .catch((error) => console.log("error", error)); 
-    
- 
+  }
 
-    fetch(`${HOST_URL}/schedule?course_id=${this.state.id}`, requestOptions)
+  fetch_class_notifications = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(`${HOST_URL}/course_notifications?course_id=${this.state.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-          
-          this.setState({schedule: result});
+          this.setState({
+            class_notification_list: result
+          });
       })
       .catch((error) => console.log("error", error)); 
-
+  }
+  fetch_class_schedule = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(`${HOST_URL}/schedule?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        
+        this.setState({schedule: result});
+    })
+    .catch((error) => console.log("error", error)); 
+  }
+  fetch_enroll_status = (user_id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
     fetch(`${HOST_URL}/enroll?student_id=${user_id}&course_id=${this.state.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -97,17 +196,15 @@ export class StudentCourseDetail extends Component {
         }
 		  })
       .catch((error) => console.log("error", error)); 
-    // fetch material list
-    fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-        this.setState({
-          class_material_list: result
-        });
-    })
-    .catch((error) => console.log("error", error));  
+  }
 
-    // fetch exam list
+  fetch_class_exams = (user_id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
     fetch(`${HOST_URL}/exams?course_id=${this.state.id}&student_id=${user_id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
@@ -117,9 +214,23 @@ export class StudentCourseDetail extends Component {
         });
     })
     .catch((error) => console.log("error", error));  
+  }
 
-
-  };
+  fetch_class_material = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        this.setState({
+          class_material_list: result
+        });
+    })
+  }
   downloadMaterialRequest = (id, filename) => {
     
     var myHeaders = new Headers();
@@ -167,7 +278,7 @@ export class StudentCourseDetail extends Component {
       headers: myHeaders,
       redirect: 'follow',
       };
-      fetch(`${HOST_URL}/schedule?user_id=${user_id}&role=student`, requestOptions)
+      fetch(`${HOST_URL}/schedule?user_id=${user_id}&role=student&type=both`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         const mapped_result = result.map(item => (JSON.stringify({weekday_id: item.weekday_id, time_id: item.time_id})));
@@ -190,9 +301,9 @@ export class StudentCourseDetail extends Component {
               body: raw,
               redirect: 'follow',
               };
-              fetch(`${HOST_URL}/enroll`, requestOptions)
-              .then((response) => this.setState({enrolled:  1}))
-              .catch((error) => console.log("error", error));   
+            fetch(`${HOST_URL}/enroll`, requestOptions)
+            .then((response) => this.setState({enrolled:  1}))
+            .catch((error) => console.log("error", error));   
           }
           else {
             var requestOptions = {
@@ -206,7 +317,8 @@ export class StudentCourseDetail extends Component {
           }
         }
         else{
-          alert("Schedule conflict!");
+          const newStatus = {code:400, msg: 'Schedule conflict'};
+          this.setState({status:newStatus});
         }
       })
       .catch((error) => console.log("error", error));  
@@ -227,13 +339,14 @@ export class StudentCourseDetail extends Component {
     const enrolled = this.state.enrolled;
     const schedule = this.state.schedule.map((schedule_item) => this.int_to_time(schedule_item));
     const material_list = this.state.class_material_list;
+    const notification_list = this.state.class_notification_list;
     const exams =  this.state.class_exam_list;
     // console.log(exams);
     if(this.state.class_info)
     {
       const class_info = this.state.class_info;
       
-      const notifications = class_info.notifications;
+      // const notifications = class_info.notifications;
       
       // console.log(class_info);
       if(enrolled === 2 && class_info.status === 'ongoing')
@@ -271,7 +384,7 @@ export class StudentCourseDetail extends Component {
                     }
                   >
                     {
-                      notifications.map((noti) => 
+                      notification_list.map((noti) => 
                         <div className="plan-item">
                           <div className="datetime">{noti.create_at}</div>
                             <div className="content">
@@ -333,6 +446,19 @@ export class StudentCourseDetail extends Component {
       }
       return(
           <div className='student__course__detail'>
+          {this.state.status  && Object.keys(this.state.status).includes('code') ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => this.setState({ status: null })}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}
         {
           class_info ? 
           <>

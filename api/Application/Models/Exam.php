@@ -15,6 +15,10 @@ class ExamModel extends Model{
     }
 
     public function create($exam_info, $students){
+        foreach($exam_info as $key => $value){
+            if (!in_array($key, $this->_describe))
+                return false;
+        }
         $this->setAtrributes($exam_info);
         if (!$this->save())
             return false;

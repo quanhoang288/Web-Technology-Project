@@ -49,7 +49,7 @@ export class StudentCourse extends Component {
             <Carousel
               show={5}
               children={courses.map((course) => {
-                if (course.status === "new") {
+                if (course.status === "new" || course.enroll_status === '1' || course.enroll_status === '3') {
                   return (
                     <div>
                       <Card
@@ -68,7 +68,7 @@ export class StudentCourse extends Component {
             <Carousel
               show={5}
               children={courses.map((course) => {
-                if (course.status === "ongoing") {
+                if (course.status === "ongoing" && course.enroll_status === '2') {
                   return (
                     <div>
                       <Card
@@ -88,7 +88,7 @@ export class StudentCourse extends Component {
             <Carousel
               show={5}
               children={courses.map((course) => {
-                if (course.status === "finished") {
+                if (course.status === "finished" && course.enroll_status === '2') {
                   return (
                     <div>
                       <Card

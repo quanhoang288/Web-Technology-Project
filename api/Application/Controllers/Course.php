@@ -1,7 +1,8 @@
 <?php
 
 use MVC\Controller;
-
+use JWT\JWT;
+require SYSTEM . 'JWT.php';
 class CourseController extends Controller {
 
     public function __construct()
@@ -50,6 +51,7 @@ class CourseController extends Controller {
                         if (is_int($idx)){
                             // echo "found" . PHP_EOL;
                             $status = $course_info['student'][$idx]['course_student']['status'];
+                            $course_info['course']['enroll_status'] = $status;
                             unset($course_info['student']);
                             array_push($res, $course_info['course']);
                             // if ($status == '2' && $course_info['course']['status'] == 'ongoing'){
@@ -197,12 +199,26 @@ class CourseController extends Controller {
     }
     public function create()
     {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $result = $this->_model->create($data);
-        if ($result) 
-            $this->send(201, 'Created');
-        else 
-            $this->send(400, 'Error');
+        $token = getBearerToken();
+        if (JWT::verify($token, SECRET_KEY)){
+            $decoded_JWT = JWT::decode(($token));
+            $request_sender_role = json_decode($decoded_JWT, true)['role'];
+            if ($request_sender_role == 'admin'){
+                $data = json_decode(file_get_contents('php://input'), true);
+                $result = $this->_model->create($data);
+                if ($result) 
+                    $this->send(201, 'Created');
+                else 
+                    $this->send(400, 'Error');
+            }
+            else{
+                $this->send(400, "Permission Denied");
+            }
+        }
+        else{
+            $this->send(400, "Permission Denied");
+        }
+
     }
 
     public function update($params){
