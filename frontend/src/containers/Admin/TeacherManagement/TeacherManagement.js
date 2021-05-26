@@ -91,6 +91,7 @@ export class TeacherManagement extends Component {
         {this.state.teacher_info.length > 0 ? (
           <DataTables
             data={this.state.teacher_info}
+            hidden_field={['id']}
             rowPerPage={5}
             rowClick={this.editHander}
             // onRightClick={this.showSchedule}

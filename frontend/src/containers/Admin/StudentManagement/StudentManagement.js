@@ -91,6 +91,7 @@ export class StudentManagement extends Component {
         {this.state.student_info.length > 0 ? 
           <DataTables
             data={this.state.student_info}
+            hidden_field = {['id']}
             rowPerPage={5}
             rowClick={this.editHander}
           ></DataTables>

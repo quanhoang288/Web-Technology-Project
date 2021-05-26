@@ -68,6 +68,10 @@ export class Table extends Component {
       padding_row.push(
         <tr>
           {columns.map((col, idx) => {
+            if(this.props.hidden_field && this.props.hidden_field.includes(col))
+            {
+              return null
+            }
             return <td key={idx}></td>;
           })}
         </tr>
@@ -84,6 +88,10 @@ export class Table extends Component {
           <div className="checkboxes">
             {data[0]
               ? columns.map((elm, idx) => {
+                  if(this.props.hidden_field && this.props.hidden_field.includes(elm))
+                  {
+                    return null
+                  }
                   return (
                     <div>
                       <input
@@ -114,6 +122,10 @@ export class Table extends Component {
             <tr>
               {data[0]
                 ? columns.map((elm, idx) => {
+                  if(this.props.hidden_field && this.props.hidden_field.includes(elm))
+                  {
+                    return null
+                  }
                     return <th key={idx}>{elm}</th>;
                   })
                 : null}
@@ -144,6 +156,10 @@ export class Table extends Component {
                       }}
                     >
                       {row_values.map((row_val, td_idx) => {
+                        if(this.props.hidden_field && this.props.hidden_field.includes(Object.keys(row)[td_idx]))
+                        {
+                          return null
+                        }
                         if (!this.props.editable) {
                           return <td key={td_idx}>{row_val}</td>;
                         }

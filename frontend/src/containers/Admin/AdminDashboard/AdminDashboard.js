@@ -18,13 +18,13 @@ export class Dashboard extends Component {
   };
   ref = React.createRef();
   addNotificationHandler = () => {
-    var slug = 'system_notifications'
+    var slug = "system_notifications";
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    var tzoffset = new Date().getTimezoneOffset() * 60000;
     const time_created = new Date(Date.now() - tzoffset).toISOString();
-    const date = time_created.split('T')[0];
-    const time = time_created.split('T')[1].split('.')[0]
+    const date = time_created.split("T")[0];
+    const time = time_created.split("T")[1].split(".")[0];
 
     var raw = JSON.stringify({ content: this.ref.current.value,created_at: date + ' ' + time});
     // console.log(raw)
@@ -53,9 +53,8 @@ export class Dashboard extends Component {
       })
       .catch((error) => console.log("error", error));
   };
-  
- 
-  fetch_noti(){
+
+  fetch_noti() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -66,18 +65,24 @@ export class Dashboard extends Component {
 
     fetch(`${HOST_URL}/system_notifications`, requestOptions)
       .then((response) => response.json())
-      .then((result) => this.setState({noti_data:result}))
+      .then((result) => this.setState({ noti_data: result }))
       .catch((error) => console.log("error", error));
     fetch(`${HOST_URL}/courses?stats=all`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        this.setState({revenue: parseInt(result.revenue), num_courses: parseInt(result.num_courses)});
-      })
+        this.setState({
+          revenue: parseInt(result.revenue),
+          num_courses: parseInt(result.num_courses),
+        });
+      });
     fetch(`${HOST_URL}/users?stats=all`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      this.setState({num_students: parseInt(result.student), num_teachers: parseInt(result.teacher)});
-    })
+      .then((response) => response.json())
+      .then((result) => {
+        this.setState({
+          num_students: parseInt(result.student),
+          num_teachers: parseInt(result.teacher),
+        });
+      });
   }
   componentDidMount() {
     this.fetch_noti();
@@ -88,7 +93,7 @@ export class Dashboard extends Component {
       { title: "Revenue", content: this.state.revenue },
       { title: "Teacher", content: this.state.num_teachers },
       { title: "Student", content: this.state.num_students },
-      { title: "Course", content: this.state.num_courses }
+      { title: "Course", content: this.state.num_courses },
     ];
 
     return (
