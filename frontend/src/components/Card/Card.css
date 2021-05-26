@@ -9,6 +9,8 @@
   
   width: 500px;  
   max-width: 100%;
+  height: 500px;
+  max-height: 100%;
   
   border-radius: 5px;
 }

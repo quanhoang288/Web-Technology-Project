@@ -80,10 +80,11 @@ class UserController extends Controller {
                         
                         $this->_model->setAtrributes($data);
                         $this->_model->save();
-                        $this->send(201, ['response'=>$response]);
+                        $this->send(201,$response);
                     }
                     catch(PDOException $e){
-                        $this->send(400, ['response'=> $e->getMessage()]);
+                        
+                        $this->send(400,"Error creating user");
                     }             
                 }
                 else{

@@ -86,7 +86,7 @@ class CourseModel extends Model{
 
     }
     public function update($course_id, $data){
-        $course_data = $data['course'];
+        $course_data = $data;
         $course_name = $course_data['name'];
         $img = $course_data['img'];
         $img_exploded = explode(';', $img);

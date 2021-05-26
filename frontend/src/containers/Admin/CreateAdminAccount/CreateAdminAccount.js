@@ -64,10 +64,20 @@ class Registration extends Component {
 
     fetch(`${HOST_URL}/users`, requestOptions)
       .then((response) => {
-        console.log(response.statusText);
-        this.setState({ status: response.status });
+        
+        
+          var newStatus = {...this.state.status}
+          newStatus.code = response.status
+          this.setState({status:newStatus})
+          return response.json()
+        
       })
-      .then((result) => console.log(result))
+      .then((result) => {
+        
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
+      })
       .catch((error) => console.log("error", error));
   };
   render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css'
-import axios from 'axios'
+import PopUp from '../PopUp/PopUp'
 import { HOST_URL } from '../../config'
 import {Link, Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'

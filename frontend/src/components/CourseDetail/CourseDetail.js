@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import StudentTable from "../../components/Table/Table";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/Button/Button";
@@ -327,8 +326,10 @@ export default function CourseDetail() {
           </div>
         ) : null}
       </CourseDetailModal>
-      <Link to={`/admin/manage/courses/edit-course/${id}`}>
-            <i class="fas fa-edit fa-2x"></i>
+      <Link 
+      style = {{"position":"absolute","right":"30px","bottom":"30px"}}
+      to={`/admin/manage/courses/edit-course/${id}`}>
+            <i class="fas fa-edit fa-5x"></i>
       </Link>
     </div>
   );
