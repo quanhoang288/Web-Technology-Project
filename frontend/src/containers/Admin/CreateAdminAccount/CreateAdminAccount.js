@@ -37,7 +37,6 @@ class Registration extends Component {
     } 
 
     else {
-      console.log("Ojashdkjasdhakjh")
       data = JSON.stringify({
         username: username,
         password: password,
@@ -64,6 +63,8 @@ class Registration extends Component {
 
     fetch(`${HOST_URL}/users`, requestOptions)
       .then((response) => {
+        
+        console.log(response.status);
         console.log(response.statusText);
         this.setState({ status: response.status });
       })

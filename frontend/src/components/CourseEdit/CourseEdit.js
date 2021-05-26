@@ -91,7 +91,7 @@ export class CourseEdit extends Component {
 		level: level_option["name"],
 		description: description,
 		img: img,
-    time_created: date + ' ' + time
+        time_created: date + ' ' + time
 		};
 		var raw_sched = this.process_sched(sched);
 		var raw = JSON.stringify({

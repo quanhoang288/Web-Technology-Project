@@ -66,7 +66,8 @@ class UserController extends Controller {
     public function create(){
         $data = json_decode(file_get_contents('php://input'), true);
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT); // incoming post data
-        if($data['role'] == 'admin' || $data['role'] =='teacher' )
+        
+        if($data['role'] == 'admin' || $data['role'] =='teacher')
         {
             $token  = getBearerToken();
             if(JWT::verify($token,SECRET_KEY))
@@ -75,12 +76,13 @@ class UserController extends Controller {
                 $request_sender_role = json_decode($decoded_JWT, true)['role'];
                 if($request_sender_role == 'admin')
                 {
-                    $response ='Succesfully Registerd ';
+                    $response ='Succesfully Registerd 1';
                     try{
                         
                         $this->_model->setAtrributes($data);
-                        $this->_model->save();
-                        $this->send(201, ['response'=>$response]);
+                        if ($this->_model->save())
+                            $this->send(201, ['response'=>$response]);
+                        $this->send(400, ['response'=> 'Error']);
                     }
                     catch(PDOException $e){
                         $this->send(400, ['response'=> $e->getMessage()]);

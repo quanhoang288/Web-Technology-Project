@@ -11,7 +11,8 @@ export class Dashboard extends Component {
     revenue: 0,
     num_students: 0, 
     num_teachers: 0, 
-    num_courses: 0 
+    num_courses: 0, 
+    status: false 
   };
   ref = React.createRef();
   addNotificationHandler = () => {
@@ -24,7 +25,7 @@ export class Dashboard extends Component {
     const time = time_created.split('T')[1].split('.')[0]
 
     var raw = JSON.stringify({ content: this.ref.current.value,created_at: date + ' ' + time});
-    console.log(raw)
+    // console.log(raw)
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -63,7 +64,7 @@ export class Dashboard extends Component {
     })
   }
   componentDidMount() {
-    this.fetch_noti()
+    this.fetch_noti();
   }
 
   render() {
