@@ -110,7 +110,7 @@ export class CourseEdit extends Component {
 		{name: "Geography"},
 	];
 
-    console.log(this.state.title);
+    
 	const level_options = [{name:"Beginner"}, {name:"Intermidiate"}, {name:"Upper-Intermidiate"}, {name:"Advanced"}];
     return (
     <React.Fragment>

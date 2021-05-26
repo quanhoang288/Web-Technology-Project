@@ -55,7 +55,7 @@ export class Sidebar extends Component {
             <Fragment>
                 <div class="sidebar-wrapper">
                     <div className={this.props.permission === 'default' ? 'sidebar-disable' : 'sidebar-enable'}>
-                        <input type="checkbox" id="check" checked={this.state.sidebar_open ? true : false} />
+                        <input type="checkbox" id="check" readOnly checked={this.state.sidebar_open ? true : false} />
                         <label htmlFor="check" >
                             <i class="fas fa-bars" id="btn" onClick={this.toggleBackdrop} ></i>
                             <i class="fas fa-times" id="cancel" onClick={this.toggleBackdrop}></i>

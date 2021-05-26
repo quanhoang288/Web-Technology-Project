@@ -125,23 +125,22 @@ export class Table extends Component {
                   let row_values = Object.values(row);
                   return (
                     <tr
-                    
                       key={idx}
                       onClick={(e) => {
-                        
-                          if (this.props.rowClick) {
-                            this.props.rowClick(row);
-                          
+                        if (this.props.rowClick) {
+                          this.props.rowClick(row);
                         }
                       }}
-                      onContextMenu = {(e) => {
-                        
-                          if(this.props.onRightClick)
-                          {
-
-                              this.props.onRightClick(row)
-                          }
-                          
+                      onContextMenu={(e) => {
+                        document.oncontextmenu = function () {
+                          return false;
+                        };
+                        if (this.props.onRightClick) {
+                          this.props.onRightClick(row);
+                        }
+                        document.oncontextmenu = function () {
+                          return true;
+                        };
                       }}
                     >
                       {row_values.map((row_val, td_idx) => {
@@ -156,8 +155,6 @@ export class Table extends Component {
                               disabled={this.enabledEditField(columns[td_idx])}
                               value={row_val}
                               onChange={(_, value) => {
-                                // const newRow = {...row}
-
                                 row[Object.keys(row)[td_idx]] = value;
                                 this.props.onEdit(currentRows);
                               }}

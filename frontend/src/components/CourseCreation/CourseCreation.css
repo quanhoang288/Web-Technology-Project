@@ -13,6 +13,7 @@
 }
 .course-create-form > div{
     margin: 30px;
+    width: 100%;
 }
 .course-create-form textarea{
     width: 90%;
