@@ -80,7 +80,7 @@ export class TeacherInfo extends Component {
                 ) : null}
               </div>
               
-              <Link to='/teacher/change-password' > <i class="fas fa-key fa-2x" style={{"color":"white"}}></i> </Link>
+              <Link to={{pathname:'/teacher/change-password', state:{id: this.props.user.id}}} > <i class="fas fa-key fa-2x" style={{"color":"white"}}></i> </Link>
             </div>
             <div class="right">
               <div class="info">
