@@ -75,7 +75,7 @@ export class Schedule extends Component {
           return (
               <div>
                   <Table
-                      rowPerPage={schedule.length}
+                      rowPerPage={5}
                       data={schedule}
                     
                   ></Table>

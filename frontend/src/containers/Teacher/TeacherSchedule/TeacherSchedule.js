@@ -70,7 +70,7 @@ export class TeacherSchedule extends Component {
             return (
                 <div>
                     {
-                        <TeacherTable rowPerPage={schedule.length} data={schedule}/> 
+                        <TeacherTable rowPerPage={5} data={schedule}/> 
                     }
 
                 </div>

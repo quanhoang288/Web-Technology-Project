@@ -165,8 +165,12 @@ export class TeacherCourseDetail extends Component {
     //api call
   };
   examScoreUpdate = () => {
+    
     const scores = this.state.mark_input_data;
-
+    if(scores === null)
+    {
+      return
+    }
     const exam_id = this.state.target_exam.id;
     var raw = JSON.stringify(
       scores.map((score_info) => ({
@@ -477,7 +481,8 @@ export class TeacherCourseDetail extends Component {
           >
             {student_list.length > 0 ? (
               <Table
-                rowPerPage={Math.min(5, student_list.length)}
+                rowPerPage={5}
+                hidden_field = {['id','status','active']}
                 data={student_list}
               ></Table>
             ) : (
@@ -495,6 +500,7 @@ export class TeacherCourseDetail extends Component {
                 {class_exam_list.length > 0 ? (
                   <>
                     <Table
+                      hidden_field = {['id']}
                       data={class_exam_list.map((exam_info) => exam_info.exam)}
                       rowPerPage={5}
                       rowClick={(target_row) => {

@@ -10,7 +10,7 @@ export class NavBar extends Component {
 
         return (
             <header class='header'>
-                <div className='logo'>Logo</div>
+                
                 
                 {
                     !this.props.user ?
