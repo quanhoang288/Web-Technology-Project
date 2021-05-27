@@ -10,6 +10,9 @@
 }
 .plan-item .content{
     width: 75%;
+    overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 .plan-item .datetime{
     background-color: #eeeeee;

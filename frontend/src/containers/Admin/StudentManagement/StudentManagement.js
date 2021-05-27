@@ -24,6 +24,7 @@ export class StudentManagement extends Component {
   fetch_data() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
@@ -41,7 +42,11 @@ export class StudentManagement extends Component {
     
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    
+
+    myHeaders.append(
+      "Authorization",
+      `Bearer ${localStorage.getItem("token")}`
+    );
     var requestOptions = {
       method: "PUT",
       headers: myHeaders,

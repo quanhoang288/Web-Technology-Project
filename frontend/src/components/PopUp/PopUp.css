@@ -3,14 +3,14 @@
     z-index: 10000000;
     background: #fff;
     width: 70%;
-    position: relative;
+    position: absolute;
     max-width: 800px;
     margin: 2rem auto;
     transition: all .5s ease;
-    position: fixed;
-    top: 10vh;
+    top:20%;
+    left: 50%;
     
-    left: 550px;
+    
     border-radius: 15px;
   }
   

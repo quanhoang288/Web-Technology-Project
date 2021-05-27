@@ -6,7 +6,7 @@ export const PopUp = ({ show, msg, closeHandler , redirect}) => {
     <div
       className="popup-wrapper"
       style={{
-        transform: show ? "translateY(0vh)" : "translateY(-100vh)",
+        transform: show ? "translateY(0vh) translate(-50%,-50%)" : "translateY(-100vh)",
         opacity: show ? "1" : "0",
       }}
     >

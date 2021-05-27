@@ -51,7 +51,17 @@ export class CourseCreation extends Component {
     if (subject){
       fetch(`${HOST_URL}/users?role=teacher&subject=${subject}`, requestOptions)
 		  .then((response) => response.json())
-		  .then((result) => this.setState({teachers: result}))
+		  .then((result) => 
+        {
+          if(result)
+          {
+            this.setState({teachers:result})
+          }
+          else{
+            this.setState({teachers:[]})
+          }
+        }
+      )
 		  .catch((error) => console.log(error));
     }
     else{
@@ -239,21 +249,7 @@ export class CourseCreation extends Component {
     ];
     return (
       <div className="course-create">
-         {this.state.status ? (
-          <React.Fragment>
-            <PopUp
-              show={this.state.status ? true : false}
-              closeHandler={() => this.setState({ status: null })}
-              msg={this.state.status}
-              redirect={() => {
-                window.location.href = "/admin/manage/courses";
-              }}
-            ></PopUp>
-            <Backdrop
-              toggleBackdrop={() => this.setState({ status: null })}
-            ></Backdrop>
-          </React.Fragment>
-        ) : null}
+         
         <div className="course-create-form">
           <InputField
             type="text"
@@ -294,7 +290,7 @@ export class CourseCreation extends Component {
           <Dropdown
             options={subject_option}
             prompt="Choose a subject"
-            value="subject"
+            
             field="name"
             value={
               this.state.subject_option
@@ -302,13 +298,16 @@ export class CourseCreation extends Component {
                 : null
             }
             onChange={(option) => {
+              
               if (option) {
+                
                 this.fetch_teachers(option.name);
                 this.setState({ subject_option: option });
                 
               } else {
                 this.setState({ subject_option: null });
               }
+              this.setState({teacher_option:null})
             }}
           ></Dropdown>
           <Dropdown
@@ -320,6 +319,7 @@ export class CourseCreation extends Component {
               this.state.level_option ? this.state.level_option["name"] : null
             }
             onChange={(option) => {
+              console.log(this.state)
               if (option) {
                 this.setState({ level_option: option });
               } else {
@@ -328,7 +328,7 @@ export class CourseCreation extends Component {
             }}
           ></Dropdown>
           <Dropdown
-            options={teacher_option}
+            options={teacher_option }
             prompt="Choose a teacher"
             field="name"
             value={
@@ -337,7 +337,9 @@ export class CourseCreation extends Component {
                 : null
             }
             onChange={(option) => {
+              console.log(this.state)
               if (option) {
+
                 this.setState({ teacher_option: option });
               } else {
                 this.setState({ teacher_option: null });

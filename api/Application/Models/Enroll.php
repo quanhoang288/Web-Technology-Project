@@ -75,9 +75,26 @@ class EnrollModel extends Model{
     }
 
     public function remove_pending($course_id){
-        $update_query = 'UPDATE course_student SET status = 3 WHERE course_id = ? AND status IN (1, 2)';
-        $stmt = $this->_db->prepare($update_query);
-        return $stmt->execute([$course_id]);
+        $course_query = 'SELECT * from course where id = ?';
+        $stmt = $this->_db->prepare($course_query);
+        $update_query = "";
+        if($stmt->execute([$course_id]))
+        {
+            $status = $stmt->fetch(PDO::FETCH_NAMED)['status'];
+            echo($status);
+            if($status == 'ongoing')
+            {
+                $update_query = 'UPDATE course_student SET status = 3 WHERE course_id = ? AND status IN (1)';    
+            }
+            else
+            {
+                $update_query = 'UPDATE course_student SET status = 3 WHERE course_id = ? AND status IN (1,2)';    
+            }
+            $stmt = $this->_db->prepare($update_query);
+            return $stmt->execute([$course_id]);
+        }
+        return false;
+
 
     }
 

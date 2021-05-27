@@ -284,10 +284,12 @@ export class CourseEdit extends Component {
           }
           onChange={(option) => {
             if (option) {
+              this.fetch_teachers(option.name);
               this.setState({ subject_option: option });
             } else {
               this.setState({ subject_option: null });
             }
+            this.setState({teacher_option:null})
           }}
         ></Dropdown>
         <Dropdown

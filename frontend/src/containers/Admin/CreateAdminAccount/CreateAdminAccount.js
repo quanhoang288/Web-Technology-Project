@@ -45,6 +45,7 @@ class Registration extends Component {
         role: role,
         phone: this.state.user_info.phone,
         school: this.state.user_info.school,
+        subject : this.state.user_info.subject,
       });
     }
     

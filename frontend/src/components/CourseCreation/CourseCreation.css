@@ -1,6 +1,7 @@
 .course-create{
     display: flex;
     justify-content: space-around;
+    align-items: flex-start;
     padding: 30px;
 }
 

@@ -18,6 +18,7 @@ export default function Dropdown({
         }
     })
     const filter = ()=>{
+        
         return options.filter((option) => {
             return(
                 option[field].toLowerCase().indexOf(q.toLowerCase()) > -1
@@ -56,6 +57,8 @@ export default function Dropdown({
             </div>
             <div className={`options ${open ? 'open' :null}`}>
                 {
+                    
+                    
                     filter(options).map((option,idx) => {
                         return(
                             <div key={idx} className={`option ${value === option[field] ? 'selected' :null}`}
@@ -69,6 +72,7 @@ export default function Dropdown({
                             </div>
                         )
                     })
+                    
                 }
             </div>
         </div>

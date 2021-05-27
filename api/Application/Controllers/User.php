@@ -31,7 +31,7 @@ class UserController extends Controller {
                     }
                     $this->_model->orderBy('name');
                     $data = $this->_model->search();
-                    if ($data){
+                    if (is_array($data)){
                         $res = array();
                         $role = $params['role'];
                         if ($role == 'teacher'){
@@ -83,7 +83,10 @@ class UserController extends Controller {
                         $this->_model->setAtrributes($data);
                         if ($this->_model->save())
                             $this->send(201, $response);
-                        $this->send(400, 'Error creating user');
+                        else{
+                            $this->send(400, 'Error creating user');
+                        }
+                        
                     }
                     catch(PDOException $e){
                         
@@ -131,7 +134,7 @@ class UserController extends Controller {
                     if(password_verify($old_password, $user_password))
                     {
                         $this->_model->id = $id;
-                        $this->_model->setAtrributes(["password"=> $new_password]);
+                        $this->_model->setAtrributes(["password"=> password_hash($new_password,PASSWORD_DEFAULT)]);
                         $result = $this->_model->save();
                         if ($result)    
                             $this->send(200, 'Updated password');

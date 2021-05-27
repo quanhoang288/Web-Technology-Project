@@ -7,9 +7,7 @@
     max-width: 800px;
     margin: 2rem auto;
     transition: all .5s ease;
-    
     top: 50%;
-    
     left: 50%;
     border-radius: 15px;
   }
