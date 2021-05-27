@@ -10,6 +10,7 @@ import { HOST_URL } from "../../../config";
 export class TeacherCourseDetail extends Component {
   constructor(props) {
     super(props);
+
   }
   state = {
     id: this.props.match.params.id,
@@ -28,87 +29,99 @@ export class TeacherCourseDetail extends Component {
   };
   onChange = (e) => {
     this.setState({ material_file: e.target.files[0] });
-  };
+  }
   onSubmit = (e) => {
     e.preventDefault();
 
     const file = this.state.material_file;
 
     const formData = new FormData();
-
+	
     formData.append("material", file);
+
 
     formData.append("course_id", this.state.id);
 
-    var tzoffset = new Date().getTimezoneOffset() * 60000;
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000;
     const time_created = new Date(Date.now() - tzoffset).toISOString();
-    const date = time_created.split("T")[0];
-    const time = time_created.split("T")[1].split(".")[0];
+    const date = time_created.split('T')[0];
+    const time = time_created.split('T')[1].split('.')[0]
 
-    formData.append("time_created", date + " " + time);
+    formData.append("time_created", date + ' ' + time);
 
     var requestOptions = {
-      method: "POST",
+      method: 'POST',
       body: formData,
-      redirect: "follow",
+      redirect: 'follow'
     };
-
+    
     fetch(`${HOST_URL}/documents`, requestOptions)
-      .then((response) => {
-        // console.log(response.status);
-        // console.log(response.statusText);
+      .then(response => {
+		  // console.log(response.status);
+			// console.log(response.statusText);
 
-        if (response.status !== 201) {
-          var newStatus = { ...this.state.status };
+      
+        if (response.status !== 201){
+          var newStatus = {...this.state.status};
           newStatus.code = response.status;
-          this.setState({ status: newStatus });
-        } else {
-          this.setState({ material_file: null });
+          this.setState({status:newStatus});
+			  }
+        else{
+          this.setState({material_file: null});
           this.fetch_course_material();
         }
 
-        return response.json();
+        
+        return response.json()
       })
-      .then((result) => {
-        var newStatus = { ...this.state.status };
-        newStatus.msg = result;
-        this.setState({ status: newStatus });
+      .then((result)=>{
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
       })
-      .catch((error) => console.log("error", error));
-  };
+      .catch(error => console.log('error', error));
+
+
+  }
   downloadMaterialRequest = (id, filename) => {
+    
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
-
+      
       redirect: "follow",
     };
 
-    fetch(`${HOST_URL}/documents/${id}`, requestOptions)
+    fetch(
+      `${HOST_URL}/documents/${id}`,
+      requestOptions
+    )
       .then((response) => response.blob())
       .then((blob) => {
-        var objectURL = window.URL.createObjectURL(blob);
+        var objectURL = window.URL.createObjectURL(blob); 
         // console.log(objectURL);
-        this.setState({ obj: objectURL });
-        const link = document.createElement("a");
+        this.setState({obj:objectURL}) 
+        const link = document.createElement('a');
         link.href = objectURL;
-        link.setAttribute("download", filename);
+        link.setAttribute('download',filename); 
         document.body.appendChild(link);
         link.click();
-      })
+                
+                
+    })
       .catch((error) => console.log("error", error));
-  };
+  }
 
-  newExamOnSubmit = () => {
-    var exam = this.state.new_exam_content;
+  newExamOnSubmit = ()=> {
+    var exam = this.state.new_exam_content; 
     // console.log(exam);
     var course_id = this.state.id;
-    const tzoffset = new Date().getTimezoneOffset() * 60000;
+    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
     const time_created = new Date(Date.now() - tzoffset).toISOString();
-    const date = time_created.split("T")[0];
-    const time = time_created.split("T")[1].split(".")[0];
+    const date = time_created.split('T')[0];
+    const time = time_created.split('T')[1].split('.')[0]
     const raw = JSON.stringify({
       exam: {
         course_id: course_id,
@@ -128,21 +141,25 @@ export class TeacherCourseDetail extends Component {
 
     fetch(`${HOST_URL}/exams`, requestOptions)
       .then((response) => {
-        if (response.status !== 201) {
-          var newStatus = { ...this.state.status };
-          newStatus.code = response.status;
-          this.setState({ status: newStatus });
-        } else {
+
+        if (response.status !== 201){
+          var newStatus = {...this.state.status}
+          newStatus.code = response.status
+          this.setState({status:newStatus})
+        }
+        else{
           this.setState({ new_exam_content: { content: "", taskname: "" } });
           this.fetch_course_exams();
         }
 
+
+  
         return response.json();
       })
-      .then((result) => {
-        var newStatus = { ...this.state.status };
-        newStatus.msg = result;
-        this.setState({ status: newStatus });
+      .then((result)=>{
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
       })
       .catch((error) => console.log("error", error));
     //api call
@@ -166,21 +183,23 @@ export class TeacherCourseDetail extends Component {
     };
     fetch(`${HOST_URL}/exams/${exam_id}`, requestOptions)
       .then((response) => {
-        var newStatus = { ...this.state.status };
-        newStatus.code = response.status;
-        this.setState({ status: newStatus });
-        this.setState({ input_modal_show: false });
 
+        var newStatus = {...this.state.status}
+        newStatus.code = response.status
+        this.setState({status:newStatus})
+        this.setState({ input_modal_show: false });
+        
         return response.json();
         // this.setState({ input_modal_show: false });
       })
       .then((result) => {
-        var newStatus = { ...this.state.status };
-        newStatus.msg = result;
-        this.setState({ status: newStatus });
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
       })
       .catch((error) => console.log("error", error));
   };
+
 
   examAssesHandler = (target_row) => {
     this.setState({ input_modal_show: true });
@@ -200,48 +219,53 @@ export class TeacherCourseDetail extends Component {
     this.setState({ class_notification: e.target.value });
   };
   handleCreateNotification = () => {
-    const notification = this.state.class_notification;
-    const tzoffset = new Date().getTimezoneOffset() * 60000;
+		const notification = this.state.class_notification;
+    const tzoffset = (new Date()).getTimezoneOffset() * 60000;
     const time_created = new Date(Date.now() - tzoffset).toISOString();
-    const date = time_created.split("T")[0];
-    const time = time_created.split("T")[1].split(".")[0];
-    const raw = JSON.stringify({
-      content: notification,
-      course_id: this.state.id,
-      create_at: date + " " + time,
-    });
+    const date = time_created.split('T')[0];
+    const time = time_created.split('T')[1].split('.')[0]
+		const raw = JSON.stringify({
+			content: notification, 
+			course_id: this.state.id,
+			create_at: date + ' ' + time
+		});
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-    };
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var requestOptions = {
+		method: "POST",
+		headers: myHeaders,
+		body: raw
+		};
+	
+		fetch(`${HOST_URL}/course_notifications`, requestOptions)
+		.then((response) => {
+      if (response.status !== 201){
+        var newStatus = {...this.state.status}
+        newStatus.code = response.status
+        this.setState({status:newStatus})
+        
+      }
+      else{
+        this.setState({class_notification: ""});
+        this.fetch_course_notifications();
+      }
+      return response.json();
+			// response.json();
+			// console.log(response);
+			// this.setState({class_notification: ""});
+			// this.setState({class_notification: ""});
+			// this.fetch_data();
+		})
+		.then((result) => {
+      var newStatus = {...this.state.status};
+      newStatus.msg = result;
+      this.setState({status:newStatus});
+			
+		})
+		.catch((error) => console.log("error", error));
 
-    fetch(`${HOST_URL}/course_notifications`, requestOptions)
-      .then((response) => {
-        if (response.status !== 201) {
-          var newStatus = { ...this.state.status };
-          newStatus.code = response.status;
-          this.setState({ status: newStatus });
-        } else {
-          this.setState({ class_notification: "" });
-          this.fetch_course_notifications();
-        }
-        return response.json();
-        // response.json();
-        // console.log(response);
-        // this.setState({class_notification: ""});
-        // this.setState({class_notification: ""});
-        // this.fetch_data();
-      })
-      .then((result) => {
-        var newStatus = { ...this.state.status };
-        newStatus.msg = result;
-        this.setState({ status: newStatus });
-      })
-      .catch((error) => console.log("error", error));
+
   };
 
   toggleTab = (index) => {
@@ -272,6 +296,7 @@ export class TeacherCourseDetail extends Component {
     this.fetch_course_notifications();
     this.fetch_course_material();
     this.fetch_course_exams();
+
   };
 
   fetch_course_notifications = () => {
@@ -281,16 +306,13 @@ export class TeacherCourseDetail extends Component {
       method: "GET",
       headers: myHeaders,
     };
-    fetch(
-      `${HOST_URL}/course_notifications?course_id=${this.state.id}`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        this.setState({ class_notification_list: result });
-      })
-      .catch((error) => console.log("error", error));
-  };
+    fetch(`${HOST_URL}/course_notifications?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      this.setState({ class_notification_list: result });
+    })
+    .catch((error) => console.log("error", error));
+  }
 
   fetch_course_material = () => {
     var myHeaders = new Headers();
@@ -300,14 +322,14 @@ export class TeacherCourseDetail extends Component {
       headers: myHeaders,
     };
     fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
+    .then((response) => response.json())
+    .then((result) => {
         // console.log(result);
         this.setState({
-          class_material_list: result,
+          class_material_list: result
         });
-      });
-  };
+    })
+  }
 
   fetch_course_exams = () => {
     var myHeaders = new Headers();
@@ -317,14 +339,16 @@ export class TeacherCourseDetail extends Component {
       headers: myHeaders,
     };
     fetch(`${HOST_URL}/exams?course_id=${this.state.id}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
+    .then((response) => response.json())
+    .then((result) => {
         // console.log(result);
         this.setState({
-          class_exam_list: result,
+          class_exam_list: result
         });
-      });
-  };
+    })
+  }
+
+
 
   componentDidMount() {
     this.fetch_data();
@@ -346,8 +370,7 @@ export class TeacherCourseDetail extends Component {
 
     return (
       <div>
-        {this.state.status &&
-        Object.keys(this.state.status).includes("code") ? (
+        {this.state.status  && Object.keys(this.state.status).includes('code') ? (
           <React.Fragment>
             <PopUp
               show={this.state.status ? true : false}
@@ -407,14 +430,14 @@ export class TeacherCourseDetail extends Component {
               <Button onClick={this.handleCreateNotification}> Send </Button>
             </div>
 
-            {class_notification_list.map((noti) => (
+            {class_notification_list.map((noti) => 
               <div className="plan-item">
                 <div className="datetime">{noti.create_at}</div>
                 <div className="content">
                   <p>{noti.content}</p>
                 </div>
               </div>
-            ))}
+            )}
           </div>
 
           <div //tab material
@@ -424,37 +447,23 @@ export class TeacherCourseDetail extends Component {
           >
             <div className="material">
               <div className="material-board">
-                {class_material_list.map((material) => (
-                  <div className="plan-item">
-                    <div className="datetime">{material.time_created}</div>
-                    <div className="content">
-                      <Link to="#">
-                        <div
-                          onClick={() =>
-                            this.downloadMaterialRequest(
-                              material.id,
-                              material.filename
-                            )
-                          }
-                        >
-                          {material.filename}
+              {class_material_list.map((material) => 
+                      <div className="plan-item">
+                        <div className="datetime">{material.time_created}</div>
+                        <div className="content">
+                            <Link to="#">
+                            <div onClick={() => this.downloadMaterialRequest(material.id, material.filename)}>{material.filename}</div>
+                            </Link>
                         </div>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
+                        
+                      </div>
+                )}
+                
               </div>
               <div className="material-uploader">
                 <form onSubmit={this.onSubmit}>
-                  <div className="fileUpload">
-                    <input
-                      type="file"
-                      name="material"
-                      onChange={this.onChange}
-                    />
-                    <span>Choose material (.docx/.pdf)</span>
-                  </div>
-
+                  
+                  <input type="file" name="material" onChange={this.onChange} />
                   <Button type="submit">Upload File</Button>
                 </form>
               </div>
@@ -493,6 +502,7 @@ export class TeacherCourseDetail extends Component {
                       }}
                     ></Table>
                     <ExamAssesmentModal
+        
                       show={this.state.input_modal_show}
                       closeHandler={this.examAssesCancelHandler}
                       updateHandler={this.examScoreUpdate}
@@ -539,14 +549,7 @@ export class TeacherCourseDetail extends Component {
                     value={this.state.new_exam_content.content}
                   ></textarea>
                 </div>
-                <div
-                  style={{
-                    margin: "20px auto",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-around",
-                  }}
-                >
+                <div style={{ margin: "20px auto", width: "100%" , display:'flex', justifyContent:"space-around"}}>
                   {/* <InputField
                     type="text"
                     label="Taskname"
