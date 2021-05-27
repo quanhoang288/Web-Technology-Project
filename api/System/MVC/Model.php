@@ -75,6 +75,10 @@ class Model {
 		$this->_order = $order;
 	}
 
+	public function in_describe($field){
+		return in_array($field, $this->_describe);
+	}
+
     public function search(){
 		$from = '`'.$this->_table.'`' ;
 		$conditions = '\'1\'=\'1\' AND ';
@@ -138,9 +142,6 @@ class Model {
 						$conditionsChild = '';
 						$fromChild = '';
 
-						// $tableChild = strtolower($modelChild);
-						// $pluralAliasChild = strtolower($aliasChild);
-						// $singularAliasChild = strtolower($aliasChild);
 
 						$fromChild .= '`'.$childTable.'` AS' . '`' . $aliasChild . '`';
 						

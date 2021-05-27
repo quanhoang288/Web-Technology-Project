@@ -36,13 +36,6 @@ export class StudentCourse extends Component {
           </Link>
         </div>
         
-        {/* <div className="courses">
-          {
-            courses.map((course) => 
-              <Card id={course.id} title={course.name} teacher={course.teacher_name} img={course.img}></Card>
-            )
-          }
-        </div> */}
         <div className="courses-section">
           <div className="open-course">
             <h1>Registering</h1>

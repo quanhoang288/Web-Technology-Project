@@ -29,6 +29,7 @@ class UserController extends Controller {
                         $this->_model->where($key, $value);
                         
                     }
+                    $this->_model->orderBy('name');
                     $data = $this->_model->search();
                     if ($data){
                         $res = array();
@@ -112,11 +113,73 @@ class UserController extends Controller {
     }
 
     
-    
-  
+    public function update($params)
+    {
+        if (!$params){
+            $this->send(400, 'Bad request');
+        }
+        else{
+            $id = $params['id'];
+            $data = json_decode(file_get_contents('php://input'), true);
+            if (isset($data['old_password'])){
+                $old_password = $data['old_password'];
+                $new_password = $data['new_password'];
+                $this->_model->id = $id;
+                $result = $this->_model->search();
+                if (is_array($result) && count($result)){
+                    $user_password = $result['user']['password'];
+                    if(password_verify($old_password, $user_password))
+                    {
+                        $this->_model->id = $id;
+                        $this->_model->setAtrributes(["password"=> $new_password]);
+                        $result = $this->_model->save();
+                        if ($result)    
+                            $this->send(200, 'Updated password');
+                        else 
+                            $this->send(400, "Error updating password");
+                        
+                    }
+                    else
+                        $this->send(401, "Invalid password");
+                }
+                else{
+                    $this->send(400, "User not found");
+                }
+            }
+            else{
+                $token  = getBearerToken();
+                if(JWT::verify($token,SECRET_KEY)){
+                    $response ='Succesfully Updated User Information';
+                    try{
+                        $this->_model->id = $id;
+                        foreach($data as $key=>$value){
+                            if (!$this->_model->in_describe($key)){
+                                $this->send(400,"Bad request");
+                                exit();
+                            }
+                        }
+                        $this->_model->setAtrributes($data);
+                        if ($this->_model->save())
+                            $this->send(201, $response);
+                        else
+                            $this->send(400, 'Error updating user information');
+                    }
+                    catch(PDOException $e){
+                        
+                        $this->send(400,"Error updating user information");
+                    }             
+                }
+                else{
+                    $this->send(400, "Permission Denied");
+                }
+            }
+            
+        }
+
+
+    }
     public function validate()
     {        
-        
         $data = json_decode(file_get_contents('php://input'), true);
         $username = $data['username'];
         $password = $data['password'];
@@ -126,8 +189,8 @@ class UserController extends Controller {
         if(sizeof($user) == 0)
         {
             $response = 'invalid_username';
-            $this->response->sendStatus(401);
-            $this->response->setContent(['response'=> $response]);
+            $this->send(400,$response);
+            
         }
         else{
             $user = $user[0];
@@ -137,16 +200,13 @@ class UserController extends Controller {
                 $token = JWT::encode($user, SECRET_KEY);
                 
                 $response = ['user'=>$user,'token' => $token];
-                $this->send(200, ['response'=>$response]);
-                // $this->response->sendStatus(200);
-                // $this->response->setContent(['response'=> $response]);    
+                $this->send(200,$response);
+                
             }
             else
             {
                 $response = 'invalid_password';
-                $this->send(401, ['response'=> $response]);
-                // $this->response->sendStatus(401);
-                // $this->response->setContent([ 'response'=> $response]);
+                $this->send(400,$response);
             }
         }
     }

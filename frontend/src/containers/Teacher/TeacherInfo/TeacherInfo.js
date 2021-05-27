@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import "./TeacherInfo.css";
 import InputField from "../../../components/InputField/InputField";
 import { connect } from "react-redux";
+import {Link} from 'react-router-dom'
 import { HOST_URL } from "../../../config";
+import Backdrop from "../../../components/Backdrop/Backdrop";
+import PopUp from "../../../components/PopUp/PopUp";
+
 export class TeacherInfo extends Component {
   state = {
     editing: false,
     info: null,
     edit_info: null,
+    status: null
   };
   fetch_data = () => {
     var myHeaders = new Headers();
@@ -35,7 +40,10 @@ export class TeacherInfo extends Component {
   onSubmit = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
+    myHeaders.append(
+      "Authorization",
+      `Bearer ${localStorage.getItem("token")}`
+    );
     var raw = JSON.stringify(this.state.edit_info);
 
     var requestOptions = {
@@ -46,8 +54,16 @@ export class TeacherInfo extends Component {
     };
 
     fetch(`${HOST_URL}/users/${this.props.user.id}`, requestOptions)
-      .then((response) => response.text())
+      .then((response) =>{
+        var newStatus = {...this.state.status}
+        newStatus.code = response.status
+        this.setState({status:newStatus})
+        return response.json()
+      })
       .then((result) => {
+        var newStatus = {...this.state.status}
+        newStatus.msg = result
+        this.setState({status:newStatus})
         this.fetch_data();
         this.setState({ editing: false });
       })
@@ -56,8 +72,24 @@ export class TeacherInfo extends Component {
   render() {
     return (
       <div class="user-info">
+        {this.state.status ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => {
+                this.setState({ status: null });
+              }}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}
         {this.state.info ? (
           <React.Fragment>
+                    
             <div class="left">
               
               <h4 style={{ textTransform: "capitalize" ,marginTop:"100px"}}>
@@ -78,6 +110,8 @@ export class TeacherInfo extends Component {
                   <i class="fas fa-check fa-2x" onClick={this.onSubmit}></i>
                 ) : null}
               </div>
+              
+              <Link to={{pathname:'/teacher/change-password', state:{id: this.props.user.id}}} > <i class="fas fa-key fa-2x" style={{"color":"white"}}></i> </Link>
             </div>
             <div class="right">
               <div class="info">

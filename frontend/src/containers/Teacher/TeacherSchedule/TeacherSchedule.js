@@ -60,9 +60,6 @@ export class TeacherSchedule extends Component {
         res['weekday'] = weekday[schedule_item.weekday_id - 2];
         res['time'] = shift_option[schedule_item.time_id].duration;
         return res;
-
-        
-
     }
     componentDidMount(){
         this.fetch_data();
@@ -79,7 +76,7 @@ export class TeacherSchedule extends Component {
                 </div>
             )
         }
-        return null;
+        return <div> You don't have any course assigned </div>;
     }
 }
 

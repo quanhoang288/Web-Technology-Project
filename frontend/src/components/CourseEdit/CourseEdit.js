@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import InputField from "../InputField/InputField";
 import ImageUploader from "../ImageUploader/ImageUploader";
 import Dropdown from "../Dropdown/Dropdown";
+import Backdrop from "../../components/Backdrop/Backdrop";
+import PopUp from "../../components/PopUp/PopUp";
 import Button from "../Button/Button";
 import { HOST_URL } from "../../config";
 export class CourseEdit extends Component {
@@ -18,6 +20,8 @@ export class CourseEdit extends Component {
 		category: "",
 		img: "",
 		price: "",
+    sched: [],
+    status: null,
 	};
 	textarea_ref = React.createRef("");
 	fetch_data = () => {
@@ -29,74 +33,173 @@ export class CourseEdit extends Component {
 		  headers: myHeaders,
 		  redirect: "follow",
 		};
-        fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-            console.log(result)
-            this.setState({
-                title: result.name,
-                teacher_option: {id: result.teacher_id, name: result.teacher_name},
-                subject_option: {name: result.subject},
-                level_option: {name: result.level},
-                img:result.img,
-                min: result.min,
-                max: result.max,
-                description: result.description,
-                category: result.subject, 
-                price: result.fee
-
-            })
+    fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        // console.log(result)
+        this.setState({class_info: result});
+        this.setState({
+            title: result.name,
+            teacher_option: {id: result.teacher_id, name: result.teacher_name},
+            subject_option: {name: result.subject},
+            level_option: {name: result.level},
+            img:result.img,
+            min: result.min,
+            max: result.max,
+            description: result.description,
+            category: result.subject, 
+            price: result.fee
+            
         })
-        .catch((error) => console.log(error));
+        this.fetch_teachers(result.subject);
+        this.fetch_schedule();
+    })
+    .catch((error) => console.log(error));
 	
-		fetch(HOST_URL + "/users?role=teacher", requestOptions)
+	}
+  fetch_schedule = () => {
+    var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+		  method: "GET",
+		  headers: myHeaders,
+		  redirect: "follow",
+		};
+
+    fetch(`${HOST_URL}/schedule?course_id=${this.state.id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => this.setState({sched: result}))
+    .catch((error) => console.log(error));
+    
+
+  }
+  fetch_teachers = (subject=null) => {
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+		  method: "GET",
+		  headers: myHeaders,
+		  redirect: "follow",
+		};
+    if (subject){
+      fetch(`${HOST_URL}/users?role=teacher&subject=${subject}`, requestOptions)
 		  .then((response) => response.json())
 		  .then((result) => this.setState({teachers: result}))
 		  .catch((error) => console.log(error));
-	}
+    }
+    else{
+      fetch(`${HOST_URL}/users?role=teacher`, requestOptions)
+		  .then((response) => response.json())
+		  .then((result) => this.setState({teachers: result}))
+		  .catch((error) => console.log(error));
+    }
+
+  }
 	componentDidMount(){
 		this.fetch_data();
         
 	}
-	
-	onSubmit = () => {
-    var tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    const time_created = new Date(Date.now() - tzoffset).toISOString();
-    const date = time_created.split('T')[0];
-    const time = time_created.split('T')[1].split('.')[0]
-		var { title, teacher_option, subject_option, level_option, min, max, description,  img, price } =
-		this.state;
-		var raw_course = {
-		name: title,
-		fee: price,
-		min: min, 
-		max: max,
-		teacher_id: teacher_option["id"],
-		subject: subject_option["name"],
-		level: level_option["name"],
-		description: description,
-		img: img,
-        time_created: date + ' ' + time
-		};
-		
+  onSubmit = () => {
+    
 
-		
+    const required_field = ['title',"description","price"]
+    var missing_field = false
+    required_field.forEach((field) => {
+      // console.log(this.state[field].length);
+      if(this.state[field].length === 0)
+      {
+   
+        this.setState({status:{code:400, msg:"Fill all required field"}})
+        missing_field = true
+        return
+      }
+    })
+    if(missing_field ||this.state.img === null) {
+      this.setState({status:{code:400, msg:"Fill all required field"}})
+      return
+    }
+ 
+    try{
+      var raw_course = {
+        name: this.state.title,
+        fee: this.state.price,
+        min: this.state.min, 
+        max: this.state.max,
+        teacher_id: this.state.teacher_option["id"],
+        subject: this.state.subject_option["name"],
+        level: this.state.level_option["name"],
+        description: this.state.description,
+        img: this.state.img,
+      };
+        
+    
+      }
+    catch(err){
+      this.setState({status:{code:400, msg:"Fill all required field"}})
+      return
+    }
+
+    
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");  
 		var requestOptions = {
-		method: "PUT",
-		headers: myHeaders,
-		body: JSON.stringify(raw_course),
-		redirect: "follow",
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
 		};
-		fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+    // console.log(teacher_option);
+    
+    fetch(`${HOST_URL}/schedule?user_id=${this.state.teacher_option['id']}&role=teacher&type=both`, requestOptions)
 		.then((response) =>{
-      console.log(response.status);
-      response.text();
+      return response.json();
     })
-		.then((result) => console.log(result))
+		.then((result) => {
+      const sched_stringify = this.state.sched ? this.state.sched.map(item => (JSON.stringify({weekday_id: parseInt(item.weekday_id), time_id: parseInt(item.time_id)}))) : [];
+      console.log(result);
+      console.log(this.state.sched);
+      const mapped_result = result ? result.map(item => (JSON.stringify({weekday_id: parseInt(item.weekday_id), time_id: parseInt(item.time_id)}))) : [];
+      const intersect = mapped_result.filter(schedule_item => sched_stringify.includes(schedule_item));
+      // console.log(mapped_result);
+      // console.log(sched_stringify);
+      if (intersect.length === 0){
+        // alert("No Conflict");
+        myHeaders.append("Content-Type", "application/json");  
+        myHeaders.append(
+          "Authorization",
+          `Bearer ${localStorage.getItem("token")}`
+        );
+        requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: JSON.stringify(raw_course),
+        redirect: "follow",
+        };
+        fetch(`${HOST_URL}/courses/${this.state.id}`, requestOptions)
+        .then((response) =>{
+          var newStatus = {...this.state.status}
+          newStatus.code = response.status
+          this.setState({status:newStatus})
+          return response.json()
+        })
+        .then((result) => {
+          // console.log(result)
+          var newStatus = {...this.state.status};
+          newStatus.msg = result;
+          this.setState({status:newStatus});
+        })
+        .catch((error) => console.log("error", error));
+      }
+      else{
+        this.setState({status: {code: 400, msg: "Conflict in teacher schedule"}})
+
+      }
+    })
 		.catch((error) => console.log("error", error));
-	};
+
+		
+	}
+	
+
   render() {
 	const teacher_option = this.state.teachers;
 	const subject_option = [
@@ -110,12 +213,27 @@ export class CourseEdit extends Component {
 		{name: "Geography"},
 	];
 
-    console.log(this.state.title);
+    
 	const level_options = [{name:"Beginner"}, {name:"Intermidiate"}, {name:"Upper-Intermidiate"}, {name:"Advanced"}];
     return (
     <React.Fragment>
       {this.state.title ?
       <div className="course-create">
+       {this.state.status ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => {
+                window.location.href = "/admin/manage/courses";
+              }}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}  
       <div className="course-create-form">
         <InputField
           type="text"
@@ -126,7 +244,7 @@ export class CourseEdit extends Component {
             this.setState({ [`${field}`]: input });
           }}
         ></InputField>
-  <InputField
+        <InputField
           type="text"
           field="price"
           label="Price - in $"
@@ -145,7 +263,7 @@ export class CourseEdit extends Component {
             this.setState({ [`${field}`]: input });
           }}
         ></InputField>
-  <InputField
+        <InputField
           type="number"
           field="max"
           label="Max number of students"
@@ -154,7 +272,7 @@ export class CourseEdit extends Component {
             this.setState({ [`${field}`]: input });
           }}
         ></InputField>
-  <Dropdown
+        <Dropdown
           options={subject_option}
           prompt="Choose a subject"
        
@@ -172,7 +290,7 @@ export class CourseEdit extends Component {
             }
           }}
         ></Dropdown>
-  <Dropdown
+        <Dropdown
           options={level_options}
           prompt="Choose a level"
           value="level"

@@ -36,7 +36,7 @@ export class TeacherCourseDetail extends Component {
     const file = this.state.material_file;
 
     const formData = new FormData();
-	// console.log(file);
+	
     formData.append("material", file);
 
 
@@ -265,23 +265,7 @@ export class TeacherCourseDetail extends Component {
 		})
 		.catch((error) => console.log("error", error));
 
-    // var myHeaders = new Headers();
-    // myHeaders.append("Content-Type", "application/json");
-    // var requestOptions = {
-    //   method: "POST",
-    //   headers: myHeaders,
-    //   body: raw,
-    // };
 
-    // fetch(`${HOST_URL}/course_notifications`, requestOptions)
-    //   .then((response) => {
-    //     response.json();
-    //   })
-    //   .then((result) => {
-    //     this.setState({ class_notification: "" });
-    //     this.fetch_data();
-    //   })
-    //   .catch((error) => console.log("error", error));
   };
 
   toggleTab = (index) => {
@@ -312,20 +296,7 @@ export class TeacherCourseDetail extends Component {
     this.fetch_course_notifications();
     this.fetch_course_material();
     this.fetch_course_exams();
-    // fetch(`${HOST_URL}/documents?course_id=${this.state.id}`, requestOptions)
-    // .then((response) => response.json())
-    // .then((result) => {
-    //     console.log(result);
-    //     this.setState({
-    //       class_material_list: result
-    //     });
-    // })
-    // fetch(`${HOST_URL}/exams?course_id=${this.state.id}`, requestOptions)
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     this.setState({ class_exam_list: result });
-    //   })
-    //   .catch((error) => console.log("error", error));
+
   };
 
   fetch_course_notifications = () => {
@@ -534,6 +505,7 @@ export class TeacherCourseDetail extends Component {
                       }}
                     ></Table>
                     <ExamAssesmentModal
+        
                       show={this.state.input_modal_show}
                       closeHandler={this.examAssesCancelHandler}
                       updateHandler={this.examScoreUpdate}

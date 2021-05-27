@@ -87,6 +87,12 @@ class CourseModel extends Model{
     }
     public function update($course_id, $data){
         $course_data = $data;
+        // var_dump($data);
+        foreach($data as $key=>$value){
+            if (!in_array($key, $this->_describe))
+                return false;
+        }
+        
         if (isset($course_data['name'])){
             $course_name = $course_data['name'];
             $img = $course_data['img'];
@@ -103,8 +109,4 @@ class CourseModel extends Model{
 
     }
     
-
-    
-
-
 }

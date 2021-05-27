@@ -39,6 +39,7 @@ export default function Dropdown({
             <div className="control" onClick={() => setOpen(prev => !prev)}>
                 <div className="selected-value">
                     <input type='text'
+                    required
                     ref={ref}
                     placeholder={value ? value[field] :prompt}
                     value={displayValue()}
@@ -55,9 +56,9 @@ export default function Dropdown({
             </div>
             <div className={`options ${open ? 'open' :null}`}>
                 {
-                    filter(options).map((option) => {
+                    filter(options).map((option,idx) => {
                         return(
-                            <div className={`option ${value === option[field] ? 'selected' :null}`}
+                            <div key={idx} className={`option ${value === option[field] ? 'selected' :null}`}
                                 onClick = {() => {
                                     onChange(option)
                                     setOpen(false)

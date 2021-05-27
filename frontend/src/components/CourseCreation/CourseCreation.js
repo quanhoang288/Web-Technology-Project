@@ -19,10 +19,9 @@ export class CourseCreation extends Component {
 		description: "",
 		category: "",
 		sched: [0, -1, -1, -1, -1, -1, -1],
-		img: "",
+		img: null,
 		price: "",
-		category: "",
-    status: null,
+    status : null,
 	};
 	textarea_ref = React.createRef("");
 	fetch_data = () => {
@@ -64,9 +63,7 @@ export class CourseCreation extends Component {
 
   }
 
-  check_teacher_sched_conflict = () => {
 
-  }
 	componentDidMount(){
 		this.fetch_data();
 	}
@@ -80,28 +77,55 @@ export class CourseCreation extends Component {
 		return process_sched;
 	}
 	onSubmit = () => {
+    
     var tzoffset = (new Date()).getTimezoneOffset() * 60000;
     const time_created = new Date(Date.now() - tzoffset).toISOString();
     const date = time_created.split('T')[0];
     const time = time_created.split('T')[1].split('.')[0]
 		var { title, teacher_option, subject_option, level_option, min, max, description, sched, img, price } =
 		this.state;
-    // console.log(teacher_option);
-		var raw_course = {
-		name: title,
-		fee: price,
-		min: min, 
-		max: max,
-		teacher_id: teacher_option["id"],
-		subject: subject_option["name"],
-		level: level_option["name"],
-		description: description,
-		img: img,
-    time_created: date + ' ' + time
-		};
-		var raw_sched = this.process_sched(sched);
+    
+    const required_field = ['title',"description","price"]
+    var missing_field = false
+    required_field.forEach((field) => {
+      if(this.state[field].length === 0)
+      {
+        
+        this.setState({status:{code:400, msg:"Fill all required field"}})
+        missing_field = true
+        return
+      }
+    })
+    if(missing_field ||img === null) {
+      this.setState({status:{code:400, msg:"Fill all required field"}})
+      return
+    }
+ 
+    try{
+      var raw_course = {
+        name: title,
+        fee: price,
+        min: min, 
+        max: max,
+        teacher_id: teacher_option["id"],
+        subject: subject_option["name"],
+        level: level_option["name"],
+        description: description,
+        img: img,
+        time_created: date + ' ' + time
+        };
+        var raw_sched = this.process_sched(sched);
+    
+      }
+    catch(err)
+    {
+      this.setState({status:{code:400, msg:"Fill all required field"}})
+      return
+    }
+		
     const raw_sched_stringify = raw_sched.map(item => (JSON.stringify(item)));
-    var myHeaders = new Headers();
+   
+		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");  
 		var requestOptions = {
       method: "GET",
@@ -112,8 +136,6 @@ export class CourseCreation extends Component {
     
     fetch(`${HOST_URL}/schedule?user_id=${teacher_option['id']}&role=teacher&type=both`, requestOptions)
 		.then((response) =>{
-      // console.log(response.status);
-      // console.log(response);
       return response.json();
     })
 		.then((result) => {
@@ -165,26 +187,7 @@ export class CourseCreation extends Component {
     })
 		.catch((error) => console.log("error", error));
 
-		// var raw = JSON.stringify({
-		// course: raw_course, 
-		// schedule: raw_sched
-		// });
 		
-		// var myHeaders = new Headers();
-		// myHeaders.append("Content-Type", "application/json");  
-		// var requestOptions = {
-		// method: "POST",
-		// headers: myHeaders,
-		// body: raw,
-		// redirect: "follow",
-		// };
-		// fetch(`${HOST_URL}/courses`, requestOptions)
-		// .then((response) =>{
-    //   console.log(response.status);
-    //   response.text();
-    // })
-		// .then((result) => console.log(result))
-		// .catch((error) => console.log("error", error));
 	}
 
 
@@ -256,6 +259,7 @@ export class CourseCreation extends Component {
             type="text"
             field="title"
             label="Course title"
+            value={this.state.title}
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
             }}
@@ -264,6 +268,7 @@ export class CourseCreation extends Component {
             type="number"
             field="price"
             label="Price - in $"
+            value={this.state.price}
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
             }}
@@ -271,6 +276,7 @@ export class CourseCreation extends Component {
           <InputField
             type="number"
             field="min"
+            value={this.state.min}
             label="Min number of students"
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
@@ -279,6 +285,7 @@ export class CourseCreation extends Component {
           <InputField
             type="number"
             field="max"
+            value={this.state.max}
             label="Max number of students"
             onChange={(field, input) => {
               this.setState({ [`${field}`]: input });
@@ -411,21 +418,21 @@ export class CourseCreation extends Component {
             }}
           ></ImageUploader>
           <Button onClick={this.onSubmit}>Submit</Button>
-          {
-            this.state.statusPopUp ? 
-            <React.Fragment>
-              <PopUp 
-              show={this.state.statusPopUp ? true : false}
-              closeHandler = {() => this.setState({statusPopUp:null})}
-              msg = {this.state.statusPopUp}
-              redirect = {() => {this.props.history.push('/admin/manage/courses')}}
-            >
-            </PopUp>
-            <Backdrop toggleBackdrop = {()=>this.setState({statusPopUp:null})}></Backdrop>
-            </React.Fragment>
-            
-            : null
-          }
+          {this.state.status ? (
+          <React.Fragment>
+            <PopUp
+              show={this.state.status ? true : false}
+              closeHandler={() => this.setState({ status: null })}
+              msg={this.state.status}
+              redirect={() => {
+                this.props.history.push("/admin/manage/courses");
+              }}
+            ></PopUp>
+            <Backdrop
+              toggleBackdrop={() => this.setState({ status: null })}
+            ></Backdrop>
+          </React.Fragment>
+        ) : null}
         </div>
         
       </div>

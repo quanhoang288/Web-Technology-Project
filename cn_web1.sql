@@ -167,11 +167,7 @@ INSERT INTO `exam_student` (`exam_id`, `student_id`, `score`) VALUES
 -- Table structure for table `payment`
 --
 
-CREATE TABLE `payment` (
-  `sid` int(11) NOT NULL,
-  `cid` int(11) NOT NULL,
-  `paid` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- --------------------------------------------------------
 
@@ -300,9 +296,7 @@ ALTER TABLE `exam_student`
 --
 -- Indexes for table `payment`
 --
-ALTER TABLE `payment`
-  ADD PRIMARY KEY (`sid`,`cid`),
-  ADD KEY `cid_idx` (`cid`);
+
 
 --
 -- Indexes for table `schedule`

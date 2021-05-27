@@ -18,7 +18,7 @@
   color: #fff;
   user-select: none;
   border-radius: 15px;
-  background: linear-gradient(-135deg, #c850c0, #4158d0);
+  background: linear-gradient(-135deg, #ffafbd, #ffc3a0);
 }
 .wrapper-login form{
   padding: 10px 30px 50px 30px;
@@ -96,7 +96,7 @@
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
-  background: linear-gradient(-135deg, #c850c0, #4158d0);
+  background: linear-gradient(-135deg, #ffafbd, #ffc3a0);
   transition: all 0.3s ease;
 }
 .wrapper-login form .field input[type="submit"]:active{

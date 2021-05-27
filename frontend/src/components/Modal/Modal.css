@@ -3,14 +3,14 @@
     z-index: 10000000;
     background: #fff;
     width: 80%;
-    position: relative;
+    position: absolute;
     max-width: 800px;
     margin: 2rem auto;
     transition: all .5s ease;
-    position: fixed;
-    top: 0px;
-    height: 90%;
-    left: 25%;
+    
+    top: 50%;
+    
+    left: 50%;
     border-radius: 15px;
   }
   
@@ -31,12 +31,14 @@
   
   .modal-content {
     padding: 1rem 1rem;
-    height: 75%;
+    
+    
   }
   
   .modal-body {
     margin-bottom: 1rem;
-    height: 100%;
+    
+    
   }
   
   .modal-body h4 {
@@ -53,7 +55,7 @@
   }
   .modal-footer{
     
-    position: absolute;
+    
     bottom: 20px;
     left: 260px;
     display: flex;
@@ -64,13 +66,14 @@
   .modal-footer button {
     display: block;
     font-size: 1rem;
-    margin-left: 20px;
+    margin: 20px 20px;
     padding: 0.5rem 1.8rem;
     background: #DD501D;
     color: #fff;
     border: none;
     outline: none;
     cursor: pointer;
+    border-radius: 15px;
   }
   
   .back-drop {
@@ -87,7 +90,7 @@
     height: 75%;
   }
   .modal-wrapper form .field{
-    height: 15%;
+    
     width: 100%;
     margin-top: 20px;
     position: relative;

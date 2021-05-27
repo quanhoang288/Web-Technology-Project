@@ -209,7 +209,7 @@ class CourseController extends Controller {
                 if ($result) 
                     $this->send(201, 'Created');
                 else 
-                    $this->send(400, 'Error');
+                    $this->send(400, 'Error creating new course');
             }
             else{
                 $this->send(400, "Permission Denied");
@@ -222,13 +222,38 @@ class CourseController extends Controller {
     }
 
     public function update($params){
-        $course_id = $params['id'];
-        $data = json_decode(file_get_contents('php://input'), true);
-        $result = $this->_model->update($course_id, $data);
-        if ($result)
-            $this->send(200, 'Updated');
-        else 
-            $this->send(400, 'Error');
+        if (!isset($params['id']))
+            $this->send(400, "Bad request");
+        else{
+            $course_id = $params['id'];
+            $token = getBearerToken();
+            if (JWT::verify($token, SECRET_KEY)){
+                $decoded_JWT = JWT::decode(($token));
+                $request_sender_role = json_decode($decoded_JWT, true)['role'];
+                if ($request_sender_role == 'admin'){
+                    $data = json_decode(file_get_contents('php://input'), true);
+                    $result = $this->_model->update($course_id, $data);
+                    if ($result) 
+                        $this->send(200, 'Updated');
+                    else 
+                        $this->send(400, 'Error updating course information');
+                }
+                else{
+                    $this->send(400, "Permission Denied");
+                }
+            }
+            else{
+                $this->send(400, "Permission Denied");
+            }
+        }
+
+        // $course_id = $params['id'];
+        // $data = json_decode(file_get_contents('php://input'), true);
+        // $result = $this->_model->update($course_id, $data);
+        // if ($result)
+        //     $this->send(200, 'Updated');
+        // else 
+        //     $this->send(400, 'Error');
     }
     // public function get($params=null){
     //     // if (!$params || !isset($params['user_id']))

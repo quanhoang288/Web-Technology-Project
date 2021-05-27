@@ -53,7 +53,7 @@
   }
   .sidebar-wrapper label #btn{
     left: 40px;
-    position: absolute;
+    z-index: 100000000;
     top: 5px;
     font-size: 35px;
     color: white;

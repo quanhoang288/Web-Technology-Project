@@ -15,21 +15,19 @@
 }
 .notiboards{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 .notiboard h1{
     font-size: large;
     margin-bottom: 20px;
 }
 
-
-
-
 .create-plan{
     display: flex;
     flex-direction: column;
     margin-left:  50px;
     width: 40%;
+    padding: 40px;
 }
 
 textarea {
